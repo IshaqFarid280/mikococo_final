@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'Gate_way_screen/buttom_navigation_screens.dart';
+import 'module/models.dart';
+
+void main() async  {
+  WidgetsFlutterBinding.ensureInitialized();
+  var directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+  Hive.registerAdapter(RoutineAdapter());
+  Hive.registerAdapter(WorkoutDayAdapter());
+  Hive.registerAdapter(ExerciseAdapter());
+  Hive.registerAdapter(AddingPicturesAdapter());
+  Hive.registerAdapter(DemonPicturesAdapter());
+  await Hive.openBox<AddingPictures>('Pictures');
+  await Hive.openBox<DemonPictures>('Demo');
+  await Hive.openBox<Routine>('RoutineBox', compactionStrategy: (int total, int deleted) => deleted > 20);
+  await Hive.openBox<WorkoutDay>('WorkoutDaysBox', compactionStrategy: (int total, int deleted) => deleted > 20);
+  await Hive.openBox<Exercise>('ExercisesBox', compactionStrategy: (int total, int deleted) => deleted > 20);
+  if (Hive.box<Routine>('RoutineBox').isEmpty || Hive.box<WorkoutDay>('WorkoutDaysBox').isEmpty || Hive.box<Exercise>('ExercisesBox').isEmpty) {
+    await initializeDummyData();
+  }
+  runApp(MyApp());
+}
+
+Future<void> initializeDummyData() async {
+  // Dummy Routines
+  final routineBox = Hive.box<Routine>('RoutineBox');
+  final routine1 = Routine('Body weight', []);
+  final routine2 = Routine('Full body', []);
+  final routine3 = Routine('Mass gain', []);
+  await routineBox.addAll([routine1, routine2, routine3]);
+  // Dummy Workout Days
+  final workoutDaysBox = Hive.box<WorkoutDay>('WorkoutDaysBox');
+  final workoutDay1 = WorkoutDay('Day 1', []);
+  final workoutDay2 = WorkoutDay('Day 2', []);
+  final workoutDay3 = WorkoutDay('Day 3', []);
+  await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
+  // Dummy Exercises
+  final exercisesBox = Hive.box<Exercise>('ExercisesBox');
+  final exercise1 = Exercise('Push-ups',null);
+  final exercise2 = Exercise('Squats',null);
+  final exercise3 = Exercise('Pull-ups',null);
+  await exercisesBox.addAll([exercise1, exercise2, exercise3]);
+  // Link routines with workout days
+  routine1.workoutDays.add(workoutDay1.key);
+  routine1.workoutDays.add(workoutDay2.key);
+  routine2.workoutDays.add(workoutDay3.key);
+  // Link workout days with exercises
+  workoutDay1.exercises.add(exercise1.key);
+  workoutDay2.exercises.add(exercise2.key);
+  workoutDay3.exercises.add(exercise3.key);
+  // Save changes
+  await Future.wait([
+    routine1.save(),
+    routine2.save(),
+    routine3.save(),
+    workoutDay1.save(),
+    workoutDay2.save(),
+    workoutDay3.save(),
+  ]);
+}
+
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home:BottomNavigationScreen(),
+    );
+  }
+}
+
