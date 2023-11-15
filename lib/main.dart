@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/routine/RoutineProvider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'Gate_way_screen/buttom_navigation_screens.dart';
 import 'module/models.dart';
 
@@ -24,21 +27,27 @@ void main() async  {
   if (Hive.box<Routine>('RoutineBox').isEmpty || Hive.box<WorkoutDay>('WorkoutDaysBox').isEmpty || Hive.box<Exercise>('ExercisesBox').isEmpty) {
     await initializeDummyData();
   }
-  runApp(MyApp());
+  runApp(
+      MultiProvider(providers: [
+        ChangeNotifierProvider(create: (context) => RoutineProvider())
+      ],
+        child: MyApp(),
+      )
+  );
 }
 
 Future<void> initializeDummyData() async {
   // Dummy Routines
   final routineBox = Hive.box<Routine>('RoutineBox');
-  final routine1 = Routine('Body weight', []);
-  final routine2 = Routine('Full body', []);
-  final routine3 = Routine('Mass gain', []);
+  final routine1 = Routine('Body weight', '3 Monhs me Mass Gain Karna 😮', 'e', redColor.value.toRadixString(16), []);
+  final routine2 = Routine('Full body','3 Monhs me Mass Gain Karna 😮', 'g', blackColor.value.toRadixString(16), []);
+  final routine3 = Routine('Mass gain','3 Monhs me Mass Gain Karna 😮', 'a', greyColor.value.toRadixString(16), []);
   await routineBox.addAll([routine1, routine2, routine3]);
   // Dummy Workout Days
   final workoutDaysBox = Hive.box<WorkoutDay>('WorkoutDaysBox');
-  final workoutDay1 = WorkoutDay('Day 1', []);
-  final workoutDay2 = WorkoutDay('Day 2', []);
-  final workoutDay3 = WorkoutDay('Day 3', []);
+  final workoutDay1 = WorkoutDay('Day 1', 's', redColor.value.toRadixString(16), []);
+  final workoutDay2 = WorkoutDay('Day 2', 'q', greenColor.value.toRadixString(16), []);
+  final workoutDay3 = WorkoutDay('Day 3', 'p',greyColor.value.toRadixString(16),[]);
   await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
   // Dummy Exercises
   final exercisesBox = Hive.box<Exercise>('ExercisesBox');
@@ -48,8 +57,8 @@ Future<void> initializeDummyData() async {
   await exercisesBox.addAll([exercise1, exercise2, exercise3]);
   // Link routines with workout days
   routine1.workoutDays.add(workoutDay1.key);
-  routine1.workoutDays.add(workoutDay2.key);
-  routine2.workoutDays.add(workoutDay3.key);
+  routine2.workoutDays.add(workoutDay2.key);
+  routine3.workoutDays.add(workoutDay3.key);
   // Link workout days with exercises
   workoutDay1.exercises.add(exercise1.key);
   workoutDay2.exercises.add(exercise2.key);
