@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:mikococo/charts/stats/Status.dart';
+import '../charts/charts_screen.dart';
 import '../module/models.dart';
 
 class SetsScreen extends StatefulWidget {
@@ -14,6 +16,90 @@ class SetsScreen extends StatefulWidget {
 
 class _SetsScreenState extends State<SetsScreen> {
   final TextEditingController kgController = TextEditingController();
+
+  // Check if a date is within the last month
+  bool isWithinLastMonth(DateTime date, DateTime now) {
+    return date.isAfter(now.subtract(Duration(days: 30))) && date.isBefore(now);
+  }
+
+
+  List<int> getRepsData() {
+    List<int> repsData = [];
+    List<Map<String, dynamic>> setData = getSetData();
+
+    for (var data in setData) {
+      repsData.add(data['reps'] as int);
+    }
+
+    return repsData;
+  }
+  List<double> getKGData() {
+    List<double> kgData = [];
+    List<Map<String, dynamic>> setData = getSetData();
+
+    for (var data in setData) {
+      kgData.add(data['kg'] as double);
+    }
+
+    return kgData;
+  }
+
+  List<Map<String, dynamic>> getSetData() {
+    List<Map<String, dynamic>> setData = [];
+    DateTime now = DateTime.now();
+
+    for (int setKey in setKeys) {
+      final set = setsBox.get(setKey);
+      if (set != null && set.date != null) {
+        // Check if the set date is within the last month
+        if (isWithinLastMonth(set.date!, now)) {
+          setData.add({
+            'date': set.date!,
+            'reps': set.reps,
+            'kg': set.kg,
+          });
+        }
+      }
+    }
+
+    return setData;
+  }
+
+
+  // List<int> getRepsData() {
+  //   List<int> repsData = [];
+  //   DateTime now = DateTime.now();
+  //
+  //   for (int setKey in setKeys) {
+  //     final set = setsBox.get(setKey);
+  //     if (set != null && set.date != null) {
+  //       // Check if the set date is within the last month
+  //       if (isWithinLastMonth(set.date!, now)) {
+  //         repsData.add(set.reps);
+  //       }
+  //     }
+  //   }
+  //
+  //   return repsData;
+  // }
+  // List<double> getKGData() {
+  //   List<double> kgData = [];
+  //   DateTime now = DateTime.now();
+  //
+  //   for (int setKey in setKeys) {
+  //     final set = setsBox.get(setKey);
+  //     if (set != null && set.date != null) {
+  //       // Check if the set date is within the last month
+  //       if (isWithinLastMonth(set.date!, now)) {
+  //         kgData.add(set.kg);
+  //       }
+  //     }
+  //   }
+  //
+  //   return kgData;
+  // }
+
+
 
   List<int> setKeys = [];
   late Box<SetsScreenData> setsBox;
@@ -77,6 +163,34 @@ class _SetsScreenState extends State<SetsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sets for ${widget.exercise.name}', style: TextStyle(color: Colors.black)),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChartScreen(
+                  repsData: getRepsData(),
+                  kgData: getKGData(),
+                  dates: getSetData().map((data) => data['date'] as DateTime).toList(),
+                ),
+              ),
+            );
+          }, icon: Icon(Icons.add_chart)),
+          IconButton(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>StatusScreen(
+                  totalKg: totalKg.toString(),
+                  totalReps: totalReps.toString(),
+                  averageKg: averageKg.toStringAsFixed(2),
+                  bestKg: bestKg.toString(),
+                  bestReps: bestReps.toString(),
+                )
+              ),
+            );
+          }, icon: Icon(Icons.stacked_bar_chart)),
+        ],
       ),
       body: ListView.builder(
         itemCount: setKeys.length,

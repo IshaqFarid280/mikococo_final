@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
+import '../charts/charts_screen.dart';
 import '../module/models.dart';
 import 'exercise_list.dart';
 
