@@ -107,6 +107,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () { Navigator.of(context).pop();},
+        )
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddPictureScreen(
