@@ -8,9 +8,18 @@ class Routine extends HiveObject {
   String name;
 
   @HiveField(1)
+  String description;
+
+  @HiveField(2)
+  String leadingword;
+
+  @HiveField(3)
+  String avatarColor;
+
+  @HiveField(4)
   List<int> workoutDays;
 
-  Routine(this.name, this.workoutDays);
+  Routine(this.name,  this.description, this.leadingword, this.avatarColor, this.workoutDays);
 }
 
 
@@ -20,9 +29,15 @@ class WorkoutDay extends HiveObject {
   String name;
 
   @HiveField(1)
+  String leadingword;
+
+  @HiveField(2)
+  String avatarColors;
+
+  @HiveField(3)
   List<int> exercises;
 
-  WorkoutDay(this.name, this.exercises);
+  WorkoutDay(this.name, this.leadingword, this.avatarColors,  this.exercises);
 }
 
 

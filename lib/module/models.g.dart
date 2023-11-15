@@ -18,17 +18,26 @@ class RoutineAdapter extends TypeAdapter<Routine> {
     };
     return Routine(
       fields[0] as String,
-      (fields[1] as List).cast<int>(),
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      (fields[4] as List).cast<int>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Routine obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
+      ..write(obj.description)
+      ..writeByte(2)
+      ..write(obj.leadingword)
+      ..writeByte(3)
+      ..write(obj.avatarColor)
+      ..writeByte(4)
       ..write(obj.workoutDays);
   }
 
@@ -55,17 +64,23 @@ class WorkoutDayAdapter extends TypeAdapter<WorkoutDay> {
     };
     return WorkoutDay(
       fields[0] as String,
-      (fields[1] as List).cast<int>(),
+      fields[1] as String,
+      fields[2] as String,
+      (fields[3] as List).cast<int>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, WorkoutDay obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
+      ..write(obj.leadingword)
+      ..writeByte(2)
+      ..write(obj.avatarColors)
+      ..writeByte(3)
       ..write(obj.exercises);
   }
 

@@ -10,7 +10,7 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  var indexx = 0 ;
+  var indexx = 1 ;
   List<Widget> screens = [
     HomeScreen(null),
     MyRoutinesScreen(),
