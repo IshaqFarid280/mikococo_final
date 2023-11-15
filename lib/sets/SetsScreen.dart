@@ -65,42 +65,6 @@ class _SetsScreenState extends State<SetsScreen> {
     return setData;
   }
 
-
-  // List<int> getRepsData() {
-  //   List<int> repsData = [];
-  //   DateTime now = DateTime.now();
-  //
-  //   for (int setKey in setKeys) {
-  //     final set = setsBox.get(setKey);
-  //     if (set != null && set.date != null) {
-  //       // Check if the set date is within the last month
-  //       if (isWithinLastMonth(set.date!, now)) {
-  //         repsData.add(set.reps);
-  //       }
-  //     }
-  //   }
-  //
-  //   return repsData;
-  // }
-  // List<double> getKGData() {
-  //   List<double> kgData = [];
-  //   DateTime now = DateTime.now();
-  //
-  //   for (int setKey in setKeys) {
-  //     final set = setsBox.get(setKey);
-  //     if (set != null && set.date != null) {
-  //       // Check if the set date is within the last month
-  //       if (isWithinLastMonth(set.date!, now)) {
-  //         kgData.add(set.kg);
-  //       }
-  //     }
-  //   }
-  //
-  //   return kgData;
-  // }
-
-
-
   List<int> setKeys = [];
   late Box<SetsScreenData> setsBox;
 
@@ -136,23 +100,19 @@ class _SetsScreenState extends State<SetsScreen> {
     totalKg = 0;
     bestReps = 0;
     bestKg = 0;
-
     for (int setKey in setKeys) {
       final set = setsBox.get(setKey);
       if (set != null) {
         totalReps += set.reps;
         totalKg += set.kg.round();
-
         if (set.reps > bestReps) {
           bestReps = set.reps;
         }
-
         if (set.kg > bestKg) {
           bestKg = set.kg.round();
         }
       }
     }
-
     if (setKeys.isNotEmpty) {
       averageKg = totalKg / setKeys.length;
     }

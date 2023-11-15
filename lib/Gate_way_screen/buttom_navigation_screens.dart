@@ -47,7 +47,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       MyRoutinesScreen(),
       HomeScreen(null),
       TimerScreen(),
-      CalenderScreen(),
+      ShareScreen(),
     ];
 
     // Check if the index corresponds to a specific destination
@@ -69,7 +69,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     MyRoutinesScreen(),
     HomeScreen(null),
     TimerScreen(),
-    CalenderScreen()
+    ShareScreen()
   ];
   @override
   Widget build(BuildContext context) {
