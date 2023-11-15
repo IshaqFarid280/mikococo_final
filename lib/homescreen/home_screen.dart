@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   void addExercise(String name,String imagePath,WorkoutDay workoutDay) {
-    final exercise = Exercise(name,imagePath);
+    final exercise = Exercise(name,imagePath,null);
     Hive.box<Exercise>('ExercisesBox').add(exercise).then((exerciseKey) {
       workoutDay.exercises.add(exerciseKey);
       workoutDay.save();

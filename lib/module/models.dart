@@ -35,10 +35,10 @@ class Exercise extends HiveObject {
   String ? image ;
 
 
-  // @HiveField(2)
-  // String ? path ;
+  @HiveField(2)
+  List<int> ? sets;
 
-  Exercise(this.name,this.image,);
+  Exercise(this.name,this.image,this.sets);
 }
 
 
@@ -65,4 +65,19 @@ class DemonPictures extends HiveObject {
   String ? title;
 
   DemonPictures({this.image,this.title});
+}
+
+
+@HiveType(typeId: 5)
+class SetsScreenData extends HiveObject {
+  @HiveField(0)
+  int reps;
+
+  @HiveField(1)
+  double kg;
+
+  @HiveField(2)
+  DateTime ? date;
+
+  SetsScreenData(this.reps,this.kg,this.date);
 }

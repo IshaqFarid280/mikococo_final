@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mikococo/services/Boxes.dart';
+import 'package:mikococo/sets/SetsScreen.dart';
 import '../module/models.dart';
 import 'edit_exercise.dart';
 
@@ -16,14 +18,17 @@ class ExercisesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     ImageItem imageItem ;
+    ImageItem imageItem ;
     return ListView.builder(
       itemCount: exercises.length,
       itemBuilder: (context, index) {
         return ListTile(
+          onTap: (){
+            Navigator.push(context, CupertinoPageRoute(builder: (context)=>SetsScreen(exercises[index])));
+          },
           leading: CircleAvatar(
             backgroundImage:exercises[index].image.toString().contains('assets/images') ? AssetImage(exercises[index].image.toString()):FileImage(File(exercises[index].image.toString()))  as ImageProvider,
-              //
+            //
           ),
           // leading: IconButton(onPressed: (){
           //   onDelete(index);

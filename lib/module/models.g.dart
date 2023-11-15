@@ -93,17 +93,20 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
     return Exercise(
       fields[0] as String,
       fields[1] as String?,
+      (fields[2] as List?)?.cast<int>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Exercise obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.image);
+      ..write(obj.image)
+      ..writeByte(2)
+      ..write(obj.sets);
   }
 
   @override
@@ -187,6 +190,46 @@ class DemonPicturesAdapter extends TypeAdapter<DemonPictures> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DemonPicturesAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SetsScreenDataAdapter extends TypeAdapter<SetsScreenData> {
+  @override
+  final int typeId = 5;
+
+  @override
+  SetsScreenData read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return SetsScreenData(
+      fields[0] as int,
+      fields[1] as double,
+      fields[2] as DateTime?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, SetsScreenData obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.reps)
+      ..writeByte(1)
+      ..write(obj.kg)
+      ..writeByte(2)
+      ..write(obj.date);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SetsScreenDataAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

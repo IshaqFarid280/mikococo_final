@@ -14,11 +14,13 @@ void main() async  {
   Hive.registerAdapter(ExerciseAdapter());
   Hive.registerAdapter(AddingPicturesAdapter());
   Hive.registerAdapter(DemonPicturesAdapter());
+  Hive.registerAdapter(SetsScreenDataAdapter());
   await Hive.openBox<AddingPictures>('Pictures');
   await Hive.openBox<DemonPictures>('Demo');
   await Hive.openBox<Routine>('RoutineBox', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<WorkoutDay>('WorkoutDaysBox', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<Exercise>('ExercisesBox', compactionStrategy: (int total, int deleted) => deleted > 20);
+  await Hive.openBox<SetsScreenData>('SetsBox');
   if (Hive.box<Routine>('RoutineBox').isEmpty || Hive.box<WorkoutDay>('WorkoutDaysBox').isEmpty || Hive.box<Exercise>('ExercisesBox').isEmpty) {
     await initializeDummyData();
   }
@@ -40,9 +42,9 @@ Future<void> initializeDummyData() async {
   await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
   // Dummy Exercises
   final exercisesBox = Hive.box<Exercise>('ExercisesBox');
-  final exercise1 = Exercise('Push-ups',null);
-  final exercise2 = Exercise('Squats',null);
-  final exercise3 = Exercise('Pull-ups',null);
+  final exercise1 = Exercise('Push-ups',null,null);
+  final exercise2 = Exercise('Squats',null,null);
+  final exercise3 = Exercise('Pull-ups',null,null);
   await exercisesBox.addAll([exercise1, exercise2, exercise3]);
   // Link routines with workout days
   routine1.workoutDays.add(workoutDay1.key);

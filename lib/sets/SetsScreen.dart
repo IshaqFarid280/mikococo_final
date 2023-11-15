@@ -1,0 +1,310 @@
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
+import '../module/models.dart';
+
+class SetsScreen extends StatefulWidget {
+  final Exercise exercise;
+
+  SetsScreen(this.exercise);
+
+  @override
+  _SetsScreenState createState() => _SetsScreenState();
+}
+
+class _SetsScreenState extends State<SetsScreen> {
+  final TextEditingController kgController = TextEditingController();
+
+  List<int> setKeys = [];
+  late Box<SetsScreenData> setsBox;
+
+  int totalReps = 0;
+  int totalKg = 0;
+  int bestReps = 0;
+  int bestKg = 0;
+  double averageKg = 0.0;
+
+  int? selectedReps;
+  int? selectedKg;
+
+  @override
+  void initState() {
+    super.initState();
+    setsBox = Hive.box<SetsScreenData>('SetsBox');
+    loadSetKeys();
+    calculateStats();
+  }
+
+  void loadSetKeys() {
+    setKeys.clear();
+
+    if (widget.exercise.sets != null) {
+      for (int setKey in widget.exercise.sets!) {
+        setKeys.add(setKey);
+      }
+    }
+  }
+
+  void calculateStats() {
+    totalReps = 0;
+    totalKg = 0;
+    bestReps = 0;
+    bestKg = 0;
+
+    for (int setKey in setKeys) {
+      final set = setsBox.get(setKey);
+      if (set != null) {
+        totalReps += set.reps;
+        totalKg += set.kg.round();
+
+        if (set.reps > bestReps) {
+          bestReps = set.reps;
+        }
+
+        if (set.kg > bestKg) {
+          bestKg = set.kg.round();
+        }
+      }
+    }
+
+    if (setKeys.isNotEmpty) {
+      averageKg = totalKg / setKeys.length;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sets for ${widget.exercise.name}', style: TextStyle(color: Colors.black)),
+      ),
+      body: ListView.builder(
+        itemCount: setKeys.length,
+        itemBuilder: (context, index) {
+          final setIndex = index;
+          final set = setsBox.get(setKeys[setIndex])!;
+
+          // Check if the date has been displayed already
+          if (setIndex == 0 || set.date!.day != setsBox.get(setKeys[setIndex - 1])!.date!.day) {
+            // Display date ListTile
+            final formattedDate = DateFormat('yyyy-MM-dd').format(set.date!);
+            return Column(
+              children: [
+                ListTile(
+                  title: Text(formattedDate, style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                // Display set ListTile
+                ListTile(
+                  title: Text('Set ${setIndex + 1}: Reps - ${set.reps}, KG - ${set.kg}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          _showEditSetBottomSheet(setKeys[setIndex], set.reps, set.kg.round());
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          _deleteSet(setKeys[setIndex]);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          } else {
+            // Display set ListTile without the date
+            return ListTile(
+              title: Text('Set ${setIndex + 1}: Reps - ${set.reps}, KG - ${set.kg}'),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      _showEditSetBottomSheet(setKeys[setIndex], set.reps, set.kg.round());
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      _deleteSet(setKeys[setIndex]);
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddSetBottomSheet();
+        },
+        child: Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Total Reps: $totalReps'),
+              Text('Total KG: $totalKg'),
+              Text('Average KG: ${averageKg.toStringAsFixed(2)}'),
+              Text('Best Reps: $bestReps'),
+              Text('Best KG: $bestKg'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showAddSetBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  DropdownButton<int>(
+                    value: selectedReps,
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        selectedReps = newValue;
+                      });
+                    },
+                    items: List.generate(20, (index) {
+                      return DropdownMenuItem<int>(
+                        value: index + 1,
+                        child: Text((index + 1).toString()),
+                      );
+                    }),
+                  ),
+                  DropdownButton<int>(
+                    value: selectedKg,
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        selectedKg = newValue;
+                      });
+                    },
+                    items: List.generate(20, (index) {
+                      return DropdownMenuItem<int>(
+                        value: index + 1,
+                        child: Text((index + 1).toString()),
+                      );
+                    }),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (selectedReps != null && selectedKg != null) {
+                        final set = SetsScreenData(selectedReps!, selectedKg!.toDouble(), DateTime.now());
+
+                        setsBox.add(set).then((key) {
+                          // Update exercise's sets list
+                          if (widget.exercise.sets == null) {
+                            widget.exercise.sets = [];
+                          }
+                          widget.exercise.sets!.add(key);
+                          widget.exercise.save();
+
+                          loadSetKeys();
+                          calculateStats();
+
+                          Navigator.of(context).pop();
+                        });
+                      } else {
+                        // Handle the case where either selectedReps or selectedKg is null
+                        // You might want to show an error message or take appropriate action.
+                      }
+                    },
+                    child: Text('Add Set'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showEditSetBottomSheet(int setKey, int initialReps, int initialKg) {
+    int editedReps = initialReps;
+    int editedKg = initialKg;
+
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  DropdownButton<int>(
+                    value: editedReps,
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        editedReps = newValue!;
+                      });
+                    },
+                    items: List.generate(20, (index) {
+                      return DropdownMenuItem<int>(
+                        value: index + 1,
+                        child: Text((index + 1).toString()),
+                      );
+                    }),
+                  ),
+                  DropdownButton<int>(
+                    value: editedKg,
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        editedKg = newValue!;
+                      });
+                    },
+                    items: List.generate(20, (index) {
+                      return DropdownMenuItem<int>(
+                        value: index + 1,
+                        child: Text((index + 1).toString()),
+                      );
+                    }),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      final editedSet = SetsScreenData(editedReps, editedKg.toDouble(), DateTime.now());
+                      setsBox.put(setKey, editedSet);
+                      loadSetKeys();
+                      calculateStats();
+
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Edit Set'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _deleteSet(int setKey) {
+    setsBox.delete(setKey);
+    widget.exercise.sets?.remove(setKey);
+    widget.exercise.save();
+    loadSetKeys();
+    calculateStats();
+  }
+}
