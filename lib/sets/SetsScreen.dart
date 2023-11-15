@@ -261,21 +261,6 @@ class _SetsScreenState extends State<SetsScreen> {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Total Reps: $totalReps'),
-              Text('Total KG: $totalKg'),
-              Text('Average KG: ${averageKg.toStringAsFixed(2)}'),
-              Text('Best Reps: $bestReps'),
-              Text('Best KG: $bestKg'),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
