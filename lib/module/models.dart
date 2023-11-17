@@ -96,3 +96,25 @@ class SetsScreenData extends HiveObject {
 
   SetsScreenData(this.reps,this.kg,this.date);
 }
+
+
+
+@HiveType(typeId: 6)
+class TimerModel {
+  @HiveField(0)
+  late String timerName;
+
+  @HiveField(1)
+  late int seconds;
+
+  TimerModel(this.timerName, this.seconds);
+}
+
+
+@HiveType(typeId: 7) // Add this HiveType for the 'timerBox'
+class TimerBoxModel {
+  @HiveField(0)
+  late List<TimerModel> timers;
+
+  TimerBoxModel(this.timers);
+}

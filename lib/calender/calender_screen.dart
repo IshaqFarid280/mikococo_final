@@ -74,7 +74,6 @@ class _ShareScreenState extends State<ShareScreen> {
 
   Widget _buildExerciseData() {
     String exerciseData = _formatExerciseData();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -93,11 +92,8 @@ class _ShareScreenState extends State<ShareScreen> {
 
   String _formatExerciseData() {
     String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
-
     String exerciseText = 'Workout : $formattedDate\n';
-
     List<SetsScreenData> selectedDateSets = getSelectedDateSets(_selectedDate);
-
     for (SetsScreenData set in selectedDateSets) {
       Exercise? exercise = exercisesBox.get(set.key);
       String exerciseName = exercise?.name ?? 'Unknown Exercise';
@@ -110,14 +106,12 @@ class _ShareScreenState extends State<ShareScreen> {
 
   List<SetsScreenData> getSelectedDateSets(DateTime selectedDate) {
     List<SetsScreenData> selectedDateSets = [];
-
     for (int i = 0; i < setsBox.length; i++) {
       SetsScreenData set = setsBox.getAt(i)!;
       if (_isSameDay(set.date!, selectedDate)) {
         selectedDateSets.add(set);
       }
     }
-
     return selectedDateSets;
   }
 
