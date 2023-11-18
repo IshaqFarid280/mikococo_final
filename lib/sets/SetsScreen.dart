@@ -266,7 +266,7 @@ class _SetsScreenState extends State<SetsScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (selectedReps != null && selectedKg != null) {
-                        final set = SetsScreenData(selectedReps!, selectedKg!.toDouble(), DateTime.now());
+                        final set = SetsScreenData(selectedReps!, selectedKg!.toDouble(), DateTime.now(),widget.exercise.key);
 
                         setsBox.add(set).then((key) {
                           // Update exercise's sets list
@@ -341,7 +341,7 @@ class _SetsScreenState extends State<SetsScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      final editedSet = SetsScreenData(editedReps, editedKg.toDouble(), DateTime.now());
+                      final editedSet = SetsScreenData(editedReps, editedKg.toDouble(), DateTime.now(),widget.exercise.key);
                       setsBox.put(setKey, editedSet);
                       loadSetKeys();
                       calculateStats();

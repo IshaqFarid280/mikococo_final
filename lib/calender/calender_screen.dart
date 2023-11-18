@@ -94,11 +94,15 @@ class _ShareScreenState extends State<ShareScreen> {
     String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
     String exerciseText = 'Workout : $formattedDate\n';
     List<SetsScreenData> selectedDateSets = getSelectedDateSets(_selectedDate);
+
     for (SetsScreenData set in selectedDateSets) {
-      Exercise? exercise = exercisesBox.get(set.key);
-      String exerciseName = exercise?.name ?? 'Unknown Exercise';
-      String setInfo = '$exerciseName: ${set.reps}x${set.kg}kg';
-      exerciseText += '$setInfo\n';
+      Exercise? exercise = exercisesBox.get(set.exerciseKey);
+
+      if (exercise != null) {
+        String exerciseName = exercise.name ?? 'Unknown Exercise';
+        String setInfo = '$exerciseName: ${set.reps}x${set.kg}kg';
+        exerciseText += '$setInfo\n';
+      }
     }
 
     return exerciseText;

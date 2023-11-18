@@ -92,9 +92,12 @@ class SetsScreenData extends HiveObject {
   double kg;
 
   @HiveField(2)
-  DateTime ? date;
+  DateTime? date;
 
-  SetsScreenData(this.reps,this.kg,this.date);
+  @HiveField(3)
+  int exerciseKey;
+
+  SetsScreenData(this.reps, this.kg, this.date, this.exerciseKey);
 }
 
 
