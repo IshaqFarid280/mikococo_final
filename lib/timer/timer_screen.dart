@@ -1,19 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TimerScreen(),
-    );
-  }
-}
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import '../module/models.dart';
+import 'edit_timer.dart';
 
 class TimerScreen extends StatefulWidget {
   @override
@@ -22,15 +12,53 @@ class TimerScreen extends StatefulWidget {
 
 class _TimerScreenState extends State<TimerScreen> {
   int _selectedBox = -1; // Index of the selected box
-  List<int> _timerValues = [30, 60, 90, 120]; // Initial values for each box
-  List<int> _currentValues = [30, 60, 90, 120]; // Current displayed values for each box
+  late List<int> _timerValues;
+  late List<int> _currentValues;
   List<Timer?> _timers = List.filled(4, null); // Timers for each box
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTimerValues();
+  }
+
+  Future<void> _loadTimerValues() async {
+    final timerValuesBox = await Hive.openBox<TimerValues>('timerValues');
+    final timerValues = timerValuesBox.get('values', defaultValue: TimerValues([30, 60, 90, 120]));
+
+    setState(() {
+      _timerValues = List.from(timerValues?.values ?? []);
+      _currentValues = List.from(timerValues?.values ?? []);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Timer Screen'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () async {
+              // Navigate to EditTimerScreen and get the edited values
+              List<int>? editedValues = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditTimerScreen(timerValues: _timerValues),
+                ),
+              );
+
+              // Update the timer values if the user made changes
+              if (editedValues != null) {
+                setState(() {
+                  _timerValues = List.from(editedValues);
+                  _currentValues = List.from(editedValues);
+                });
+              }
+            },
+          ),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
