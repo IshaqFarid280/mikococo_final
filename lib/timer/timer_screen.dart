@@ -111,15 +111,14 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
   void _handleBoxTap(int index) {
-    if (_selectedBox != index) {
-      _stopTimer(_selectedBox);
-      setState(() {
-        _selectedBox = index;
-        _currentValues[_selectedBox] = _timerValues[_selectedBox];
-      });
-      _startTimer(_currentValues[_selectedBox]);
-    }
+    _stopTimer(_selectedBox); // Stop the previously selected timer, if any
+    setState(() {
+      _selectedBox = index;
+      _currentValues[_selectedBox] = _timerValues[_selectedBox];
+    });
+    _startTimer(_currentValues[_selectedBox]);
   }
+
 
   void _startTimer(int initialValue) {
     _timers[_selectedBox]?.cancel(); // Cancel previous timer, if any
