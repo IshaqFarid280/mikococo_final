@@ -19,16 +19,14 @@ void main() async  {
   Hive.registerAdapter(AddingPicturesAdapter());
   Hive.registerAdapter(DemonPicturesAdapter());
   Hive.registerAdapter(SetsScreenDataAdapter());
-  Hive.registerAdapter(TimerModelAdapter());
-  Hive.registerAdapter(TimerBoxModelAdapter());
+  Hive.registerAdapter(TimerValuesAdapter());
   await Hive.openBox<AddingPictures>('Pictures');
   await Hive.openBox<DemonPictures>('Demo');
   await Hive.openBox<Routine>('RoutineBox', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<WorkoutDay>('WorkoutDaysBox', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<Exercise>('ExercisesBox', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<SetsScreenData>('SetsBox');
-  await Hive.openBox<TimerModel>('timerBox');
-  await Hive.openBox<TimerBoxModel>('timerBoxModel');
+  await Hive.openBox<TimerValues>('timerValues');
   if (Hive.box<Routine>('RoutineBox').isEmpty || Hive.box<WorkoutDay>('WorkoutDaysBox').isEmpty || Hive.box<Exercise>('ExercisesBox').isEmpty) {
     await initializeDummyData();
   }

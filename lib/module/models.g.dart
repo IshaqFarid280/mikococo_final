@@ -223,19 +223,22 @@ class SetsScreenDataAdapter extends TypeAdapter<SetsScreenData> {
       fields[0] as int,
       fields[1] as double,
       fields[2] as DateTime?,
+      fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, SetsScreenData obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.reps)
       ..writeByte(1)
       ..write(obj.kg)
       ..writeByte(2)
-      ..write(obj.date);
+      ..write(obj.date)
+      ..writeByte(3)
+      ..write(obj.exerciseKey);
   }
 
   @override
@@ -249,30 +252,27 @@ class SetsScreenDataAdapter extends TypeAdapter<SetsScreenData> {
           typeId == other.typeId;
 }
 
-class TimerModelAdapter extends TypeAdapter<TimerModel> {
+class TimerValuesAdapter extends TypeAdapter<TimerValues> {
   @override
   final int typeId = 6;
 
   @override
-  TimerModel read(BinaryReader reader) {
+  TimerValues read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TimerModel(
-      fields[0] as String,
-      fields[1] as int,
+    return TimerValues(
+      (fields[0] as List).cast<int>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, TimerModel obj) {
+  void write(BinaryWriter writer, TimerValues obj) {
     writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.timerName)
       ..writeByte(1)
-      ..write(obj.seconds);
+      ..writeByte(0)
+      ..write(obj.values);
   }
 
   @override
@@ -281,41 +281,7 @@ class TimerModelAdapter extends TypeAdapter<TimerModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TimerModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class TimerBoxModelAdapter extends TypeAdapter<TimerBoxModel> {
-  @override
-  final int typeId = 7;
-
-  @override
-  TimerBoxModel read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return TimerBoxModel(
-      (fields[0] as List).cast<TimerModel>(),
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, TimerBoxModel obj) {
-    writer
-      ..writeByte(1)
-      ..writeByte(0)
-      ..write(obj.timers);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TimerBoxModelAdapter &&
+      other is TimerValuesAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
