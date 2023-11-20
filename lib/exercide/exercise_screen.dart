@@ -11,8 +11,6 @@ import 'package:mikococo/sets/SetsScreen.dart';
 import 'package:provider/provider.dart';
 import '../module/models.dart';
 
-
-
 class ExercisesScreen extends StatelessWidget {
   final WorkoutDay workoutDay;
 
@@ -42,6 +40,7 @@ class ExercisesScreen extends StatelessWidget {
   // }
 
   Widget build(BuildContext context) {
+    debugPrint('ExercisesScreen rebuilt');
     // var exercisesBox = Hive.box<Exercise>('ExercisesBox');
     // List<Exercise> exercises = exercisesBox.values
     //     .where((exercise) => widget.workoutDay.exercises.contains(exercise.key))
@@ -53,37 +52,77 @@ class ExercisesScreen extends StatelessWidget {
         title: Text('Exercises for ${workoutDay.name}'),
       ),
       body: Consumer<ExercisesScreenProvider>(
-        builder: (context, exercisesScreenProvider, _){
+        builder: (context, exercisesScreenProvider, _) {
+          if (exercisesScreenProvider.exercises.isEmpty) {
+            // If there are no routines, display a message
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/emptyIcon.png',
+                    height: 100,
+                    width: 100,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'No Items',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Text(
+                    "You don't have any routines. Add a routine using the '+' button.",
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
+          }
           return ListView.builder(
             itemCount: exercisesScreenProvider.exercises.length,
             itemBuilder: (context, index) {
               return ListTile(
-                onTap: (){
-                  Navigator.push(context, CupertinoPageRoute(builder: (context)=>SetsScreen(exercisesScreenProvider.exercises[index])));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => SetsScreen(
+                              exercisesScreenProvider.exercises[index])));
                 },
                 leading: CircleAvatar(
-                  backgroundImage:exercisesScreenProvider.exercises[index].image.toString().contains('assets/images') ? AssetImage(exercisesScreenProvider.exercises[index].image.toString()):FileImage(File(exercisesScreenProvider.exercises[index].image.toString()))  as ImageProvider,
+                  backgroundImage: exercisesScreenProvider
+                          .exercises[index].image
+                          .toString()
+                          .contains('assets/images')
+                      ? AssetImage(exercisesScreenProvider
+                          .exercises[index].image
+                          .toString())
+                      : FileImage(File(exercisesScreenProvider
+                          .exercises[index].image
+                          .toString())) as ImageProvider,
                   //
                 ),
-
                 title: Text(exercisesScreenProvider.exercises[index].name),
-                trailing:IconButton(onPressed: (){
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('Edit Exercise'),
-                        content: EditExerciseForm(
-                          initialName: exercisesScreenProvider.exercises[index].name,
-                          onEdit: (String newName) {
-                            exercisesScreenProvider.updateExercise(index, newName);
-                            Navigator.of(context).pop();
-                          },
-                        ),
+                trailing: IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Edit Exercise'),
+                            content: EditExerciseForm(
+                              initialName:
+                                  exercisesScreenProvider.exercises[index].name,
+                              onEdit: (String newName) {
+                                exercisesScreenProvider.updateExercise(
+                                    index, newName);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                }, icon:const Icon(Icons.edit)),
+                    icon: const Icon(Icons.edit)),
               );
             },
           );
@@ -91,13 +130,15 @@ class ExercisesScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> HomeScreen(workoutDay),),);
+          Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => HomeScreen(workoutDay),
+            ),
+          );
         },
         child: Icon(Icons.add),
       ),
     );
   }
-
-
-
 }
