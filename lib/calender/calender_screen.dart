@@ -106,7 +106,6 @@ class _ShareScreenState extends State<ShareScreen> {
         exerciseText += '$setInfo\n';
       }
     }
-
     return exerciseText;
   }
 

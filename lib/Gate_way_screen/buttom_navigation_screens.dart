@@ -84,8 +84,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.fitness_center),label: 'workoout'),
             BottomNavigationBarItem(icon: Icon(Icons.menu),label: 'exercises'),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_month),label: 'Calender'),
             BottomNavigationBarItem(icon: Icon(Icons.timer),label: 'Timer'),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_month),label: 'Calender'),
           ]
       ),
       body: screens[_selectedindexx],
