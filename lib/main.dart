@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'Gate_way_screen/buttom_navigation_screens.dart';
 import 'module/models.dart';
+import 'timer/timer.model.dart';
 
 void main() async  {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +32,9 @@ void main() async  {
   }
   runApp(
       MultiProvider(providers: [
-        ChangeNotifierProvider(create: (context) => RoutineProvider())
+        ChangeNotifierProvider(create: (context) => RoutineProvider()),
+        ChangeNotifierProvider(create: (context) => TimerModel()),
+
       ],
         child: MyApp(),
       )

@@ -53,7 +53,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       body: ExercisesList(exercises,deleteExercise,updateExercise),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, CupertinoPageRoute(builder: (context)=> HomeScreen(widget.workoutDay),),);
+          Navigator.push(context, CupertinoPageRoute(builder: (context)=> HomeScreen(widget.workoutDay,isExerciseScreen: true,),),);
           // showDialog(
           //   context: context,
           //   builder: (context) {

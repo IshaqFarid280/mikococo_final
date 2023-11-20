@@ -34,20 +34,22 @@ class _ShareScreenState extends State<ShareScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildCalendar(),
-            SizedBox(height: 16),
-            _buildExerciseData(),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                _shareExerciseData(_formatExerciseData());
-              },
-              child: Text('Share'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildCalendar(),
+              SizedBox(height: 16),
+              _buildExerciseData(),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  _shareExerciseData(_formatExerciseData());
+                },
+                child: Text('Share'),
+              ),
+            ],
+          ),
         ),
       ),
     );
