@@ -1,11 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mikococo/exercide/edit_exercise.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
-import '../charts/charts_screen.dart';
+import 'package:mikococo/sets/SetsScreen.dart';
 import '../module/models.dart';
-import 'exercise_list.dart';
 
 
 
@@ -40,7 +42,9 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       widget.workoutDay.exercises.add(exercise.key);
       widget.workoutDay.save();
     });
+
   }
+
   Widget build(BuildContext context) {
     var exercisesBox = Hive.box<Exercise>('ExercisesBox');
     List<Exercise> exercises = exercisesBox.values
@@ -50,36 +54,48 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       appBar: AppBar(
         title: Text('Exercises for ${widget.workoutDay.name}'),
       ),
-      body: ExercisesList(exercises,deleteExercise,updateExercise),
+      body: ListView.builder(
+        itemCount: exercises.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            onTap: (){
+              Navigator.push(context, CupertinoPageRoute(builder: (context)=>SetsScreen(exercises[index])));
+            },
+            leading: CircleAvatar(
+              backgroundImage:exercises[index].image.toString().contains('assets/images') ? AssetImage(exercises[index].image.toString()):FileImage(File(exercises[index].image.toString()))  as ImageProvider,
+              //
+            ),
+
+            title: Text(exercises[index].name),
+            trailing:IconButton(onPressed: (){
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Edit Exercise'),
+                    content: EditExerciseForm(
+                      initialName: exercises[index].name,
+                      onEdit: (String newName) {
+                        updateExercise(index, newName);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  );
+                },
+              );
+            }, icon:const Icon(Icons.edit)),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, CupertinoPageRoute(builder: (context)=> HomeScreen(widget.workoutDay),),);
-          // showDialog(
-          //   context: context,
-          //   builder: (context) {
-          //     return AlertDialog(
-          //       title: Text('Add Exercise'),
-          //       content: AddExerciseForm(
-          //         onAdd: (String name) {
-          //           addExercise(name, widget.workoutDay);
-          //           Navigator.of(context).pop();
-          //         },
-          //       ),
-          //     );
-          //   },
-          // );
+          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> HomeScreen(widget.workoutDay),),);
         },
         child: Icon(Icons.add),
       ),
     );
   }
 
-  // void addExercise(String name, WorkoutDay workoutDay) {
-  //   final exercise = Exercise(name);
-  //   Hive.box<Exercise>('ExercisesBox').add(exercise).then((exerciseKey) {
-  //     workoutDay.exercises.add(exerciseKey);
-  //     workoutDay.save();
-  //   });
-  // }
+
 
 }

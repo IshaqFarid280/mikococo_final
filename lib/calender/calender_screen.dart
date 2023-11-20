@@ -100,7 +100,6 @@ class _ShareScreenState extends State<ShareScreen> {
       String setInfo = '$exerciseName: ${set.reps}x${set.kg}kg';
       exerciseText += '$setInfo\n';
     }
-
     return exerciseText;
   }
 
