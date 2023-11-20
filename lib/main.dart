@@ -5,6 +5,7 @@ import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/homescreen/HomeScreenProvider.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
+import 'package:mikococo/timer/timer.model.dart';
 import 'package:mikococo/workout/WorkoutScreenProvider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,7 @@ void main() async  {
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => RoutineProvider()),
         ChangeNotifierProvider(create: (context) => HomeScreenProvider()),
+        ChangeNotifierProvider(create: (context) => TimerModel()),
         ChangeNotifierProvider(create: (context) => ExercisesScreenProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutDaysScreenProvider()),
       ],

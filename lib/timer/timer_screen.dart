@@ -1,9 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import '../module/models.dart';
+import 'package:provider/provider.dart';
 import 'edit_timer.dart';
+import 'timer.model.dart'; // Adjust the import path based on your project structure
 
 class TimerScreen extends StatefulWidget {
   @override
@@ -11,25 +9,16 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  int _selectedBox = -1; // Index of the selected box
-  late List<int> _timerValues;
-  late List<int> _currentValues;
-  List<Timer?> _timers = List.filled(4, null); // Timers for each box
+  late Future<void> _loadTimerValues;
 
   @override
   void initState() {
     super.initState();
-    _loadTimerValues();
+    _loadTimerValues = _loadValues();
   }
 
-  Future<void> _loadTimerValues() async {
-    final timerValuesBox = await Hive.openBox<TimerValues>('timerValues');
-    final timerValues = timerValuesBox.get('values', defaultValue: TimerValues([30, 60, 90, 120]));
-
-    setState(() {
-      _timerValues = List.from(timerValues?.values ?? []);
-      _currentValues = List.from(timerValues?.values ?? []);
-    });
+  Future<void> _loadValues() async {
+    await Provider.of<TimerModel>(context, listen: false).loadTimerValues();
   }
 
   @override
@@ -41,105 +30,128 @@ class _TimerScreenState extends State<TimerScreen> {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () async {
-              // Navigate to EditTimerScreen and get the edited values
-              List<int>? editedValues = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditTimerScreen(timerValues: _timerValues),
-                ),
-              );
-
-              // Update the timer values if the user made changes
-              if (editedValues != null) {
-                setState(() {
-                  _timerValues = List.from(editedValues);
-                  _currentValues = List.from(editedValues);
-                });
-              }
+              _editTimer(context);
             },
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(
-              _timerValues.length,
-                  (index) => GestureDetector(
-                onTap: () {
-                  _handleBoxTap(index);
-                },
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  color: _selectedBox == index ? Colors.blue : Colors.grey,
-                  child: Center(
-                    child: Text(
-                      '${_currentValues[index]}s',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.stop),
-            label: 'Stop Timer',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pause), // Customize the icon as needed
-            label: 'Pause Timer', // Customize the label as needed
-          ),
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            _stopTimer(_selectedBox);
-          } else if (index == 1) {
-            // Handle the functionality for the second item (e.g., pause timer)
-            // Add your logic here
+      body: FutureBuilder(
+        future: _loadTimerValues,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Consumer<TimerModel>(
+              builder: (context, timerModel, child) {
+                return TimerButtons(timerModel: timerModel);
+              },
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
+      ),
+      bottomNavigationBar: TimerBottomNavigationBar(),
+    );
+  }
+
+  void _editTimer(BuildContext context) async {
+    var timerModel = Provider.of<TimerModel>(context, listen: false);
+
+    List<int>? editedValues = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTimerScreen(timerValues: timerModel.timerValues),
+      ),
+    );
+
+    if (editedValues != null) {
+      timerModel.timerValues = List.from(editedValues);
+      timerModel.currentValues = List.from(editedValues);
+    }
+  }
+}
+
+class TimerButtons extends StatelessWidget {
+  final TimerModel timerModel;
+
+  TimerButtons({required this.timerModel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: List.generate(
+            timerModel.timers.length,
+                (index) => TimerButton(index: index, timerModel: timerModel),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TimerButton extends StatelessWidget {
+  final int index;
+  final TimerModel timerModel;
+
+  TimerButton({required this.index, required this.timerModel});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _handleTimerTap(context),
+      child: Container(
+        width: 50,
+        height: 50,
+        color: timerModel.selectedBox == index ? Colors.blue : Colors.grey,
+        child: Center(
+          child: Text(
+            '${timerModel.currentValues[index]}s',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
       ),
     );
   }
 
-  void _handleBoxTap(int index) {
-    _stopTimer(_selectedBox); // Stop the previously selected timer, if any
-    setState(() {
-      _selectedBox = index;
-      _currentValues[_selectedBox] = _timerValues[_selectedBox];
-    });
-    _startTimer(_currentValues[_selectedBox]);
+  void _handleTimerTap(BuildContext context) {
+    timerModel.stopTimer(timerModel.selectedBox);
+    timerModel.selectedBox = index;
+    timerModel.currentValues[timerModel.selectedBox] = timerModel.timerValues[timerModel.selectedBox];
+    timerModel.startTimer(timerModel.selectedBox, timerModel.currentValues[timerModel.selectedBox]);
+  }
+}
+
+class TimerBottomNavigationBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var timerModel = Provider.of<TimerModel>(context);
+
+    return BottomNavigationBar(
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.stop),
+          label: 'Stop Timer',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.pause),
+          label: 'Pause Timer',
+        ),
+      ],
+      onTap: (index) => _handleBottomNavBarTap(index, timerModel),
+    );
   }
 
-
-  void _startTimer(int initialValue) {
-    _timers[_selectedBox]?.cancel(); // Cancel previous timer, if any
-    _timers[_selectedBox] = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (initialValue > 0) {
-        setState(() {
-          _currentValues[_selectedBox] = initialValue;
-        });
-        initialValue--;
-      } else {
-        timer.cancel();
-        setState(() {
-          _selectedBox = -1;
-        });
-      }
-    });
-  }
-
-  void _stopTimer(int index) {
-    if (index >= 0 && index < _timers.length) {
-      _timers[index]?.cancel();
+  void _handleBottomNavBarTap(int index, TimerModel timerModel) {
+    if (index == 0) {
+      timerModel.stopTimer(timerModel.selectedBox);
+    } else if (index == 1) {
+      // Handle the functionality for the second item (e.g., pause timer)
+      // Add your logic here
     }
   }
 }

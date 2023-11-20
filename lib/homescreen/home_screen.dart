@@ -16,7 +16,8 @@ import 'add_info_screen.dart';
 class HomeScreen extends StatefulWidget {
   // final Function(String) ? onAdd;
   final WorkoutDay ? workoutDay;
-   HomeScreen(this.workoutDay);
+  final isExerciseScreen ;
+   HomeScreen(this.workoutDay,{this.isExerciseScreen = false});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -80,9 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Container(
                                   margin: const EdgeInsets.only(top: 5),
                                   child: ListTile(
-                                    trailing: IconButton(onPressed: ()  {
+                                    trailing:widget.isExerciseScreen ?  IconButton(onPressed: ()  {
                                       // add data into exercise list
-
                                       imageItem.isAsset ? imageItem.imagePath :imageItem.imagePath;
                                       homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
                                       setState(() {
@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       });
                                       Navigator.pop(context);
                                       Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
-                                    }, icon: Icon(Icons.add)),
+                                    }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
                                     onTap: (){
                                       Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                     },
@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   return Container(
                                     margin: const EdgeInsets.only(top: 5),
                                     child: ListTile(
-                                      trailing: IconButton(onPressed: (){
+                                      trailing:widget.isExerciseScreen ?  IconButton(onPressed: (){
                                         // add data into exercise list
 
                                         imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         });
                                         Navigator.pop(context);
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
-                                      }, icon: Icon(Icons.add)),
+                                      }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
                                       onTap: (){
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                       },

@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:mikococo/charts/stats/Status.dart';
+import 'package:mikococo/sets/sets_timer.dart';
+import 'package:provider/provider.dart';
 import '../charts/charts_screen.dart';
 import '../module/models.dart';
+import '../timer/timer.model.dart';
 
 class SetsScreen extends StatefulWidget {
   final Exercise exercise;
@@ -120,10 +125,22 @@ class _SetsScreenState extends State<SetsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var timerModel = Provider.of<TimerModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Sets for ${widget.exercise.name}', style: TextStyle(color: Colors.black)),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DummyTimerScreen(),
+                ),
+              );
+            },
+            icon: Icon(Icons.timer),
+          ),
           IconButton(onPressed: (){
             Navigator.push(
               context,
@@ -221,8 +238,95 @@ class _SetsScreenState extends State<SetsScreen> {
         },
         child: Icon(Icons.add),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.timer),
+            label: timerModel.selectedBox != -1
+                ? 'Timer: ${timerModel.currentValues[timerModel.selectedBox]}s'
+                :'Timer: ${timerModel.dummyTimerValue}s' ,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.stop),
+            label: 'Stop Timer',
+          ),
+        ],
+        onTap: (index) => _handleBottomNavBarTap(index, timerModel),
+      ),
+      // bottomNavigationBar: Consumer<TimerModel>(
+      //   builder: (context, timerModel, _) => BottomNavigationBar(
+      //     items: [
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.timer),
+      //         label: timerModel.selectedBox != -1
+      //             ? 'Timer: ${timerModel.currentValues[timerModel.selectedBox]}s'
+      //             : 'Start Timer',
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.stop),
+      //         label: 'Stop Timer',
+      //       ),
+      //     ],
+      //     onTap: (index) {
+      //       if (index == 0) {
+      //         // Start or stop the timer in TimerScreen for the selected box
+      //         if (timerModel.selectedBox != -1) {
+      //           if (timerModel.timers[timerModel.selectedBox] != null &&
+      //               timerModel.timers[timerModel.selectedBox]!.isActive) {
+      //             timerModel.stopTimer(timerModel.selectedBox);
+      //           } else {
+      //             // Adjust the initial value as needed
+      //             timerModel.startTimer(timerModel.selectedBox, 45);
+      //           }
+      //         }
+      //       } else if (index == 1) {
+      //         // Stop the timer for the selected box
+      //         if (timerModel.selectedBox != -1 &&
+      //             timerModel.timers[timerModel.selectedBox] != null &&
+      //             timerModel.timers[timerModel.selectedBox]!.isActive) {
+      //           timerModel.stopTimer(timerModel.selectedBox);
+      //         }
+      //       }
+      //     },
+      //   ),
+      // ),
     );
   }
+  void _handleBottomNavBarTap(int index, TimerModel timerModel) {
+    if (index == 0) {
+      // Start or stop the timer in SetsScreen for the selected box
+      if (timerModel.selectedBox != -1) {
+        if (timerModel.timers[timerModel.selectedBox] != null &&
+            timerModel.timers[timerModel.selectedBox]!.isActive) {
+          timerModel.stopTimer(timerModel.selectedBox);
+        } else {
+          // Start the timer for the selected box
+          timerModel.startTimer(
+            timerModel.selectedBox,
+            timerModel.timerValues[timerModel.dummyTimerValue],
+          );
+        }
+      } else {
+        // Start the dummy timer
+        timerModel.startTimer(
+          timerModel.dummyTimerValue,
+          timerModel.timerValues[timerModel.dummyTimerValue],
+        );
+      }
+    } else if (index == 1) {
+      // Stop the timer for the selected box or stop the dummy timer
+      if (timerModel.selectedBox != -1 &&
+          timerModel.timers[timerModel.selectedBox] != null &&
+          timerModel.timers[timerModel.selectedBox]!.isActive) {
+        timerModel.stopTimer(timerModel.selectedBox);
+      } else {
+        // Stop the dummy timer
+        timerModel.stopTimer(timerModel.dummyTimerValue);
+      }
+    }
+  }
+
+
 
   void _showAddSetBottomSheet() {
     showModalBottomSheet<void>(

@@ -45,7 +45,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     // Define a list of destinations for each index
     List<Widget> destinations = [
       MyRoutinesScreen(),
-      HomeScreen(null),
+      HomeScreen(null,isExerciseScreen: false,),
       TimerScreen(),
       ShareScreen(),
     ];
