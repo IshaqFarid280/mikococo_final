@@ -51,5 +51,6 @@ class ExercisesScreenProvider extends ChangeNotifier {
     _workoutDay!.exercises.add(exercise.key);
     _workoutDay!.save();
     loadExercises();
+    print('Exercise added: ${exercise.name}');
   }
 }

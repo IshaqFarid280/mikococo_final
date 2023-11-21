@@ -14,7 +14,8 @@ class WorkoutDaysScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var workoutDaysScreenProvider = Provider.of<WorkoutDaysScreenProvider>(context);
+    var workoutDaysScreenProvider =
+        Provider.of<WorkoutDaysScreenProvider>(context);
     workoutDaysScreenProvider.loadWorkoutDays(routine);
 
     return Scaffold(
@@ -23,6 +24,30 @@ class WorkoutDaysScreen extends StatelessWidget {
       ),
       body: Consumer<WorkoutDaysScreenProvider>(
         builder: (context, workoutDaysScreenProvider, _) {
+          if (workoutDaysScreenProvider.workoutDays.isEmpty) {
+            // If there are no routines, display a message
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/emptyIcon.png',
+                    height: 100,
+                    width: 100,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'No Items',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Text(
+                    "You don't have any routines. Add a routine using the '+' button.",
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
+          }
           return ListView.builder(
             itemCount: workoutDaysScreenProvider.workoutDays.length,
             itemBuilder: (context, index) {
@@ -30,9 +55,12 @@ class WorkoutDaysScreen extends StatelessWidget {
                 leading: CircleAvatar(
                   backgroundColor: Color(
                     int.parse(
-                      workoutDaysScreenProvider.workoutDays[index].avatarColors.replaceFirst('#', ''),
-                      radix: 16,
-                    ) | 0xff000000,
+                          workoutDaysScreenProvider
+                              .workoutDays[index].avatarColors
+                              .replaceFirst('#', ''),
+                          radix: 16,
+                        ) |
+                        0xff000000,
                   ),
                   child: Text(
                     workoutDaysScreenProvider.workoutDays[index].leadingword,
@@ -43,7 +71,9 @@ class WorkoutDaysScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => ExercisesScreen(workoutDaysScreenProvider.workoutDays.elementAt(index)),
+                      builder: (context) => ExercisesScreen(
+                          workoutDaysScreenProvider.workoutDays
+                              .elementAt(index)),
                     ),
                   );
                 },
@@ -55,9 +85,11 @@ class WorkoutDaysScreen extends StatelessWidget {
                         return AlertDialog(
                           title: Text('Edit Workout Day'),
                           content: EditWorkoutDayForm(
-                            initialName: workoutDaysScreenProvider.workoutDays[index].name,
+                            initialName: workoutDaysScreenProvider
+                                .workoutDays[index].name,
                             onEdit: (String newName) {
-                              workoutDaysScreenProvider.updateWorkoutDay(index, newName, routine);
+                              workoutDaysScreenProvider.updateWorkoutDay(
+                                  index, newName, routine);
                               Navigator.of(context).pop();
                             },
                           ),
@@ -78,8 +110,10 @@ class WorkoutDaysScreen extends StatelessWidget {
             context,
             CupertinoPageRoute(
               builder: (ctx) => AddWorkoutDayForm(
-                onAdd: (String name, String leadingtext, String leadingavatarcolor) {
-                  workoutDaysScreenProvider.addWorkoutDay(name, leadingtext, leadingavatarcolor, routine);
+                onAdd: (String name, String leadingtext,
+                    String leadingavatarcolor) {
+                  workoutDaysScreenProvider.addWorkoutDay(
+                      name, leadingtext, leadingavatarcolor, routine);
                   Navigator.of(context).pop();
                 },
               ),

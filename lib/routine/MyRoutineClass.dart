@@ -45,6 +45,27 @@ class MyRoutinesScreen extends StatelessWidget {
       body: Consumer<RoutineProvider>(
           builder: (context, routineProvider, _) {
             List<Routine> routines = routineProvider.routines;
+            if (routines.isEmpty) {
+              // If there are no routines, display a message
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/emptyIcon.png', height: 100, width: 100,),
+                    SizedBox(height: 16),
+                    Text(
+                      'No Items',
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    Text(
+                      "You don't have any routines. Add a routine using the '+' button.",
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            }
+
             return ValueListenableBuilder<Box<Routine>>(
                 valueListenable: Hive.box<Routine>('RoutineBox').listenable(),
                 builder: (context, Box<Routine> box, _) {
