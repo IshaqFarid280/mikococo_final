@@ -145,6 +145,8 @@ class KGChart extends StatelessWidget {
               // getTextStyles: (context, value) => const TextStyle(color: Colors.white),
             ),
             bottomTitles: SideTitles(
+              rotateAngle: 45,
+              margin:10 ,
               showTitles: true,
               getTextStyles: (context, value) => const TextStyle(color: Colors.white),
               // Customize the date labels based on your needs

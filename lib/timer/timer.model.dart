@@ -12,6 +12,12 @@ class TimerModel extends ChangeNotifier {
   int dummyTimerValue = 60;
   bool isTimerRunning = false;
 
+  bool isTimerInSetsScreen = false;
+
+
+  // Define the index of the dummy timer
+  static const int dummyTimerIndex = 0;
+
   void resetDummyTimer() {
     dummyTimerValue = 60; // You can set any initial value
     notifyListeners();
@@ -29,52 +35,53 @@ class TimerModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+
+
+
+
+
+
   void startTimer(int selectedBox, int initialValue) {
-    print('Start Timer Called - selectedBox: $selectedBox, initialValue: $initialValue');
-    print('Timer List Length: ${timers.length}');
-    print('Timer State: ${timers[selectedBox]?.isActive}');
-
-    stopTimer(this.selectedBox); // Stop the previous timer
-
+    stopTimer(this.selectedBox);
     this.selectedBox = selectedBox;
-    currentValues[selectedBox] = initialValue;
 
-    _startTimer(currentValues[selectedBox]); // Start the timer with the current value
+    if (timerValues.isEmpty) {
+      // Handle the case when timerValues is empty
+      dummyTimerValue = 60; // Set any default value
+      notifyListeners();
+      return;
+    }
+
+    // Start the dummy timer if the selected box is the dummy timer index
+    if (selectedBox == dummyTimerIndex) {
+      _startTimer(currentValues[dummyTimerIndex]);
+    } else {
+      // Start the regular timer
+      currentValues[selectedBox] = initialValue;
+      _startTimer(currentValues[selectedBox]);
+    }
 
     notifyListeners();
   }
 
-  // void startTimer(int selectedBox, int initialValue) {
-  //   print('Start Timer Called - selectedBox: $selectedBox, initialValue: $initialValue');
-  //   print('Timer List Length: ${timers.length}');
-  //   print('Timer State: ${timers[selectedBox]?.isActive}');
-  //
-  //   if (selectedBox == dummyTimerValue) {
-  //     // Handle starting the dummy timer
-  //     stopTimer(selectedBox); // Stop the previous timer
-  //     this.selectedBox = selectedBox;
-  //     currentValues[selectedBox] = initialValue;
-  //     _startTimer(currentValues[selectedBox]); // Start the timer with the current value
-  //   } else if (selectedBox >= 0 && selectedBox < timers.length) {
-  //     // Handle starting the regular timer
-  //     stopTimer(this.selectedBox); // Stop the previous timer
-  //     this.selectedBox = selectedBox;
-  //     currentValues[selectedBox] = initialValue;
-  //     _startTimer(currentValues[selectedBox]); // Start the timer with the current value
-  //   }
-  //
-  //   notifyListeners();
-  // }
-
 
   void _startTimer(int initialValue) {
-    timers[selectedBox]?.cancel();
+    if (selectedBox == dummyTimerIndex) {
+      // Handle dummy timer logic
+      if (dummyTimerIndex < 0 || dummyTimerIndex >= timerValues.length) {
+        print('Invalid dummy timer index or timerValues length is not sufficient.');
+        selectedBox = -1;
+        return;
+      }
+    }
 
+    timers[selectedBox]?.cancel();
     timers[selectedBox] = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (selectedBox == dummyTimerValue) {
+      if (selectedBox == dummyTimerIndex) {
         // Handle dummy timer logic
         if (initialValue > 0) {
-          currentValues[selectedBox] = initialValue;
+          currentValues[dummyTimerIndex] = initialValue;
           initialValue--;
         } else {
           timer.cancel();
@@ -96,38 +103,14 @@ class TimerModel extends ChangeNotifier {
     });
   }
 
-  // void _startTimer(int initialValue) {
-  //   timers[selectedBox]?.cancel();
-  //   timers[selectedBox] = Timer.periodic(Duration(seconds: 1), (timer) {
-  //     if (initialValue > 0) {
-  //       currentValues[selectedBox] = initialValue;
-  //       initialValue--;
-  //     } else {
-  //       timer.cancel();
-  //       selectedBox = -1;
-  //     }
-  //     notifyListeners();
-  //   });
-  // }
-
   void stopTimer(int index) {
-    print('Stop Timer Called - index: $index');
     if (index >= 0 && index < timers.length) {
       timers[index]?.cancel();
       selectedBox = -1;
-      isTimerRunning = false; // Update the flag
+      isTimerRunning = false;
       notifyListeners();
     }
   }
-
-  // void stopTimer(int index) {
-  //   if (index >= 0 && index < timers.length) {
-  //     timers[index]?.cancel();
-  //     selectedBox = -1;
-  //     notifyListeners();
-  //   }
-  // }
-
 
   Future<void> loadTimerValues() async {
     await Hive.openBox<TimerValues>('timerValues');
@@ -137,9 +120,8 @@ class TimerModel extends ChangeNotifier {
     this.timerValues = List.from(timerValues?.values ?? []);
     currentValues = List.from(timerValues?.values ?? []);
   }
-
-
 }
+
 
 class TimerValuesProvider {
   List<int> values;
@@ -154,3 +136,46 @@ class TimerValuesProvider {
     return {'values': values};
   }
 }
+
+
+// void startTimer(int selectedBox, int initialValue) {
+//   print('Start Timer Called - selectedBox: $selectedBox, initialValue: $initialValue');
+//   print('Timer List Length: ${timers.length}');
+//   print('Timer State: ${timers[selectedBox]?.isActive}');
+//
+//   if (selectedBox == dummyTimerValue) {
+//     // Handle starting the dummy timer
+//     stopTimer(selectedBox); // Stop the previous timer
+//     this.selectedBox = selectedBox;
+//     currentValues[selectedBox] = initialValue;
+//     _startTimer(currentValues[selectedBox]); // Start the timer with the current value
+//   } else if (selectedBox >= 0 && selectedBox < timers.length) {
+//     // Handle starting the regular timer
+//     stopTimer(this.selectedBox); // Stop the previous timer
+//     this.selectedBox = selectedBox;
+//     currentValues[selectedBox] = initialValue;
+//     _startTimer(currentValues[selectedBox]); // Start the timer with the current value
+//   }
+//
+//   notifyListeners();
+// }
+
+// void stopTimer(int index) {
+//   if (index >= 0 && index < timers.length) {
+//     timers[index]?.cancel();
+//     selectedBox = -1;
+//     notifyListeners();
+//   }
+// }// void _startTimer(int initialValue) {
+//   //   timers[selectedBox]?.cancel();
+//   //   timers[selectedBox] = Timer.periodic(Duration(seconds: 1), (timer) {
+//   //     if (initialValue > 0) {
+//   //       currentValues[selectedBox] = initialValue;
+//   //       initialValue--;
+//   //     } else {
+//   //       timer.cancel();
+//   //       selectedBox = -1;
+//   //     }
+//   //     notifyListeners();
+//   //   });
+//   // }
