@@ -91,7 +91,7 @@ class ExercisesScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> HomeScreen(workoutDay),),);
+          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> HomeScreen(workoutDay,isExerciseScreen: true,),),);
         },
         child: Icon(Icons.add),
       ),

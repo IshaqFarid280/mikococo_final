@@ -238,102 +238,109 @@ class _SetsScreenState extends State<SetsScreen> {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: Consumer<TimerModel>(
-        builder: (context, timerModel, _) {
-          return BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.timer),
-                label: timerModel.selectedBox != -1 && timerModel.selectedBox != TimerModel.dummyTimerIndex
-                    ? 'Timer: ${timerModel.currentValues[timerModel.selectedBox]}s'
-                    : 'Timer: ${timerModel.dummyTimerValue}s',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.stop),
-                label: 'Stop Timer',
-              ),
-            ],
-            onTap: (index) => _handleBottomNavBarTap(index, timerModel),
-          );
-        },
+       bottomNavigationBar: Consumer<TimerModel>(
+        builder: (context, timerModel, _) => BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon:timerModel.isTimerRunning ? Icon(Icons.pause_circle_outline)  : Icon(Icons.play_circle_outline_outlined),
+              label: timerModel.selectedBox != -1
+                  ? 'Timer: ${timerModel.currentValues[timerModel.selectedBox]}s'
+                  : 'Dummy : ${timerModel.dummyTimerValue}',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.stop),
+              label: 'Stop Timer',
+            ),
+          ],
+          onTap:timerModel.isTimerRunning ? (index){
+            if (timerModel.selectedBox != -1 &&
+                timerModel.timers[timerModel.selectedBox] != null &&
+                timerModel.timers[timerModel.selectedBox]!.isActive) {
+              timerModel.stopTimer(timerModel.selectedBox);
+            }
+            timerModel.stopDummyTimer();
+          }: (index) {
+            print('isDummy: ${timerModel.isDummy}, selectedBox: ${timerModel.selectedBox}');
+
+            if (timerModel.isDummy) {
+              if (index == 0) {
+                print('Starting dummy timer');
+                timerModel.startDummyTimer(true);
+              }
+            } else {
+              if (index == 0) {
+                print('Starting or stopping the timer');
+                // Start or stop the timer in TimerScreen for the selected box
+                if (timerModel.selectedBox != -1) {
+                  if (timerModel.timers[timerModel.selectedBox] != null &&
+                      timerModel.timers[timerModel.selectedBox]!.isActive) {
+                    print('Stopping the timer');
+                    timerModel.stopTimer(timerModel.selectedBox);
+                  } else {
+                    print('Starting the timer');
+                    // Adjust the initial value as needed
+                    timerModel.startTimer(timerModel.selectedBox, 45);
+                  }
+                }
+              } else if (index == 1) {
+                print('Stopping the timer');
+                // Stop the timer for the selected box
+                if (timerModel.selectedBox != -1 &&
+                    timerModel.timers[timerModel.selectedBox] != null &&
+                    timerModel.timers[timerModel.selectedBox]!.isActive) {
+                  timerModel.stopTimer(timerModel.selectedBox);
+                }
+              }
+            }
+          },
+
+
+        ),
       ),
     );
   }
-  void _handleBottomNavBarTap(int index, TimerModel timerModel) {
-    if (index == 0) {
-      // Check if no timer is running in SetsScreen
-      if (timerModel.selectedBox == -1) {
-        // Use a default dummy value when timerValues is empty
-        int defaultTimerValue = timerModel.timerValues?.isNotEmpty == true
-            ? timerModel.timerValues![0] as int // Explicit cast to int
-            : timerModel.dummyTimerValue;
-        timerModel.startTimer(TimerModel.dummyTimerIndex, defaultTimerValue);
-      } else if (timerModel.timers[timerModel.selectedBox]?.isActive != true) {
-        // Start the default timer in SetsScreen
-        int defaultTimerValue = timerModel.timerValues?.isNotEmpty == true
-            ? timerModel.timerValues![0] as int // Explicit cast to int
-            : timerModel.dummyTimerValue;
-        timerModel.startTimer(TimerModel.dummyTimerIndex, defaultTimerValue);
-      } else {
-        // Stop the running timer in SetsScreen
-        timerModel.stopTimer(timerModel.selectedBox);
-      }
-    } else if (index == 1) {
-      // Stop the timer for the selected box or stop the dummy timer
-      if (timerModel.selectedBox != TimerModel.dummyTimerIndex &&
-          timerModel.timers[timerModel.selectedBox]?.isActive == true) {
-        timerModel.stopTimer(timerModel.selectedBox);
-      } else if (timerModel.selectedBox == TimerModel.dummyTimerIndex &&
-          timerModel.dummyTimerValue >= 0 &&
-          timerModel.dummyTimerValue < (timerModel.timerValues?.length ?? 0)) {
-        // Stop the dummy timer if dummyTimerValue is within the valid range
-        timerModel.stopTimer(timerModel.selectedBox);
-      }
-    }
-  }
 
 
-
-
-
-
-
-  // bottomNavigationBar: Consumer<TimerModel>(
-  //   builder: (context, timerModel, _) => BottomNavigationBar(
-  //     items: [
-  //       BottomNavigationBarItem(
-  //         icon: Icon(Icons.timer),
-  //         label: timerModel.selectedBox != -1
-  //             ? 'Timer: ${timerModel.currentValues[timerModel.selectedBox]}s'
-  //             : 'Start Timer',
-  //       ),
-  //       BottomNavigationBarItem(
-  //         icon: Icon(Icons.stop),
-  //         label: 'Stop Timer',
-  //       ),
-  //     ],
-  //     onTap: (index) {
-  //       if (index == 0) {
-  //         // Start or stop the timer in TimerScreen for the selected box
-  //         if (timerModel.selectedBox != -1) {
-  //           if (timerModel.timers[timerModel.selectedBox] != null &&
-  //               timerModel.timers[timerModel.selectedBox]!.isActive) {
-  //             timerModel.stopTimer(timerModel.selectedBox);
-  //           } else {
-  //             // Adjust the initial value as needed
-  //             timerModel.startTimer(timerModel.selectedBox, 45);
-  //           }
-  //         }
-  //       } else if (index == 1) {
-  //         // Stop the timer for the selected box
-  //         if (timerModel.selectedBox != -1 &&
-  //             timerModel.timers[timerModel.selectedBox] != null &&
-  //             timerModel.timers[timerModel.selectedBox]!.isActive) {
-  //           timerModel.stopTimer(timerModel.selectedBox);
-  //         }
-  //       }
-  //     },
-  //   ),
+  // Consumer<TimerModel>(
+  // builder: (context, timerModel, _) => BottomNavigationBar(
+  // items: [
+  // BottomNavigationBarItem(
+  // icon: Icon(Icons.timer),
+  // label: timerModel.selectedBox != -1
+  // ? 'Timer: ${timerModel.currentValues[timerModel.selectedBox]}s'
+  //     : 'Dummy : ${timerModel.dummyTimerValue}',
+  // ),
+  // BottomNavigationBarItem(
+  // icon: Icon(Icons.stop),
+  // label: 'Stop Timer',
+  // ),
+  // ],
+  // onTap: timerModel.isDummy ? (index){
+  // if (index == 0){
+  // timerModel.startDummyTimer();
+  // }
+  // }:(index) {
+  // if (index == 0) {
+  // // Start or stop the timer in TimerScreen for the selected box
+  // if (timerModel.selectedBox != -1) {
+  // if (timerModel.timers[timerModel.selectedBox] != null &&
+  // timerModel.timers[timerModel.selectedBox]!.isActive) {
+  // timerModel.stopTimer(timerModel.selectedBox);
+  // } else {
+  // // Adjust the initial value as needed
+  // timerModel.startTimer(timerModel.selectedBox, 45);
+  // }
+  // }
+  // } else if (index == 1) {
+  // // Stop the timer for the selected box
+  // if (timerModel.selectedBox != -1 &&
+  // timerModel.timers[timerModel.selectedBox] != null &&
+  // timerModel.timers[timerModel.selectedBox]!.isActive) {
+  // timerModel.stopTimer(timerModel.selectedBox);
+  // }
+  // }
+  // },
+  // ),
   // ),
   void _showAddSetBottomSheet() {
     showModalBottomSheet<void>(

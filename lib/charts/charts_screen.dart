@@ -114,70 +114,95 @@ class RepsChart extends StatelessWidget {
   }
 }
 
+
 class KGChart extends StatelessWidget {
   final List<double> data;
   final List<DateTime> dates;
 
   KGChart({required this.data, required this.dates});
   Set<int> uniqueIndices = Set<int>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: MediaQuery.sizeOf(context).height * 0.35,
-        width: MediaQuery.sizeOf(context).width * 0.65, // Adjust the height as needed
+      height: MediaQuery.of(context).size.height * 0.35,
+      width: MediaQuery.of(context).size.width * 0.65,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        border: Border.all(
+          color: Colors.grey.shade800,
+        ),
+      ),
       child: LineChart(
-        swapAnimationDuration: Duration(seconds:2),
-        swapAnimationCurve :Curves.easeInCirc,
+        swapAnimationDuration: Duration(seconds: 2),
+        swapAnimationCurve: Curves.easeInCirc,
         LineChartData(
           gridData: FlGridData(show: false),
-          backgroundColor: Colors.black, // Set the background color to black
+          backgroundColor: Colors.orange.withOpacity(0.3),
           titlesData: FlTitlesData(
             rightTitles: SideTitles(
               showTitles: false,
-              // getTextStyles: (context, value) => const TextStyle(color: Colors.white),
             ),
-            topTitles:SideTitles(
+            topTitles: SideTitles(
               showTitles: false,
-              // getTextStyles: (context, value) => const TextStyle(color: Colors.white),
             ),
             leftTitles: SideTitles(
               showTitles: false,
-              // getTextStyles: (context, value) => const TextStyle(color: Colors.white),
             ),
             bottomTitles: SideTitles(
               rotateAngle: 45,
-              margin:10 ,
+              margin: 10,
               showTitles: true,
-              getTextStyles: (context, value) => const TextStyle(color: Colors.white),
-              // Customize the date labels based on your needs
+              getTextStyles: (context, value) =>
+              const TextStyle(color: Colors.white),
               getTitles: (value) {
                 int index = value.toInt();
                 if (uniqueIndices.contains(index)) {
-                  return ''; // Avoid displaying duplicate labels
+                  return '';
                 }
 
-                // Show dates only for the first and last set
                 if ((index == 0 || index == data.length - 1) &&
-                    index < dates.length && index < data.length && data[index] != 0) {
+                    index < dates.length &&
+                    index < data.length &&
+                    data[index] != 0) {
                   uniqueIndices.add(index);
                   return DateFormat('MM-dd').format(dates[index]);
                 }
-                return ''; // Return an empty string for other indices
+                return '';
               },
             ),
           ),
           lineBarsData: [
             LineChartBarData(
-              aboveBarData:BarAreaData(show: true,colors: [blueColor,redColor],gradientFrom:const Offset(0,1),gradientTo:const Offset(3, 0), ),
-              preventCurveOverShooting:true,
-              gradientFrom:const Offset(0, 5),
-              gradientTo:const Offset(5, 0),
+              aboveBarData: BarAreaData(
+                show: true,
+                colors: [
+                  Colors.blue.withOpacity(0.7),
+                  Colors.red.withOpacity(0.9),
+                ],
+                gradientFrom: const Offset(0, 1),
+                gradientTo: const Offset(3, 0),
+              ),
+              preventCurveOverShooting: true,
+              gradientFrom: const Offset(0, 5),
+              gradientTo: const Offset(5, 0),
               barWidth: 3,
-              spots: List.generate(data.length, (index) => FlSpot(index.toDouble(), data[index])),
+              spots: List.generate(
+                data.length,
+                    (index) => FlSpot(index.toDouble(), data[index]),
+              ),
               isCurved: true,
-              belowBarData:BarAreaData(show: true,colors: [skinColor,redColor],gradientFrom:const Offset(0,0.5),gradientTo:const Offset(3, 0), ),
-              colors: [redColor],
-              dotData: FlDotData(show: true,),
+              belowBarData: BarAreaData(
+                show: true,
+                colors: [
+                  Colors.orange.withOpacity(0.7),
+                  Colors.red.withOpacity(0.9),
+                ],
+                gradientFrom: const Offset(0, 0.5),
+                gradientTo: const Offset(3, 0),
+              ),
+              colors: [Colors.red.withOpacity(0.9)],
+              dotData: FlDotData(show: true),
             ),
           ],
         ),
@@ -185,3 +210,7 @@ class KGChart extends StatelessWidget {
     );
   }
 }
+
+
+
+

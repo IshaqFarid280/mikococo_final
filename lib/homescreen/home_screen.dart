@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                     }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
                                     onTap: (){
-                                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
+                                      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                     },
                                     title: Text(imageItem.title.toString()),
                                     tileColor: Colors.blueGrey,
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           }
                                         });
                                         Navigator.pop(context);
-                                        Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
+                                        Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                       }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
                                       onTap: (){
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
