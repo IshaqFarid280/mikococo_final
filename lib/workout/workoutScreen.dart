@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mikococo/exercide/exercise_screen.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:mikococo/workout/WorkoutScreenProvider.dart';
 import 'package:mikococo/workout/edit_workout.dart';
 import 'package:mikococo/workout/work_out_froum.dart';
 import 'package:provider/provider.dart';
+import '../consts/colors.dart';
 import '../module/models.dart';
 
 class WorkoutDaysScreen extends StatelessWidget {
@@ -20,7 +22,9 @@ class WorkoutDaysScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Workout Days for ${routine.name}'),
+        automaticallyImplyLeading: true,
+        centerTitle: false,
+        title: listTileText(title:'Workout Days ${routine.name}'),
       ),
       body: Consumer<WorkoutDaysScreenProvider>(
         builder: (context, workoutDaysScreenProvider, _) {
@@ -51,53 +55,64 @@ class WorkoutDaysScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: workoutDaysScreenProvider.workoutDays.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Color(
-                    int.parse(
-                          workoutDaysScreenProvider
-                              .workoutDays[index].avatarColors
-                              .replaceFirst('#', ''),
-                          radix: 16,
-                        ) |
-                        0xff000000,
-                  ),
-                  child: Text(
-                    workoutDaysScreenProvider.workoutDays[index].leadingword,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                title: Text(workoutDaysScreenProvider.workoutDays[index].name),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ExercisesScreen(
-                          workoutDaysScreenProvider.workoutDays
-                              .elementAt(index)),
+              return Container(
+                margin: EdgeInsets.only(top:5),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  );
-                },
-                trailing: IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('Edit Workout Day'),
-                          content: EditWorkoutDayForm(
-                            initialName: workoutDaysScreenProvider
-                                .workoutDays[index].name,
-                            onEdit: (String newName) {
-                              workoutDaysScreenProvider.updateWorkoutDay(
-                                  index, newName, routine);
-                              Navigator.of(context).pop();
-                            },
-                          ),
+                    tileColor: listTileColor,
+                    leading: CircleAvatar(
+                        radius:25,
+                      backgroundColor: Color(
+                        int.parse(
+                              workoutDaysScreenProvider
+                                  .workoutDays[index].avatarColors
+                                  .replaceFirst('#', ''),
+                              radix: 16,
+                            ) |
+                            0xff000000,
+                      ),
+                      child: listTileText(
+                        title :workoutDaysScreenProvider.workoutDays[index].leadingword.toUpperCase(),
+                      ),
+                    ),
+                    title: listTileText(title :workoutDaysScreenProvider.workoutDays[index].name.toUpperCase(),textSize:18.0),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (context) => ExercisesScreen(
+                              workoutDaysScreenProvider.workoutDays
+                                  .elementAt(index)),
+                        ),
+                      );
+                    },
+                    trailing: IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Edit Workout Day'),
+                              content: EditWorkoutDayForm(
+                                initialName: workoutDaysScreenProvider
+                                    .workoutDays[index].name,
+                                onEdit: (String newName) {
+                                  workoutDaysScreenProvider.updateWorkoutDay(
+                                      index, newName, routine);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  icon: Icon(Icons.edit),
+                      icon: Icon(Icons.edit),
+                    ),
+                  ),
                 ),
               );
             },

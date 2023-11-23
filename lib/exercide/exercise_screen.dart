@@ -9,7 +9,9 @@ import 'package:mikococo/exercide/edit_exercise.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
 import 'package:mikococo/sets/SetsScreen.dart';
 import 'package:provider/provider.dart';
+import '../consts/colors.dart';
 import '../module/models.dart';
+import '../widgets_common/text_widgets.dart';
 
 
 
@@ -50,40 +52,53 @@ class ExercisesScreen extends StatelessWidget {
     exercisesScreenProvider.setWorkoutDay(workoutDay);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exercises for ${workoutDay.name}'),
+        title: Text('Exercise ${workoutDay.name}'),
       ),
       body: Consumer<ExercisesScreenProvider>(
         builder: (context, exercisesScreenProvider, _){
           return ListView.builder(
+            physics:const BouncingScrollPhysics(),
             itemCount: exercisesScreenProvider.exercises.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                onTap: (){
-                  Navigator.push(context, CupertinoPageRoute(builder: (context)=>SetsScreen(exercisesScreenProvider.exercises[index])));
-                },
-                leading: CircleAvatar(
-                  backgroundImage:exercisesScreenProvider.exercises[index].image.toString().contains('assets/images') ? AssetImage(exercisesScreenProvider.exercises[index].image.toString()):FileImage(File(exercisesScreenProvider.exercises[index].image.toString()))  as ImageProvider,
-                  //
-                ),
-
-                title: Text(exercisesScreenProvider.exercises[index].name),
-                trailing:IconButton(onPressed: (){
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('Edit Exercise'),
-                        content: EditExerciseForm(
-                          initialName: exercisesScreenProvider.exercises[index].name,
-                          onEdit: (String newName) {
-                            exercisesScreenProvider.updateExercise(index, newName);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      );
+              return Container(
+                margin: EdgeInsets.only(top:5),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    tileColor: listTileColor,
+                    onTap: (){
+                      Navigator.push(context, CupertinoPageRoute(builder: (context)=>SetsScreen(exercisesScreenProvider.exercises[index])));
                     },
-                  );
-                }, icon:const Icon(Icons.edit)),
+                    leading: CircleAvatar(
+                      radius:25,
+                      backgroundImage:exercisesScreenProvider.exercises[index].image.toString().contains('assets/images') ? AssetImage(exercisesScreenProvider.exercises[index].image.toString()):FileImage(File(exercisesScreenProvider.exercises[index].image.toString()))  as ImageProvider,
+                      //
+                    ),
+
+                    title: listTileText(title :exercisesScreenProvider.exercises[index].name.toUpperCase()),
+                    trailing:IconButton(onPressed: (){
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Edit Exercise'),
+                            content: EditExerciseForm(
+                              initialName: exercisesScreenProvider.exercises[index].name,
+                              onEdit: (String newName) {
+                                exercisesScreenProvider.updateExercise(index, newName);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    }, icon:const Icon(Icons.edit)),
+                  ),
+                ),
               );
             },
           );

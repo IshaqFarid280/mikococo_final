@@ -5,6 +5,7 @@ import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/homescreen/HomeScreenProvider.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
+import 'package:mikococo/sets/SetsProvider.dart';
 import 'package:mikococo/timer/timer.model.dart';
 import 'package:mikococo/workout/WorkoutScreenProvider.dart';
 import 'package:path_provider/path_provider.dart';
@@ -40,6 +41,7 @@ void main() async  {
         ChangeNotifierProvider(create: (context) => TimerModel()),
         ChangeNotifierProvider(create: (context) => ExercisesScreenProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutDaysScreenProvider()),
+
       ],
         child: MyApp(),
       )
@@ -92,8 +94,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        appBarTheme:const  AppBarTheme(
+          color: blackColor,
+          elevation: 5,
+        ),
       ),
       home:BottomNavigationScreen(),
     );
