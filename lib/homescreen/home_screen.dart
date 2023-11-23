@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mikococo/exercide/exercise_screen.dart';
 import 'package:mikococo/homescreen/HomeScreenProvider.dart';
 import 'package:mikococo/homescreen/view_screen.dart';
@@ -89,8 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         print('imageURl : ${imageItem.imagePath}');
                                         print('setName : ${imageItem.title.toString()}');
                                       });
-                                      Navigator.pop(context);
-                                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
+                                      // Navigator.pop(context);
+                                      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                     }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
                                     onTap: (){
                                       Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
@@ -140,8 +139,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             print('imageURlFile: ${imageItem.imagePath}');
                                           }
                                         });
-                                        Navigator.pop(context);
-                                        Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
+                                        // Navigator.pop(context);
+                                        Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                       }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
                                       onTap: (){
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +25,8 @@ class _SetsScreenState extends State<SetsScreen> {
     return date.isAfter(now.subtract(Duration(days: 30))) && date.isBefore(now);
   }
 
+  // Use ValueNotifier to hold the list of sets
+  late ValueNotifier<List<SetsScreenData>> setKeysNotifier;
 
   List<int> getRepsData() {
     List<int> repsData = [];
@@ -38,6 +38,7 @@ class _SetsScreenState extends State<SetsScreen> {
 
     return repsData;
   }
+
   List<double> getKGData() {
     List<double> kgData = [];
     List<Map<String, dynamic>> setData = getSetData();
@@ -88,6 +89,8 @@ class _SetsScreenState extends State<SetsScreen> {
     setsBox = Hive.box<SetsScreenData>('SetsBox');
     loadSetKeys();
     calculateStats();
+    setKeysNotifier = ValueNotifier<List<SetsScreenData>>([]);
+    setKeysNotifier.value = setKeys.map((key) => setsBox.get(key)!).toList();
   }
 
   void loadSetKeys() {
@@ -128,7 +131,8 @@ class _SetsScreenState extends State<SetsScreen> {
     var timerModel = Provider.of<TimerModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sets for ${widget.exercise.name}', style: TextStyle(color: Colors.black)),
+        title: Text('Sets for ${widget.exercise.name}',
+            style: TextStyle(color: Colors.black)),
         actions: [
           IconButton(
             onPressed: () {
@@ -141,95 +145,112 @@ class _SetsScreenState extends State<SetsScreen> {
             },
             icon: Icon(Icons.timer),
           ),
-          IconButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChartScreen(
-                  repsData: getRepsData(),
-                  kgData: getKGData(),
-                  dates: getSetData().map((data) => data['date'] as DateTime).toList(),
-                ),
-              ),
-            );
-          }, icon: Icon(Icons.add_chart)),
-          IconButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>StatusScreen(
-                  totalKg: totalKg.toString(),
-                  totalReps: totalReps.toString(),
-                  averageKg: averageKg.toStringAsFixed(2),
-                  bestKg: bestKg.toString(),
-                  bestReps: bestReps.toString(),
-                )
-              ),
-            );
-          }, icon: Icon(Icons.stacked_bar_chart)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChartScreen(
+                      repsData: getRepsData(),
+                      kgData: getKGData(),
+                      dates: getSetData()
+                          .map((data) => data['date'] as DateTime)
+                          .toList(),
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.add_chart)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => StatusScreen(
+                            totalKg: totalKg.toString(),
+                            totalReps: totalReps.toString(),
+                            averageKg: averageKg.toStringAsFixed(2),
+                            bestKg: bestKg.toString(),
+                            bestReps: bestReps.toString(),
+                          )),
+                );
+              },
+              icon: Icon(Icons.stacked_bar_chart)),
         ],
       ),
-      body: ListView.builder(
-        itemCount: setKeys.length,
-        itemBuilder: (context, index) {
-          final setIndex = index;
-          final set = setsBox.get(setKeys[setIndex])!;
+      body: ValueListenableBuilder<List<SetsScreenData>>(
+        valueListenable: setKeysNotifier,
+        builder: (context, setKeys, _) {
+          return ListView.builder(
+            itemCount: setKeys.length,
+            itemBuilder: (context, index) {
+              final setIndex = index;
+              final set = setKeys[setIndex];
 
-          // Check if the date has been displayed already
-          if (setIndex == 0 || set.date!.day != setsBox.get(setKeys[setIndex - 1])!.date!.day) {
-            // Display date ListTile
-            final formattedDate = DateFormat('yyyy-MM-dd').format(set.date!);
-            return Column(
-              children: [
-                ListTile(
-                  title: Text(formattedDate, style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                // Display set ListTile
-                ListTile(
-                  title: Text('Set ${setIndex + 1}: Reps - ${set.reps}, KG - ${set.kg}'),
+              // Check if the date has been displayed already
+              if (setIndex == 0 ||
+                  set.date!.day != setKeys[setIndex - 1].date!.day) {
+                // Display date ListTile
+                final formattedDate =
+                    DateFormat('yyyy-MM-dd').format(set.date!);
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text(formattedDate,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    // Display set ListTile
+                    ListTile(
+                      title: Text(
+                          'Set ${setIndex + 1}: Reps - ${set.reps}, KG - ${set.kg}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              _showEditSetBottomSheet(
+                                  set.key!, set.reps, set.kg.round());
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _deleteSet(set.key!);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                // Display set ListTile without the date
+                return ListTile(
+                  title: Text(
+                      'Set ${setIndex + 1}: Reps - ${set.reps}, KG - ${set.kg}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
                         icon: Icon(Icons.edit),
                         onPressed: () {
-                          _showEditSetBottomSheet(setKeys[setIndex], set.reps, set.kg.round());
+                          _showEditSetBottomSheet(
+                              set.key!, set.reps, set.kg.round());
                         },
                       ),
                       IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          _deleteSet(setKeys[setIndex]);
+                          _deleteSet(set.key!);
                         },
                       ),
                     ],
                   ),
-                ),
-              ],
-            );
-          } else {
-            // Display set ListTile without the date
-            return ListTile(
-              title: Text('Set ${setIndex + 1}: Reps - ${set.reps}, KG - ${set.kg}'),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      _showEditSetBottomSheet(setKeys[setIndex], set.reps, set.kg.round());
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      _deleteSet(setKeys[setIndex]);
-                    },
-                  ),
-                ],
-              ),
-            );
-          }
+                );
+              }
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -244,7 +265,8 @@ class _SetsScreenState extends State<SetsScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.timer),
-                label: timerModel.selectedBox != -1 && timerModel.selectedBox != TimerModel.dummyTimerIndex
+                label: timerModel.selectedBox != -1 &&
+                        timerModel.selectedBox != TimerModel.dummyTimerIndex
                     ? 'Timer: ${timerModel.currentValues[timerModel.selectedBox]}s'
                     : 'Timer: ${timerModel.dummyTimerValue}s',
               ),
@@ -259,6 +281,7 @@ class _SetsScreenState extends State<SetsScreen> {
       ),
     );
   }
+
   void _handleBottomNavBarTap(int index, TimerModel timerModel) {
     if (index == 0) {
       // Check if no timer is running in SetsScreen
@@ -292,49 +315,6 @@ class _SetsScreenState extends State<SetsScreen> {
     }
   }
 
-
-
-
-
-
-
-  // bottomNavigationBar: Consumer<TimerModel>(
-  //   builder: (context, timerModel, _) => BottomNavigationBar(
-  //     items: [
-  //       BottomNavigationBarItem(
-  //         icon: Icon(Icons.timer),
-  //         label: timerModel.selectedBox != -1
-  //             ? 'Timer: ${timerModel.currentValues[timerModel.selectedBox]}s'
-  //             : 'Start Timer',
-  //       ),
-  //       BottomNavigationBarItem(
-  //         icon: Icon(Icons.stop),
-  //         label: 'Stop Timer',
-  //       ),
-  //     ],
-  //     onTap: (index) {
-  //       if (index == 0) {
-  //         // Start or stop the timer in TimerScreen for the selected box
-  //         if (timerModel.selectedBox != -1) {
-  //           if (timerModel.timers[timerModel.selectedBox] != null &&
-  //               timerModel.timers[timerModel.selectedBox]!.isActive) {
-  //             timerModel.stopTimer(timerModel.selectedBox);
-  //           } else {
-  //             // Adjust the initial value as needed
-  //             timerModel.startTimer(timerModel.selectedBox, 45);
-  //           }
-  //         }
-  //       } else if (index == 1) {
-  //         // Stop the timer for the selected box
-  //         if (timerModel.selectedBox != -1 &&
-  //             timerModel.timers[timerModel.selectedBox] != null &&
-  //             timerModel.timers[timerModel.selectedBox]!.isActive) {
-  //           timerModel.stopTimer(timerModel.selectedBox);
-  //         }
-  //       }
-  //     },
-  //   ),
-  // ),
   void _showAddSetBottomSheet() {
     showModalBottomSheet<void>(
       context: context,
@@ -377,7 +357,11 @@ class _SetsScreenState extends State<SetsScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (selectedReps != null && selectedKg != null) {
-                        final set = SetsScreenData(selectedReps!, selectedKg!.toDouble(), DateTime.now(),widget.exercise.key);
+                        final set = SetsScreenData(
+                            selectedReps!,
+                            selectedKg!.toDouble(),
+                            DateTime.now(),
+                            widget.exercise.key);
 
                         setsBox.add(set).then((key) {
                           // Update exercise's sets list
@@ -389,6 +373,7 @@ class _SetsScreenState extends State<SetsScreen> {
 
                           loadSetKeys();
                           calculateStats();
+                          // setState(() {});
 
                           Navigator.of(context).pop();
                         });
@@ -452,7 +437,11 @@ class _SetsScreenState extends State<SetsScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      final editedSet = SetsScreenData(editedReps, editedKg.toDouble(), DateTime.now(),widget.exercise.key);
+                      final editedSet = SetsScreenData(
+                          editedReps,
+                          editedKg.toDouble(),
+                          DateTime.now(),
+                          widget.exercise.key);
                       setsBox.put(setKey, editedSet);
                       loadSetKeys();
                       calculateStats();

@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
 import 'package:mikococo/routine/edit_routine.dart';
 import 'package:mikococo/workout/workoutScreen.dart';
@@ -10,9 +8,43 @@ import 'package:provider/provider.dart';
 import '../module/models.dart';
 import 'add_routine.dart';
 
-class MyRoutinesScreen extends StatelessWidget {
+class MyRoutinesScreen extends StatefulWidget {
+  @override
+  State<MyRoutinesScreen> createState() => _MyRoutinesScreenState();
+}
+
+class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
+  // // bool _isLoaded = false;
+  // // @override
+  // // void initState() {
+  // //   // TODO: implement initState
+  // //   super.initState();
+  // //   _loadRoutines(context);
+  // //
+  // // }
+  //
+  // // void _loadRoutines(BuildContext context) async {
+  // //   Provider.of<RoutineProvider>(context, listen: false).loadRoutines();
+  // //
+  // // }
+  // bool _isLoaded = false;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _loadRoutines();
+  // }
+  //
+  // Future<void> _loadRoutines() async {
+  //   await Provider.of<RoutineProvider>(context, listen: false).loadRoutines();
+  //   setState(() {
+  //     _isLoaded = true;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
+
 
     var routineProvider = Provider.of<RoutineProvider>(context, listen: false);
     routineProvider.loadRoutines();
@@ -37,7 +69,11 @@ class MyRoutinesScreen extends StatelessWidget {
     //
     // var routineBox = Hive.box<Routine>('RoutineBox');
     // List<Routine> routines = routineBox.values.toList();
-
+    // if (!_isLoaded) {
+    //   return Scaffold(
+    //     body: Center(child: CircularProgressIndicator()),
+    //   );
+    // }
     return Scaffold(
       appBar: AppBar(
         title: Text('My Routines'),
@@ -66,95 +102,91 @@ class MyRoutinesScreen extends StatelessWidget {
               );
             }
 
-            return ValueListenableBuilder<Box<Routine>>(
-                valueListenable: Hive.box<Routine>('RoutineBox').listenable(),
-                builder: (context, Box<Routine> box, _) {
-                  List<Routine> routine = box.values.toList();
-                  return ReorderableListView.builder(
-                    onReorder: (oldIndex, newIndex) {
-                      routineProvider.updateRoutineList(oldIndex, newIndex);
-                    },
-                    itemCount: routine.length,
-                    itemBuilder: (context, index) {
-                      final currentroutine = routine[index];
-                      return Slidable(
-                          key: Key('$index'),
-                          endActionPane: ActionPane(
-                            motion: StretchMotion(),
-                            children: [
-                              // settings option
-                              SlidableAction(
-                                onPressed: (BuildContext context) {
-                                  showDialog(
-                                      context: context, builder: (context) {
-                                    return AlertDialog(
-                                      title: Text('Edit Routine'),
-                                      content: EditRoutineForm(
-                                        initialName: currentroutine.name,
-                                        onEdit: (String newName) {
-                                          routineProvider.updateRoutine(index, newName);
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    );
-                                  });
-                                },
-                                backgroundColor: Colors.grey.shade800,
-                                icon: Icons.edit,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              // delete option
-                              SlidableAction(
-                                onPressed: (context) {
-                                  routineProvider.deleteRoutine(index);
-                                },
-                                backgroundColor: Colors.red.shade400,
-                                icon: Icons.delete,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ],
-                          ),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              // backgroundColor: Color(int.parse("FF0000", radix: 16) | 0xFF000000),
-                              backgroundColor: Color(int.parse(
-                                  currentroutine.avatarColor.replaceFirst(
-                                      '#', ''),
-                                  radix: 16) |
-                              0xff000000),
-                              child: Text(currentroutine.leadingword,
-                                  style: TextStyle(color: Colors.white)),
-                            ),
-                            title: Text(
-                              currentroutine.name,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            subtitle: Text(
-                                currentroutine.description
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      WorkoutDaysScreen(currentroutine),
+            return ReorderableListView.builder(
+              onReorder: (oldIndex, newIndex) {
+                routineProvider.updateRoutineList(oldIndex, newIndex);
+              },
+              itemCount: routines.length,
+              itemBuilder: (context, index) {
+                final currentroutine = routines[index];
+                return Slidable(
+                  key: ValueKey(routines[index]),
+                  endActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      // settings option
+                      SlidableAction(
+                        onPressed: (BuildContext context) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Edit Routine'),
+                                content: EditRoutineForm(
+                                  initialName: currentroutine.name,
+                                  onEdit: (String newName) {
+                                    routineProvider.updateRoutine(index, newName);
+                                    Navigator.of(context).pop();
+                                  },
                                 ),
                               );
                             },
-                          )
+                          );
+                        },
+                        backgroundColor: Colors.grey.shade800,
+                        icon: Icons.edit,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      // delete option
+                      SlidableAction(
+                        onPressed: (context) {
+                          routineProvider.deleteRoutine(index);
+                        },
+                        backgroundColor: Colors.red.shade400,
+                        icon: Icons.delete,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    // key: Key('$index'),
+                    leading: CircleAvatar(
+                      backgroundColor: Color(int.parse(
+                          currentroutine.avatarColor.replaceFirst('#', ''),
+                          radix: 16) |
+                      0xff000000),
+                      child: Text(currentroutine.leadingword,
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                    title: Text(
+                      currentroutine.name,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    subtitle: Text(currentroutine.description),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => WorkoutDaysScreen(currentroutine),
+                        ),
                       );
                     },
-                  );
-                });
-
-          }
+                  ),
+                );
+              },
+            );
+          },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(CupertinoPageRoute(
-              builder: (ctx) => AddRoutineForm(onAdd: (String name, String desc,
-                  String leadword, String avatarCOlor) {
-                routineProvider.addRoutine(name, desc, leadword, avatarCOlor);
-              })));
+          Navigator.of(context).push(
+            CupertinoPageRoute(
+              builder: (ctx) => AddRoutineForm(
+                onAdd: (String name, String desc, String leadword, String avatarCOlor) {
+                  routineProvider.addRoutine(name, desc, leadword, avatarCOlor);
+                },
+              ),
+            ),
+          );
         },
         child: Icon(Icons.add),
       ),

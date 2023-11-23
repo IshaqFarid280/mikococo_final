@@ -9,13 +9,27 @@ class ExercisesScreenProvider extends ChangeNotifier {
   WorkoutDay? get workoutDay => _workoutDay;
   List<Exercise> get exercises => _exercises;
 
+  void updateExcerciseList(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex = newIndex -1;
+      // Print for debugging
+      print("Reordered: $oldIndex to $newIndex");
+    }
+
+    final routine = _exercises.removeAt(oldIndex);
+    _exercises.insert(newIndex, routine);
+
+    // Notify listeners
+    notifyListeners();
+  }
+
   void setWorkoutDay(WorkoutDay workoutDay) {
     _workoutDay = workoutDay;
     loadExercises();
     notifyListeners();
   }
 
-  void loadExercises() {
+  loadExercises() async {
     var exercisesBox = Hive.box<Exercise>('ExercisesBox');
     _exercises = exercisesBox.values
         .where((exercise) => _workoutDay?.exercises.contains(exercise.key) ?? false)

@@ -5,6 +5,7 @@ import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/homescreen/HomeScreenProvider.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
+import 'package:mikococo/sets/SetScreenProvider.dart';
 import 'package:mikococo/timer/timer.model.dart';
 import 'package:mikococo/workout/WorkoutScreenProvider.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,6 +34,7 @@ void main() async  {
   if (Hive.box<Routine>('RoutineBox').isEmpty || Hive.box<WorkoutDay>('WorkoutDaysBox').isEmpty || Hive.box<Exercise>('ExercisesBox').isEmpty) {
     await initializeDummyData();
   }
+
   runApp(
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => RoutineProvider()),
