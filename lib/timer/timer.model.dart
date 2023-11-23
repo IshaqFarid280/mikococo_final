@@ -1,7 +1,8 @@
 import 'dart:async';
+
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-
 import '../module/models.dart';
 
 class TimerModel extends ChangeNotifier {
@@ -10,106 +11,120 @@ class TimerModel extends ChangeNotifier {
   List<int> currentValues = [];
   List<Timer?> timers = List.filled(4, null);
   int dummyTimerValue = 60;
-  bool isTimerRunning = false;
+  bool isDummy = true ;
+   Timer  ? _timer;
+   bool isTimerRunning = false ;
+  
 
-  bool isTimerInSetsScreen = false;
 
+  void playTimerReachedZeroSound() {
+    AssetsAudioPlayer().open(
+      Audio('assets/sound/beepSound.mp3'),
+    );
+  }
 
-  // Define the index of the dummy timer
-  static const int dummyTimerIndex = 0;
 
   void resetDummyTimer() {
-    dummyTimerValue = 60; // You can set any initial value
+    dummyTimerValue = 60;
     notifyListeners();
   }
 
   void increaseDummyTimer() {
-    dummyTimerValue += 5; // Adjust the increment value as needed
+    dummyTimerValue += 5;
     notifyListeners();
   }
 
   void decreaseDummyTimer() {
-    dummyTimerValue -= 5; // Adjust the decrement value as needed
+    dummyTimerValue -= 5;
     if (dummyTimerValue < 0) {
       dummyTimerValue = 0;
     }
     notifyListeners();
   }
 
-
-
-
-
-
-
-  void startTimer(int selectedBox, int initialValue) {
-    stopTimer(this.selectedBox);
-    this.selectedBox = selectedBox;
-
-    if (timerValues.isEmpty) {
-      // Handle the case when timerValues is empty
-      dummyTimerValue = 60; // Set any default value
-      notifyListeners();
-      return;
-    }
-
-    // Start the dummy timer if the selected box is the dummy timer index
-    if (selectedBox == dummyTimerIndex) {
-      _startTimer(currentValues[dummyTimerIndex]);
-    } else {
-      // Start the regular timer
-      currentValues[selectedBox] = initialValue;
-      _startTimer(currentValues[selectedBox]);
-    }
-
+  void startDummyTimer(bool isDummy) {
+    isDummy = true;
+    isTimerRunning = true;
+    notifyListeners();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (dummyTimerValue > 0) {
+        dummyTimerValue--;
+        notifyListeners();
+      } else {
+        resetDummyTimer(); // Reset the dummy values when the timer reaches zero
+        stopDummyTimer();
+        playTimerReachedZeroSound();
+        isDummy = false;
+        isTimerRunning = false;
+        notifyListeners();
+      }
+    });
+    isDummy = true;
     notifyListeners();
   }
 
 
-  void _startTimer(int initialValue) {
-    if (selectedBox == dummyTimerIndex) {
-      // Handle dummy timer logic
-      if (dummyTimerIndex < 0 || dummyTimerIndex >= timerValues.length) {
-        print('Invalid dummy timer index or timerValues length is not sufficient.');
-        selectedBox = -1;
-        return;
-      }
-    }
 
-    timers[selectedBox]?.cancel();
-    timers[selectedBox] = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (selectedBox == dummyTimerIndex) {
-        // Handle dummy timer logic
-        if (initialValue > 0) {
-          currentValues[dummyTimerIndex] = initialValue;
-          initialValue--;
-        } else {
-          timer.cancel();
-          selectedBox = -1;
-        }
-      } else {
-        // Handle regular timer logic
-        if (initialValue > 0) {
-          currentValues[selectedBox] = initialValue;
-          initialValue--;
-        } else {
-          timer.cancel();
-          selectedBox = -1;
-          isTimerRunning = false; // Update the flag
-        }
-      }
 
-      notifyListeners();
-    });
+  void stopDummyTimer() {
+    isTimerRunning = false;
+    _timer!.cancel();
+    resetDummyTimer();
+    notifyListeners();
   }
 
-  void stopTimer(int index) {
-    if (index >= 0 && index < timers.length) {
-      timers[index]?.cancel();
-      selectedBox = -1;
-      isTimerRunning = false;
-      notifyListeners();
+  void startTimer(int selectedBox, int initialValue) {
+    print('Start Timer Called - selectedBox: $selectedBox, initialValue: $initialValue');
+    print('Timer List Length: ${timers.length}');
+    print('Timer State: ${timers[selectedBox]?.isActive}');
+
+    isDummy = false;
+    isTimerRunning = true ;// Set isDummy to false initially
+    notifyListeners();
+
+    if (selectedBox == dummyTimerValue) {
+      // Handle starting the dummy timer
+      stopTimer(selectedBox); // Stop the previous timer
+      this.selectedBox = selectedBox;
+      currentValues[selectedBox] = initialValue;
+      _startTimer(currentValues[selectedBox]); // Start the timer with the current value
+    } else if (selectedBox >= 0 && selectedBox < timers.length) {
+      // Handle starting the regular timer
+      stopTimer(this.selectedBox); // Stop the previous timer
+      this.selectedBox = selectedBox;
+      currentValues[selectedBox] = initialValue;
+      _startTimer(currentValues[selectedBox]); // Start the timer with the current value
     }
+
+    isDummy = true;
+    isTimerRunning = false;// Set isDummy to true after starting the timer
+    notifyListeners();
+  }
+
+
+  void stopTimer(int index) {
+  if (index >= 0 && index < timers.length) {
+    timers[index]?.cancel();
+    selectedBox = -1;
+    isTimerRunning = false;
+    notifyListeners();
+  }
+}
+  void _startTimer(int initialValue) {
+    timers[selectedBox]?.cancel();
+    timers[selectedBox] = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (initialValue > 0) {
+        currentValues[selectedBox] = initialValue;
+        initialValue--;
+      } else {
+        timer.cancel();
+        selectedBox = -1;
+        isTimerRunning = false;
+        playTimerReachedZeroSound();
+      }
+      isTimerRunning = true;
+      notifyListeners();
+    });
   }
 
   Future<void> loadTimerValues() async {
@@ -138,27 +153,7 @@ class TimerValuesProvider {
 }
 
 
-// void startTimer(int selectedBox, int initialValue) {
-//   print('Start Timer Called - selectedBox: $selectedBox, initialValue: $initialValue');
-//   print('Timer List Length: ${timers.length}');
-//   print('Timer State: ${timers[selectedBox]?.isActive}');
-//
-//   if (selectedBox == dummyTimerValue) {
-//     // Handle starting the dummy timer
-//     stopTimer(selectedBox); // Stop the previous timer
-//     this.selectedBox = selectedBox;
-//     currentValues[selectedBox] = initialValue;
-//     _startTimer(currentValues[selectedBox]); // Start the timer with the current value
-//   } else if (selectedBox >= 0 && selectedBox < timers.length) {
-//     // Handle starting the regular timer
-//     stopTimer(this.selectedBox); // Stop the previous timer
-//     this.selectedBox = selectedBox;
-//     currentValues[selectedBox] = initialValue;
-//     _startTimer(currentValues[selectedBox]); // Start the timer with the current value
-//   }
-//
-//   notifyListeners();
-// }
+
 
 // void stopTimer(int index) {
 //   if (index >= 0 && index < timers.length) {
@@ -179,3 +174,48 @@ class TimerValuesProvider {
 //   //     notifyListeners();
 //   //   });
 //   // }
+// void _startTimer(int initialValue) {
+//   if (selectedBox == dummyTimerIndex) {
+//     // Handle dummy timer logic
+//     if (dummyTimerIndex < 0 || dummyTimerIndex >= timerValues.length) {
+//       print('Invalid dummy timer index or timerValues length is not sufficient.');
+//       selectedBox = -1;
+//       return;
+//     }
+//   }
+//
+//   timers[selectedBox]?.cancel();
+//   timers[selectedBox] = Timer.periodic(Duration(seconds: 1), (timer) {
+//     if (selectedBox == dummyTimerIndex) {
+//       // Handle dummy timer logic
+//       if (initialValue > 0) {
+//         currentValues[dummyTimerIndex] = initialValue;
+//         initialValue--;
+//       } else {
+//         timer.cancel();
+//         selectedBox = -1;
+//       }
+//     } else {
+//       // Handle regular timer logic
+//       if (initialValue > 0) {
+//         currentValues[selectedBox] = initialValue;
+//         initialValue--;
+//       } else {
+//         timer.cancel();
+//         selectedBox = -1;
+//         isTimerRunning = false; // Update the flag
+//       }
+//     }
+//
+//     notifyListeners();
+//   });
+// }
+
+// void stopTimer(int index) {
+//   if (index >= 0 && index < timers.length) {
+//     timers[index]?.cancel();
+//     selectedBox = -1;
+//     isTimerRunning = false;
+//     notifyListeners();
+//   }
+// }

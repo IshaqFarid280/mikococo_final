@@ -3,10 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mikococo/exercide/exercise_screen.dart';
 import 'package:mikococo/homescreen/HomeScreenProvider.dart';
 import 'package:mikococo/homescreen/view_screen.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:provider/provider.dart';
+import '../consts/colors.dart';
 import '../module/models.dart';
 import '../services/Boxes.dart';
 import 'add_info_screen.dart';
@@ -80,6 +83,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Container(
                                   margin: const EdgeInsets.only(top: 5),
                                   child: ListTile(
+                                    contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    tileColor: listTileColor,
                                     trailing:widget.isExerciseScreen ?  IconButton(onPressed: ()  {
                                       // add data into exercise list
                                       imageItem.isAsset ? imageItem.imagePath :imageItem.imagePath;
@@ -88,18 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                         print('imageURl : ${imageItem.imagePath}');
                                         print('setName : ${imageItem.title.toString()}');
                                       });
-                                      // Navigator.pop(context);
-                                      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
+                                      Navigator.pop(context);
+                                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                     }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
                                     onTap: (){
-                                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
+                                      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                     },
-                                    title: Text(imageItem.title.toString()),
-                                    tileColor: Colors.blueGrey,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                                    title: listTileText(title:imageItem.title.toString().toUpperCase()),
                                     leading: CircleAvatar(
+                                      radius: 25,
                                       backgroundImage: imageItem.isAsset
                                           ? AssetImage(imageItem.imagePath)
                                           : FileImage(File(imageItem.imagePath)) as ImageProvider,
@@ -126,6 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   return Container(
                                     margin: const EdgeInsets.only(top: 5),
                                     child: ListTile(
+                                      contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
                                       trailing:widget.isExerciseScreen ?  IconButton(onPressed: (){
                                         // add data into exercise list
 
@@ -139,18 +145,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                             print('imageURlFile: ${imageItem.imagePath}');
                                           }
                                         });
-                                        // Navigator.pop(context);
+                                        Navigator.pop(context);
                                         Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                       }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
                                       onTap: (){
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                       },
-                                      title: Text(imageItem.title.toString()),
-                                      tileColor: Colors.blueGrey,
+                                      title: listTileText(title :imageItem.title.toString().toUpperCase()),
+                                      tileColor: listTileColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       leading: CircleAvatar(
+                                        radius: 25,
                                         backgroundImage: imageItem.isAsset
                                             ? AssetImage(imageItem.imagePath)
                                             : FileImage(File(imageItem.imagePath)) as ImageProvider,

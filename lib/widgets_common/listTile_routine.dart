@@ -36,9 +36,16 @@ class ListTileRoutine extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.sizeOf(context).width * 0.1,
+                      width: MediaQuery.sizeOf(context).width * 0.08,
                     ),
-                    listTileText(title:'Full Body',context: context,textSize:21.0,weight: FontWeight.w700),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        listTileText(title:'Full Body',textSize:21.0,weight: FontWeight.w700),
+                        listTileText(title: 'Description',textSize:14.0,weight: FontWeight.w500)
+                      ],
+                    )
                   ],
                 ),
               ),
