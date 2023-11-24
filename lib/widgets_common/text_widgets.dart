@@ -13,7 +13,7 @@ Widget largeText({title, Color color = Colors.white,textSize = 20,FontWeight wei
 }
 
 
-Widget normalText({title, Color color = Colors.white,textSize = 14,FontWeight weight = FontWeight.w700}) {
+Widget normalText({title, Color color = Colors.white,textSize = 16.0,FontWeight weight = FontWeight.w700}) {
   return AutoSizeText(
     title,
     style: TextStyle(color: color, fontSize: textSize,fontWeight: weight),

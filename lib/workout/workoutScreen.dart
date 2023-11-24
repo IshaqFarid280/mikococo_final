@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mikococo/exercide/exercise_screen.dart';
+import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:mikococo/workout/WorkoutScreenProvider.dart';
 import 'package:mikococo/workout/edit_workout.dart';
@@ -22,9 +23,24 @@ class WorkoutDaysScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        leading:  LeadingIcon(),
         centerTitle: false,
-        title: listTileText(title:'Workout Days ${routine.name}'),
+        title: normalText(title:'Workout Days ${routine.name}'),
+        actions: [
+          AddThingsIcon(onTap: (){Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (ctx) => AddWorkoutDayForm(
+                onAdd: (String name, String leadingtext,
+                    String leadingavatarcolor) {
+                  workoutDaysScreenProvider.addWorkoutDay(
+                      name, leadingtext, leadingavatarcolor, routine);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+          );}),
+        ],
       ),
       body: Consumer<WorkoutDaysScreenProvider>(
         builder: (context, workoutDaysScreenProvider, _) {
@@ -118,24 +134,6 @@ class WorkoutDaysScreen extends StatelessWidget {
             },
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (ctx) => AddWorkoutDayForm(
-                onAdd: (String name, String leadingtext,
-                    String leadingavatarcolor) {
-                  workoutDaysScreenProvider.addWorkoutDay(
-                      name, leadingtext, leadingavatarcolor, routine);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-          );
-        },
-        child: Icon(Icons.add),
       ),
     );
   }

@@ -95,11 +95,12 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         appBarTheme:const  AppBarTheme(
-          color: blackColor,
+          color:backGroundColor,
           elevation: 5,
         ),
+        scaffoldBackgroundColor: backGroundColor,
       ),
-      home:BottomNavigationScreen(),
+      home:const BottomNavigationScreen(),
     );
   }
 }

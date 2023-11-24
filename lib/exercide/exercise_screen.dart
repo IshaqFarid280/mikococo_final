@@ -8,6 +8,7 @@ import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/exercide/edit_exercise.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
 import 'package:mikococo/sets/SetsScreen.dart';
+import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:provider/provider.dart';
 import '../consts/colors.dart';
 import '../module/models.dart';
@@ -52,7 +53,14 @@ class ExercisesScreen extends StatelessWidget {
     exercisesScreenProvider.setWorkoutDay(workoutDay);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exercise ${workoutDay.name}'),
+        leading: LeadingIcon(),
+        centerTitle: true,
+        title: normalText(title: 'Exercise ${workoutDay.name}'),
+        actions: [
+          AddThingsIcon(onTap: (){
+    Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> HomeScreen(workoutDay,isExerciseScreen: true,),),);
+    }),
+        ],
       ),
       body: Consumer<ExercisesScreenProvider>(
         builder: (context, exercisesScreenProvider, _){
@@ -65,7 +73,7 @@ class ExercisesScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: ListTile(
-                    contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                    contentPadding:const  EdgeInsets.only(left: 15,top: 5,bottom: 5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -103,12 +111,6 @@ class ExercisesScreen extends StatelessWidget {
             },
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> HomeScreen(workoutDay,isExerciseScreen: true,),),);
-        },
-        child: Icon(Icons.add),
       ),
     );
   }
