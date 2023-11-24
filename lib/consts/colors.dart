@@ -10,7 +10,11 @@ const Color blueColor = Color.fromRGBO(0, 34, 255, 1.0);
 const Color goldenColor = Color.fromRGBO(255, 168, 0, 1);
 const Color skinColor = Color(0xfff1c48b);
 const Color iconColor = Color(0xff747474);
-const Color listTileColor = Color(0xff060606);
+const Color backGroundColor = Color(0xff060606);
 const Color listTileLeadingColor = Color(0xff222222);
 const Color listTileDeleteColor = Color(0xffF06313);
 const Color listTileEditColor = Color(0xff747474);
+const Color listTileColor = Color(0xff151515);
+const Color buttonColors = Color(0xffF06313);
+const Color leadingButton = Color(0xff222222);
+
