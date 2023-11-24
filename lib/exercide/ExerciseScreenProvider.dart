@@ -16,8 +16,8 @@ class ExercisesScreenProvider extends ChangeNotifier {
       print("Reordered: $oldIndex to $newIndex");
     }
 
-    final routine = _exercises.removeAt(oldIndex);
-    _exercises.insert(newIndex, routine);
+    final exercise = _exercises.removeAt(oldIndex);
+    _exercises.insert(newIndex, exercise);
 
     // Notify listeners
     notifyListeners();
@@ -30,12 +30,17 @@ class ExercisesScreenProvider extends ChangeNotifier {
   }
 
   loadExercises() async {
+    if (_workoutDay == null) return;
+
     var exercisesBox = Hive.box<Exercise>('ExercisesBox');
     _exercises = exercisesBox.values
-        .where((exercise) => _workoutDay?.exercises.contains(exercise.key) ?? false)
+        .where((exercise) => _workoutDay!.exercises.contains(exercise.key))
         .toList();
-    notifyListeners();
+    Future.delayed(Duration.zero, () {
+      notifyListeners();
+    });
   }
+
 
   void deleteExercise(int index) {
     if (_workoutDay == null) return;
@@ -66,5 +71,20 @@ class ExercisesScreenProvider extends ChangeNotifier {
     _workoutDay!.save();
     loadExercises();
     print('Exercise added: ${exercise.name}');
+  }
+  void reorderExercises(int oldIndex, int newIndex) {
+    if (oldIndex >= 0 &&
+        oldIndex < _exercises.length &&
+        newIndex >= 0 &&
+        newIndex < _exercises.length) {
+      // Remove the exercise from the old index
+      final removedExercise = _exercises.removeAt(oldIndex);
+
+      // Insert the exercise at the new index
+      _exercises.insert(newIndex, removedExercise);
+
+      // Notify listeners about the change
+      notifyListeners();
+    }
   }
 }

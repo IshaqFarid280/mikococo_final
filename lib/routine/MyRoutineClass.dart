@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
@@ -15,7 +18,6 @@ import 'add_routine.dart';
 class MyRoutinesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     var routineProvider = Provider.of<RoutineProvider>(context, listen: false);
     routineProvider.loadRoutines();
 
@@ -41,141 +43,147 @@ class MyRoutinesScreen extends StatelessWidget {
     // List<Routine> routines = routineBox.values.toList();
 
     return Scaffold(
-
       appBar: AppBar(
         title: Text('My Routines'),
       ),
-      body: Consumer<RoutineProvider>(
-          builder: (context, routineProvider, _) {
-            List<Routine> routines = routineProvider.routines;
-            if (routines.isEmpty) {
-              // If there are no routines, display a message
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/emptyIcon.png', height: 100, width: 100,),
-                    SizedBox(height: 16),
-                    Text(
-                      'No Items',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    Text(
-                      "You don't have any routines. Add a routine using the '+' button.",
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+      body: Consumer<RoutineProvider>(builder: (context, routineProvider, _) {
+        List<Routine> routines = routineProvider.routines;
+        if (routines.isEmpty) {
+          // If there are no routines, display a message
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/emptyIcon.png',
+                  height: 100,
+                  width: 100,
                 ),
-              );
-            }
+                SizedBox(height: 16),
+                Text(
+                  'No Items',
+                  style: TextStyle(fontSize: 30),
+                ),
+                Text(
+                  "You don't have any routines. Add a routine using the '+' button.",
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: ReorderableListView.builder(
+              key: Key('routine'),
 
-            return ValueListenableBuilder<Box<Routine>>(
-                valueListenable: Hive.box<Routine>('RoutineBox').listenable(),
-                builder: (context, Box<Routine> box, _) {
-                  List<Routine> routine = box.values.toList();
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:2),
-                    child: ReorderableListView.builder(
-                      physics:const BouncingScrollPhysics(),
-                      onReorder: (oldIndex, newIndex) {
-                        routineProvider.updateRoutineList(oldIndex, newIndex);
-                      },
-                      itemCount: routine.length,
-                      itemBuilder: (context, index) {
-                        final currentroutine = routine[index];
-                        return Slidable(
-                            key: Key('$index'),
-                            endActionPane: ActionPane(
-                              motion: StretchMotion(),
-                              children: [
-                                // settings option
-                                SlidableAction(
-                                  onPressed: (BuildContext context) {
-                                    showDialog(
-                                        context: context, builder: (context) {
-                                      return AlertDialog(
-                                        title: Text('Edit Routine'),
-                                        content: EditRoutineForm(
-                                          initialName: currentroutine.name,
-                                          onEdit: (String newName) {
-                                            routineProvider.updateRoutine(index, newName);
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      );
-                                    });
-                                  },
-                                  backgroundColor: Colors.grey.shade800,
-                                  icon: Icons.edit,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                // delete option
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    routineProvider.deleteRoutine(index);
-                                  },
-                                  backgroundColor: Colors.red.shade400,
-                                  icon: Icons.delete,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              margin: EdgeInsets.only(top:5),
-                              child: ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                tileColor: listTileColor,
-                                leading: CircleAvatar(
-                                  radius:25,
-                                  // backgroundColor: Color(int.parse("FF0000", radix: 16) | 0xFF000000),
-                                  backgroundColor: Color(int.parse(
-                                      currentroutine.avatarColor.replaceFirst(
-                                          '#', ''),
-                                      radix: 16) |
-                                  0xff000000),
-                                  child: listTileText(title :currentroutine.leadingword.toUpperCase(),),
-                                ),
-                                title: listTileText(
-                                  title: currentroutine.name.toUpperCase(),
-                                ),
-                                subtitle: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.gps_fixed_outlined,color: iconColor,size:20,),
-                                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.02,),
-                                    listTileText(
-                                        title:currentroutine.description,
-                                      weight: FontWeight.w300,
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    CupertinoPageRoute(
-                                      builder: (context) =>
-                                          WorkoutDaysScreen(currentroutine),
-                                    ),
-                                  );
-                                },
-                              ),
-                            )
+            physics: const BouncingScrollPhysics(),
+            onReorder: (oldIndex, newIndex) {
+              routineProvider.updateRoutineList(oldIndex, newIndex);
+            },
+            itemCount: routines.length,
+            itemBuilder: (context, index) {
+              final currentroutine = routines[index];
+              return Slidable(
+                  key: ValueKey<int>(index),
+                  endActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      // settings option
+                      SlidableAction(
+                        onPressed: (BuildContext context) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Edit Routine'),
+                                  content: EditRoutineForm(
+                                    initialName: currentroutine.name,
+                                    onEdit: (String newName) {
+                                      routineProvider.updateRoutine(
+                                          index, newName);
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                );
+                              });
+                        },
+                        backgroundColor: Colors.grey.shade800,
+                        icon: Icons.edit,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      // delete option
+                      SlidableAction(
+                        onPressed: (context) {
+                          routineProvider.deleteRoutine(index);
+                        },
+                        backgroundColor: Colors.red.shade400,
+                        icon: Icons.delete,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      tileColor: listTileColor,
+                      leading: CircleAvatar(
+                        radius: 25,
+                        // backgroundColor: Color(int.parse("FF0000", radix: 16) | 0xFF000000),
+                        backgroundColor: Color(int.parse(
+                                currentroutine.avatarColor
+                                    .replaceFirst('#', ''),
+                                radix: 16) |
+                            0xff000000),
+                        child: listTileText(
+                          title: currentroutine.leadingword.toUpperCase(),
+                        ),
+                      ),
+                      title: listTileText(
+                        title: currentroutine.name.toUpperCase(),
+                      ),
+                      subtitle: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.gps_fixed_outlined,
+                            color: iconColor,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.02,
+                          ),
+                          listTileText(
+                            title: currentroutine.description,
+                            weight: FontWeight.w300,
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (context) =>
+                                WorkoutDaysScreen(currentroutine),
+                          ),
                         );
                       },
                     ),
-                  );
-                });
-
-          }
-      ),
+                  ));
+            },
+          ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(CupertinoPageRoute(
               builder: (ctx) => AddRoutineForm(onAdd: (String name, String desc,
-                  String leadword, String avatarCOlor) {
-                routineProvider.addRoutine(name, desc, leadword, avatarCOlor);
-              })));
+                      String leadword, String avatarCOlor) {
+                    routineProvider.addRoutine(
+                        name, desc, leadword, avatarCOlor);
+                  })));
         },
         child: Icon(Icons.add),
       ),

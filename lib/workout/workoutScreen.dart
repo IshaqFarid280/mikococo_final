@@ -53,9 +53,15 @@ class WorkoutDaysScreen extends StatelessWidget {
             );
           }
           return ListView.builder(
+            key: Key('workout'),
+          //   onReorder: (oldIndex, newIndex){
+          //     workoutDaysScreenProvider.reorderWorkoutDays(oldIndex, newIndex, routine);
+          //
+          // },
             itemCount: workoutDaysScreenProvider.workoutDays.length,
             itemBuilder: (context, index) {
               return Container(
+                key: ValueKey<int>(index),
                 margin: EdgeInsets.only(top:5),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
