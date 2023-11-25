@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
         fontFamily: ' ',
         appBarTheme:const  AppBarTheme(
 
-          color:backGroundColor,
+          color:blackColor,
           elevation: 5,
         ),
         scaffoldBackgroundColor: backGroundColor,

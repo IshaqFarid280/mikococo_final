@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -147,6 +148,44 @@ class ExercisesNameListTile extends StatelessWidget {
       leading: Icon(Icons.fitness_center_outlined ,color: Colors.white,),
       title:normalText(title: exercisesCategoryName,textSize:20.0),
       tileColor: goldenColor,
+    );
+  }
+}
+
+
+class SubmitButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final String? titlee;
+  final Color? primaryColor;
+
+  const SubmitButton({super.key, required this.onTap,  this.titlee,  this.primaryColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.all(4),
+      width: MediaQuery.of(context).size.width*1,
+      height: MediaQuery.of(context).size.height*0.08,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20)
+      ),
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+
+            primary: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            )
+        ),
+        child: AutoSizeText(titlee!, style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontFamily: "Poppins",
+            fontWeight: FontWeight.w800
+        ),),
+      ),
     );
   }
 }

@@ -56,7 +56,7 @@ Widget textFormField(
         SizedBox(
           height: MediaQuery.of(context).size.height * .001,
         ),
-        Text(
+        AutoSizeText(
           text,
           style: TextStyle(color: whiteColor, fontSize: 12, fontFamily: "Poppins"),
         ),
@@ -76,10 +76,12 @@ Widget textFormField(
             labelText: labelText,
             labelStyle: TextStyle(
               color: whiteColor,
+              fontSize: 14
             ),
             hintText: hint,
             hintStyle: TextStyle(
               color: whiteColor,
+              fontSize: 14,
               fontWeight: FontWeight.w100
             ),
             isDense: true,

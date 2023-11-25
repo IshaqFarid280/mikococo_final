@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mikococo/consts/colors.dart';
@@ -93,21 +94,12 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
     return Scaffold(
       appBar: AppBar(
         leading: LeadingIcon(),
-        // leading: trailingbutton(
-        //   onTap: (){
-        //         Navigator.pop(context);
-        //   },
-        //   svgAsset: 'assets/svg/backsign.svg',
-        //   svgColor: leadingButton,
-        // ),
-        // title: Text('Add New Routine'),
         title: largeText(title: 'Add New Routine'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            SizedBox(
+        child: Column(children: [
+          SizedBox(
             height: MediaQuery.of(context).size.height * 0.04,
           ),
           Center(
@@ -121,13 +113,14 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     height: MediaQuery.of(context).size.height * .1,
                     width: MediaQuery.of(context).size.width * .2,
-                    child: Center(child: Text(leadingcontroller.text.toUpperCase(),
+                    child: Center(
+                        child: Text(
+                      leadingcontroller.text.toUpperCase(),
                       style: TextStyle(
-                      color: whiteColor,
-
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                    ),
+                        color: whiteColor,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 22,
+                      ),
                     )),
                   ),
                   Positioned(
@@ -151,13 +144,15 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
                 ]),
               ],
             ),
+          ),SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
           ),
           textFormField(
-              context: context,
-              text: 'Routine Name',
-              controller: _controller,
-              hint: 'example - mass gain program',
-              // labelText: 'Example - Mass Gain Program'
+            context: context,
+            text: 'Routine Name',
+            controller: _controller,
+            hint: 'example - mass gain program',
+            // labelText: 'Example - Mass Gain Program'
           ),
           textFormField(
             context: context,
@@ -166,43 +161,27 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
             hint: 'example - december',
             // labelText: 'Example - Mass Gain Program'
           ),
-
-            Spacer(),
-            Positioned(
-              bottom: 0,
-
-              child: Container(
-                width: MediaQuery.of(context).size.width*1,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_controller.text.isNotEmpty &&
-                        _desccontroller.text.isNotEmpty &&
-                        leadingcontroller.text.isNotEmpty) {
-                      widget.onAdd(_controller.text, _desccontroller.text,
-                          leadingcontroller.text, getHexCode(_selectedColor));
-                      print(getHexCode(_selectedColor));
-                      _controller.clear();
-                      Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-
-                      primary: goldenColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      )
-                  ),
-                  child: Text('Add Routine',),
-                ),
-              ),
-            ),
-    ]
-        ),
+          Spacer(),
+          Positioned(
+            bottom: 10,
+            child: SubmitButton(
+              titlee: 'Add Routine',
+                primaryColor: goldenColor,
+                onTap: () {
+              if (_controller.text.isNotEmpty &&
+                  _desccontroller.text.isNotEmpty &&
+                  leadingcontroller.text.isNotEmpty) {
+                widget.onAdd(_controller.text, _desccontroller.text,
+                    leadingcontroller.text, getHexCode(_selectedColor));
+                print(getHexCode(_selectedColor));
+                _controller.clear();
+                Navigator.pop(context);
+              }
+            }),
+          )
+        ]),
       ),
-
     );
   }
+
 }
