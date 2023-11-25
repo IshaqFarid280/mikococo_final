@@ -23,23 +23,28 @@ class WorkoutDaysScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading:  LeadingIcon(),
+        leading: LeadingIcon(),
         centerTitle: false,
-        title: normalText(title:'Workout Days ${routine.name}'),
+        title: normalText(title: 'Workout Days ${routine.name}'),
         actions: [
-          AddThingsIcon(onTap: (){Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (ctx) => AddWorkoutDayForm(
-                onAdd: (String name, String leadingtext,
-                    String leadingavatarcolor) {
-                  workoutDaysScreenProvider.addWorkoutDay(
-                      name, leadingtext, leadingavatarcolor, routine);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-          );}),
+          trailingbutton(
+              svgColor: leadingButton,
+              svgAsset: 'assets/svg/plusicon.svg',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (ctx) => AddWorkoutDayForm(
+                      onAdd: (String name, String leadingtext,
+                          String leadingavatarcolor) {
+                        workoutDaysScreenProvider.addWorkoutDay(
+                            name, leadingtext, leadingavatarcolor, routine);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                );
+              }),
         ],
       ),
       body: Consumer<WorkoutDaysScreenProvider>(
@@ -70,25 +75,26 @@ class WorkoutDaysScreen extends StatelessWidget {
           }
           return ListView.builder(
             key: Key('workout'),
-          //   onReorder: (oldIndex, newIndex){
-          //     workoutDaysScreenProvider.reorderWorkoutDays(oldIndex, newIndex, routine);
-          //
-          // },
+            //   onReorder: (oldIndex, newIndex){
+            //     workoutDaysScreenProvider.reorderWorkoutDays(oldIndex, newIndex, routine);
+            //
+            // },
             itemCount: workoutDaysScreenProvider.workoutDays.length,
             itemBuilder: (context, index) {
               return Container(
                 key: ValueKey<int>(index),
-                margin: EdgeInsets.only(top:5),
+                margin: EdgeInsets.only(top: 5),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: ListTile(
-                    contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                    contentPadding:
+                        EdgeInsets.only(left: 15, top: 5, bottom: 5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     tileColor: listTileColor,
                     leading: CircleAvatar(
-                        radius:25,
+                      radius: 25,
                       backgroundColor: Color(
                         int.parse(
                               workoutDaysScreenProvider
@@ -99,10 +105,15 @@ class WorkoutDaysScreen extends StatelessWidget {
                             0xff000000,
                       ),
                       child: listTileText(
-                        title :workoutDaysScreenProvider.workoutDays[index].leadingword.toUpperCase(),
+                        title: workoutDaysScreenProvider
+                            .workoutDays[index].leadingword
+                            .toUpperCase(),
                       ),
                     ),
-                    title: listTileText(title :workoutDaysScreenProvider.workoutDays[index].name.toUpperCase(),textSize:18.0),
+                    title: listTileText(
+                        title: workoutDaysScreenProvider.workoutDays[index].name
+                            .toUpperCase(),
+                        textSize: 18.0),
                     onTap: () {
                       Navigator.of(context).push(
                         CupertinoPageRoute(

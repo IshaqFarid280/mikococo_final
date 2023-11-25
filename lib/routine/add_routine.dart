@@ -92,11 +92,12 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
+        leading: trailingbutton(
+          onTap: (){
+                Navigator.pop(context);
           },
+          svgAsset: 'assets/svg/backsign.svg',
+          svgColor: leadingButton,
         ),
         title: Text('Add New Routine'),
       ),

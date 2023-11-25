@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
 
 
@@ -47,29 +48,86 @@ class LeadingIcon extends StatelessWidget {
   }
 }
 
-class AddThingsIcon extends StatelessWidget {
+class trailingbutton extends StatelessWidget {
+
+  final String? svgAsset;
+  final Color? svgColor;
   final VoidCallback onTap;
-  IconData icon ;
-   AddThingsIcon({required this.onTap,this.icon = Icons.add});
+
+  const trailingbutton({
+    super.key, this.svgAsset,  this.svgColor, required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
+
       child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap:onTap,
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
         child: Container(
-          height: MediaQuery.sizeOf(context).height *0.1,
-          width:MediaQuery.sizeOf(context).width *0.15,
-          decoration:const  BoxDecoration(
-            color: leadingButton,
-            shape: BoxShape.circle,
-          ),
-          child:Icon(icon,color:iconColor,size:30,),
+            padding: EdgeInsets.all(8),
+
+            height: MediaQuery.sizeOf(context).height *0.05,
+            width:MediaQuery.sizeOf(context).width *0.11,
+            decoration: BoxDecoration(
+              // color: leadingButton,
+              color: svgColor,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child:  svgAsset != null
+                ? SvgPicture.asset(svgAsset! )
+                : Icon(Icons.error), // Replace with your placeholder or handle it differently
+
         ),
       ),
     );
   }
 }
+// class AddThingsIcon extends StatelessWidget {
+//   final VoidCallback onTap;
+//   final String? svgAsset;
+//   final Color? fontColor;
+//   final Color? backgroundColor;
+//   final Color? svgColor;
+//
+//   AddThingsIcon({
+//     required this.onTap,
+//     this.svgAsset,
+//     this.fontColor,
+//     this.backgroundColor,
+//     this.svgColor = leadingButton,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.all(5.0),
+//       child: InkWell(
+//         borderRadius: BorderRadius.circular(16),
+//
+//         onTap: onTap,
+//         child: Container(
+//           padding: EdgeInsets.all(8),
+//
+//           height: MediaQuery.sizeOf(context).height *0.05,
+//           width:MediaQuery.sizeOf(context).width *0.11,
+//           decoration: BoxDecoration(
+//             color: leadingButton,
+//             borderRadius: BorderRadius.circular(30),
+//           ),
+//           child: svgAsset != null
+//               ? SvgPicture.asset(
+//             svgAsset!,
+//             color: svgColor ?? Colors.transparent,
+//             height: MediaQuery.of(context).size.height * 0.03,
+//             width: MediaQuery.of(context).size.width * 0.07,
+//           )
+//               : Container(),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
