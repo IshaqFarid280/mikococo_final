@@ -27,19 +27,24 @@ class WorkoutDaysScreen extends StatelessWidget {
         centerTitle: false,
         title: normalText(title:'Workout Days ${routine.name}'),
         actions: [
-          AddThingsIcon(onTap: (){Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (ctx) => AddWorkoutDayForm(
-                onAdd: (String name, String leadingtext,
-                    String leadingavatarcolor) {
-                  workoutDaysScreenProvider.addWorkoutDay(
-                      name, leadingtext, leadingavatarcolor, routine);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-          );}),
+          trailingbutton(
+              svgColor: leadingBtnColor,
+              svgAsset: 'assets/svg/plusicon.svg',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (ctx) => AddWorkoutDayForm(
+                      onAdd: (String name, String leadingtext,
+                          String leadingavatarcolor) {
+                        workoutDaysScreenProvider.addWorkoutDay(
+                            name, leadingtext, leadingavatarcolor, routine);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                );
+              }),
         ],
       ),
       body: Consumer<WorkoutDaysScreenProvider>(

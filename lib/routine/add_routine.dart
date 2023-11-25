@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/consts/list.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
-
+import 'package:mikococo/widgets_common/text_widgets.dart';
 
 class AddRoutineForm extends StatefulWidget {
   final Function(String, String, String, String) onAdd;
@@ -34,7 +34,7 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
                 LengthLimitingTextInputFormatter(1),
               ],
               decoration:
-              InputDecoration(hintText: 'Enter a Text, letter or symbol'),
+                  InputDecoration(hintText: 'Enter a Text, letter or symbol'),
               controller: leadingcontroller,
               style: TextStyle(),
             ),
@@ -47,21 +47,21 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
                     runSpacing: 8.0,
                     children: colorSelection
                         .map((color) => GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedColor = color;
-                          print(_selectedColor);
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CircleAvatar(
-                          backgroundColor: color,
-                          radius: 15,
-                        ),
-                      ),
-                    ))
+                              onTap: () {
+                                setState(() {
+                                  _selectedColor = color;
+                                  print(_selectedColor);
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CircleAvatar(
+                                  backgroundColor: color,
+                                  radius: 15,
+                                ),
+                              ),
+                            ))
                         .toList(),
                   ),
                   Row(
@@ -92,34 +92,47 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: trailingbutton(
-          onTap: (){
-                Navigator.pop(context);
-          },
-          svgAsset: 'assets/svg/backsign.svg',
-          svgColor: leadingButton,
-        ),
-        title: Text('Add New Routine'),
+        leading: LeadingIcon(),
+        // leading: trailingbutton(
+        //   onTap: (){
+        //         Navigator.pop(context);
+        //   },
+        //   svgAsset: 'assets/svg/backsign.svg',
+        //   svgColor: leadingButton,
+        // ),
+        // title: Text('Add New Routine'),
+        title: largeText(title: 'Add New Routine'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          children: <Widget>[
-
-            Row(
+          children: [
+            SizedBox(
+            height: MediaQuery.of(context).size.height * 0.04,
+          ),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Stack(children: [
                   Container(
-                    height: 50,
-                    width: 50,
-                    child: CircleAvatar(
-                      child: Text(leadingcontroller.text),
-                      backgroundColor: _selectedColor,
+                    decoration: BoxDecoration(
+                        color: _selectedColor,
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    height: MediaQuery.of(context).size.height * .1,
+                    width: MediaQuery.of(context).size.width * .2,
+                    child: Center(child: Text(leadingcontroller.text.toUpperCase(),
+                      style: TextStyle(
+                      color: whiteColor,
+
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
                     ),
+                    )),
                   ),
                   Positioned(
-                    top: 25,
-                    left: 25,
+                    bottom: 0,
+                    right: 0,
                     child: Container(
                       decoration: BoxDecoration(
                           shape: BoxShape.circle, color: Colors.grey),
@@ -130,42 +143,66 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
                           },
                           child: Icon(
                             Icons.edit,
-                            size: 16,
+                            size: 18,
+                            color: goldenColor,
                           )),
                     ),
                   )
                 ]),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _controller,
-                    decoration: InputDecoration(labelText: 'Routine Name'),
-                  ),
-                ),
               ],
             ),
-            TextFormField(
-              controller: _desccontroller,
-              decoration: InputDecoration(labelText: 'Routine Description'),
+          ),
+          textFormField(
+              context: context,
+              text: 'Routine Name',
+              controller: _controller,
+              hint: 'example - mass gain program',
+              // labelText: 'Example - Mass Gain Program'
+          ),
+          textFormField(
+            context: context,
+            text: 'Routine Description',
+            controller: _desccontroller,
+            hint: 'example - december',
+            // labelText: 'Example - Mass Gain Program'
+          ),
+
+            Spacer(),
+            Positioned(
+              bottom: 0,
+
+              child: Container(
+                width: MediaQuery.of(context).size.width*1,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20)
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_controller.text.isNotEmpty &&
+                        _desccontroller.text.isNotEmpty &&
+                        leadingcontroller.text.isNotEmpty) {
+                      widget.onAdd(_controller.text, _desccontroller.text,
+                          leadingcontroller.text, getHexCode(_selectedColor));
+                      print(getHexCode(_selectedColor));
+                      _controller.clear();
+                      Navigator.pop(context);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+
+                      primary: goldenColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      )
+                  ),
+                  child: Text('Add Routine',),
+                ),
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                if (_controller.text.isNotEmpty && _desccontroller.text.isNotEmpty
-                    && leadingcontroller.text.isNotEmpty) {
-                  widget.onAdd(_controller.text, _desccontroller.text, leadingcontroller.text,
-                      getHexCode(_selectedColor));
-                  print(getHexCode(_selectedColor));
-                  _controller.clear();
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Add Routine'),
-            ),
-          ],
+    ]
         ),
       ),
+
     );
   }
 }

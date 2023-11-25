@@ -39,7 +39,7 @@ class LeadingIcon extends StatelessWidget {
           height: MediaQuery.sizeOf(context).height *0.01,
           width:MediaQuery.sizeOf(context).width *0.01,
           decoration: BoxDecoration(
-            color: leadingButton,
+            color: leadingBtnColor,
             borderRadius: BorderRadius.circular(30),
           ),
           child: Center(child: Icon(icon,color:iconColor,),),
@@ -86,51 +86,51 @@ class trailingbutton extends StatelessWidget {
     );
   }
 }
-// class AddThingsIcon extends StatelessWidget {
-//   final VoidCallback onTap;
-//   final String? svgAsset;
-//   final Color? fontColor;
-//   final Color? backgroundColor;
-//   final Color? svgColor;
-//
-//   AddThingsIcon({
-//     required this.onTap,
-//     this.svgAsset,
-//     this.fontColor,
-//     this.backgroundColor,
-//     this.svgColor = leadingButton,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.all(5.0),
-//       child: InkWell(
-//         borderRadius: BorderRadius.circular(16),
-//
-//         onTap: onTap,
-//         child: Container(
-//           padding: EdgeInsets.all(8),
-//
-//           height: MediaQuery.sizeOf(context).height *0.05,
-//           width:MediaQuery.sizeOf(context).width *0.11,
-//           decoration: BoxDecoration(
-//             color: leadingButton,
-//             borderRadius: BorderRadius.circular(30),
-//           ),
-//           child: svgAsset != null
-//               ? SvgPicture.asset(
-//             svgAsset!,
-//             color: svgColor ?? Colors.transparent,
-//             height: MediaQuery.of(context).size.height * 0.03,
-//             width: MediaQuery.of(context).size.width * 0.07,
-//           )
-//               : Container(),
-//         ),
-//       ),
-//     );
-//   }
-// }
+class AddThingsIcon extends StatelessWidget {
+  final VoidCallback onTap;
+  final String? svgAsset;
+  final Color? fontColor;
+  final Color? backgroundColor;
+  final Color? svgColor;
+
+  AddThingsIcon({
+    required this.onTap,
+    this.svgAsset,
+    this.fontColor,
+    this.backgroundColor,
+    this.svgColor = leadingBtnColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+
+        onTap: onTap,
+        child: Container(
+          padding: EdgeInsets.all(8),
+
+          height: MediaQuery.sizeOf(context).height *0.05,
+          width:MediaQuery.sizeOf(context).width *0.11,
+          decoration: BoxDecoration(
+            color: leadingBtnColor,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: svgAsset != null
+              ? SvgPicture.asset(
+            svgAsset!,
+            color: svgColor ?? Colors.transparent,
+            height: MediaQuery.of(context).size.height * 0.03,
+            width: MediaQuery.of(context).size.width * 0.07,
+          )
+              : Container(),
+        ),
+      ),
+    );
+  }
+}
 
 class ExercisesNameListTile extends StatelessWidget {
   final String exercisesCategoryName ;
