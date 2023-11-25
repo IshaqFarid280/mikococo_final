@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../../widgets_common/text_widgets.dart';
+
 class StatusScreen extends StatelessWidget {
   final String  totalReps ; // Replace with your actual data
   final String  totalKg  ;// Replace with your actual data
@@ -28,7 +30,7 @@ class StatusScreen extends StatelessWidget {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Text('Total Reps: $totalReps'),
+              child: normalText(title :'Total Reps: $totalReps'),
             ),
             SizedBox(height: 10.0),
             Container(
@@ -37,7 +39,7 @@ class StatusScreen extends StatelessWidget {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Text('Total KG: $totalKg'),
+              child: normalText(title :'Total KG: $totalKg'),
             ),
             SizedBox(height: 10.0),
             Container(
@@ -46,7 +48,7 @@ class StatusScreen extends StatelessWidget {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Text('Average KG: ${averageKg}'),
+              child: normalText(title :'Average KG: ${averageKg}'),
             ),
             SizedBox(height: 10.0),
             Container(
@@ -55,7 +57,7 @@ class StatusScreen extends StatelessWidget {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Text('Best Reps: $bestReps'),
+              child: normalText(title :'Best Reps: $bestReps'),
             ),
             SizedBox(height: 10.0),
             Container(
@@ -64,7 +66,7 @@ class StatusScreen extends StatelessWidget {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Text('Best KG: $bestKg'),
+              child: normalText(title :'Best KG: $bestKg'),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 
 
 Widget ourButton({ onpressed, color, textColor, String? title}) {
@@ -131,3 +132,21 @@ class trailingbutton extends StatelessWidget {
 //   }
 // }
 
+class ExercisesNameListTile extends StatelessWidget {
+  final String exercisesCategoryName ;
+   ExercisesNameListTile({required this.exercisesCategoryName});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      dense: true,
+      shape:RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+      leading: Icon(Icons.fitness_center_outlined ,color: Colors.white,),
+      title:normalText(title: exercisesCategoryName,textSize:20.0),
+      tileColor: goldenColor,
+    );
+  }
+}
