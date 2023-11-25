@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 
@@ -38,7 +40,7 @@ class LeadingIcon extends StatelessWidget {
           height: MediaQuery.sizeOf(context).height *0.01,
           width:MediaQuery.sizeOf(context).width *0.01,
           decoration: BoxDecoration(
-            color: leadingButton,
+            color: leadingBtnColor,
             borderRadius: BorderRadius.circular(30),
           ),
           child: Center(child: Icon(icon,color:iconColor,),),
@@ -48,26 +50,83 @@ class LeadingIcon extends StatelessWidget {
   }
 }
 
+class trailingbutton extends StatelessWidget {
+
+  final String? svgAsset;
+  final Color? svgColor;
+  final VoidCallback onTap;
+
+  const trailingbutton({
+    super.key, this.svgAsset,  this.svgColor, required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Container(
+            padding: EdgeInsets.all(8),
+
+            height: MediaQuery.sizeOf(context).height *0.05,
+            width:MediaQuery.sizeOf(context).width *0.11,
+            decoration: BoxDecoration(
+              // color: leadingButton,
+              color: svgColor,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child:  svgAsset != null
+                ? SvgPicture.asset(svgAsset! )
+                : Icon(Icons.error), // Replace with your placeholder or handle it differently
+
+        ),
+      ),
+    );
+  }
+}
 class AddThingsIcon extends StatelessWidget {
   final VoidCallback onTap;
-  IconData icon ;
-   AddThingsIcon({required this.onTap,this.icon = Icons.add});
+  final String? svgAsset;
+  final Color? fontColor;
+  final Color? backgroundColor;
+  final Color? svgColor;
+
+  AddThingsIcon({
+    required this.onTap,
+    this.svgAsset,
+    this.fontColor,
+    this.backgroundColor,
+    this.svgColor = leadingBtnColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap:onTap,
+        borderRadius: BorderRadius.circular(16),
+
+        onTap: onTap,
         child: Container(
-          height: MediaQuery.sizeOf(context).height *0.1,
-          width:MediaQuery.sizeOf(context).width *0.15,
-          decoration:const  BoxDecoration(
-            color: leadingButton,
-            shape: BoxShape.circle,
+          padding: EdgeInsets.all(8),
+
+          height: MediaQuery.sizeOf(context).height *0.05,
+          width:MediaQuery.sizeOf(context).width *0.11,
+          decoration: BoxDecoration(
+            color: leadingBtnColor,
+            borderRadius: BorderRadius.circular(30),
           ),
-          child:Icon(icon,color:iconColor,size:30,),
+          child: svgAsset != null
+              ? SvgPicture.asset(
+            svgAsset!,
+            color: svgColor ?? Colors.transparent,
+            height: MediaQuery.of(context).size.height * 0.03,
+            width: MediaQuery.of(context).size.width * 0.07,
+          )
+              : Container(),
         ),
       ),
     );
@@ -89,6 +148,44 @@ class ExercisesNameListTile extends StatelessWidget {
       leading: Icon(Icons.fitness_center_outlined ,color: Colors.white,),
       title:normalText(title: exercisesCategoryName,textSize:20.0),
       tileColor: goldenColor,
+    );
+  }
+}
+
+
+class SubmitButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final String? titlee;
+  final Color? primaryColor;
+
+  const SubmitButton({super.key, required this.onTap,  this.titlee,  this.primaryColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.all(4),
+      width: MediaQuery.of(context).size.width*1,
+      height: MediaQuery.of(context).size.height*0.08,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20)
+      ),
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+
+            primary: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            )
+        ),
+        child: AutoSizeText(titlee!, style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontFamily: "Poppins",
+            fontWeight: FontWeight.w800
+        ),),
+      ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/calender/calender_screen.dart';
+import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
 import 'package:mikococo/routine/MyRoutineClass.dart';
 import 'package:mikococo/timer/timer_screen.dart';
@@ -76,16 +78,16 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.purple,
-        currentIndex: _selectedindexx,
-        unselectedItemColor: Colors.white,
-        backgroundColor: Colors.black,
+        selectedItemColor: listTileColor,
+        // currentIndex: _selectedindexx,
+        unselectedItemColor: listTileColor,
+        backgroundColor: blackColor,
         onTap: _onItemTapped,
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.fitness_center),label: 'workoout'),
-            BottomNavigationBarItem(icon: Icon(Icons.menu),label: 'exercises'),
-            BottomNavigationBarItem(icon: Icon(Icons.timer),label: 'Timer'),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_month),label: 'Calender'),
+            BottomNavigationBarItem(icon: SvgPicture.asset('assets/svg/homeicon.svg', width: 20,),label: 'workoout'),
+            BottomNavigationBarItem(icon: SvgPicture.asset('assets/svg/dumbel.svg'), label: 'exercises'),
+            BottomNavigationBarItem(icon: SvgPicture.asset('assets/svg/clock.svg'), label: 'Timer'),
+            BottomNavigationBarItem(icon: SvgPicture.asset('assets/svg/calnder.svg'),label: 'Calender'),
           ]
       ),
       body: screens[_selectedindexx],
