@@ -26,10 +26,12 @@ class ExercisesScreenProvider extends ChangeNotifier {
   void setWorkoutDay(WorkoutDay workoutDay) {
     _workoutDay = workoutDay;
     loadExercises();
-    notifyListeners();
+    Future.delayed(Duration.zero, () {
+      notifyListeners();
+    });
   }
 
-  loadExercises() async {
+  loadExercises()  {
     if (_workoutDay == null) return;
 
     var exercisesBox = Hive.box<Exercise>('ExercisesBox');
@@ -72,7 +74,7 @@ class ExercisesScreenProvider extends ChangeNotifier {
     loadExercises();
     print('Exercise added: ${exercise.name}');
   }
-  void reorderExercises(int oldIndex, int newIndex) {
+  void reorderExercises(int oldIndex, int newIndex){
     if (oldIndex >= 0 &&
         oldIndex < _exercises.length &&
         newIndex >= 0 &&

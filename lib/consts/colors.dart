@@ -17,4 +17,7 @@ const Color listTileEditColor = Color(0xff747474);
 const Color listTileColor = Color(0xff151515);
 const Color buttonColors = Color(0xffF06313);
 const Color leadingButton = Color(0xff222222);
+const Color statusContainer1 = Color(0xff007F32);
+const Color statusContainer2 = Color(0xff00765E);
+const Color statusContainer3 = Color(0xff318300);
 

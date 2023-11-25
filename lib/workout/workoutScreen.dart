@@ -9,6 +9,7 @@ import 'package:mikococo/workout/work_out_froum.dart';
 import 'package:mikococo/workout/workoutday_widget.dart';
 import 'package:provider/provider.dart';
 import '../consts/colors.dart';
+import '../consts/strnigs.dart';
 import '../module/models.dart';
 
 class WorkoutDaysScreen extends StatelessWidget {
@@ -26,7 +27,7 @@ class WorkoutDaysScreen extends StatelessWidget {
       appBar: AppBar(
         leading:  LeadingIcon(),
         centerTitle: true,
-        title: normalText(title: 'My Workout'),
+        title: normalText(title:appName),
         actions: [
           AddThingsIcon(onTap: (){Navigator.push(
             context,

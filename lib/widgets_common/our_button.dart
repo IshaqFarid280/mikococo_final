@@ -4,13 +4,13 @@ import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 
 
-Widget ourButton({ onpressed, color, textColor, String? title}) {
+Widget ourButton({ onPressed, color = buttonColors, textColor, String? title}) {
   return ElevatedButton(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(color),
       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(12)),
     ),
-    onPressed: onpressed,
+    onPressed: onPressed,
     child: Text(
       title!,
       style: TextStyle(

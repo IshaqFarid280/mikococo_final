@@ -65,11 +65,11 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ourButton(color: redColor, onpressed: (){
+                  ourButton(color: redColor, onPressed: (){
                     Navigator.pop(context);
                   }, textColor: whiteColor, title: "Yes"),
 
-                  ourButton(color: redColor, onpressed: (){
+                  ourButton(color: redColor, onPressed: (){
                   }, textColor: whiteColor, title: "No"),
                 ],
               )

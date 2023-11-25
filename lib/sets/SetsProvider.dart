@@ -145,7 +145,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
     exercise = newExercise;
     // Ensure sets is not null
     exercise?.sets ??= [];
-    notifyListeners();
+      notifyListeners();
   }
 
   static SetsScreenStateProvider of(BuildContext context) {

@@ -69,14 +69,14 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
                     children: [
                       ourButton(
                           color: redColor,
-                          onpressed: () {
+                          onPressed: () {
                             Navigator.pop(context);
                           },
                           textColor: whiteColor,
                           title: "Yes"),
                       ourButton(
                           color: redColor,
-                          onpressed: () {},
+                          onPressed: () {},
                           textColor: whiteColor,
                           title: "No"),
                     ],

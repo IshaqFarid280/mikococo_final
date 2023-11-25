@@ -11,6 +11,7 @@ import 'package:mikococo/sets/SetsScreen.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:provider/provider.dart';
 import '../consts/colors.dart';
+import '../consts/strnigs.dart';
 import '../module/models.dart';
 import '../widgets_common/text_widgets.dart';
 
@@ -55,7 +56,7 @@ class ExercisesScreen extends StatelessWidget {
       appBar: AppBar(
         leading: LeadingIcon(),
         centerTitle: true,
-        title: normalText(title: 'My Workout'),
+        title: normalText(title:appName),
         // title: normalText(title: 'Exercise ${workoutDay.name}'),
         actions: [
           AddThingsIcon(onTap: (){

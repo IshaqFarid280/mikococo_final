@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mikococo/consts/strnigs.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
 import 'package:mikococo/routine/edit_routine.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
@@ -45,7 +46,7 @@ class MyRoutinesScreen extends StatelessWidget {
       appBar: AppBar(
         leading: LeadingIcon(icon: Icons.menu,),
         centerTitle: true,
-        title: normalText(title: 'My Workout'),
+        title: normalText(title: appName),
         actions: [
           AddThingsIcon(onTap: (){},icon:Icons.language_outlined,),
         ],
