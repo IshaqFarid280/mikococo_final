@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../consts/colors.dart';
 import '../module/models.dart';
 import '../services/Boxes.dart';
+import '../widgets_common/our_button.dart';
 import 'add_info_screen.dart';
 
 
@@ -32,45 +33,56 @@ class _HomeScreenState extends State<HomeScreen> {
     var homeScreenProvider = Provider.of<HomeScreenProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () { Navigator.of(context).pop();},
-        )
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddPictureScreen(
-            pictures: homeScreenProvider.pictures,
-            filteredPictures: homeScreenProvider.filteredPictures,
-            demo: homeScreenProvider.demo,
-            filteredDemo: homeScreenProvider.filteredDemo,
-          )));
-          // _showDialog(context);
-        },
-        child: const Icon(Icons.add),
+        centerTitle: true,
+        leading: LeadingIcon(),
+        title: normalText(title: 'My Workout'),
+        actions: [
+          AddThingsIcon(onTap: (){
+            Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddPictureScreen(
+              pictures: homeScreenProvider.pictures,
+              filteredPictures: homeScreenProvider.filteredPictures,
+              demo: homeScreenProvider.demo,
+              filteredDemo: homeScreenProvider.filteredDemo,
+            )));
+          }),
+        ],
       ),
       body: Consumer<HomeScreenProvider>(
         builder: (ctx, homeScreenProvider, _){
           return SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics:const  BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                      normalText(title: 'Exercises',textSize:22.0),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
                       TextFormField(
+                        enabled: true,
                         controller: homeScreenProvider.searchController,
                         onChanged: (text) {
                           homeScreenProvider.filterLists(homeScreenProvider.searchController.text.toString());
                         },
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
+                          hintText: 'search',
+                          hintStyle:const TextStyle(color: iconColor),
+                          label: Icon(Icons.search,color: iconColor,size:30,),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:const BorderSide(color: iconColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:const  BorderSide(color: iconColor,width: 3),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30,),
-                      Text('Abs'),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.04,),
+                      ExercisesNameListTile(exercisesCategoryName:'Abs',),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
                       ValueListenableBuilder<Box<AddingPictures>>(
                         valueListenable: BoxesClass.getData().listenable(),
                         builder: (context, box, _) {
@@ -118,7 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       ),
-                      Text('Chest'),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                      ExercisesNameListTile(exercisesCategoryName:'Legs',),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
                       ValueListenableBuilder<Box<DemonPictures>>(
                           valueListenable: BoxesClass.getDemoData().listenable(),
                           builder: (context,box,_) {

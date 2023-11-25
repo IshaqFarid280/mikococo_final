@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -50,7 +52,8 @@ class _SetsScreenState extends State<_SetsScreenContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: listTileText(title:'Sets ${_setsScreenStateProvider.exercise?.name}'),
+        centerTitle: true,
+        title: normalText(title:'My Workout'),
         actions: [
           IconButton(onPressed: (){
             Navigator.push(context, CupertinoPageRoute(builder: (context)=> ChartScreen(
@@ -75,101 +78,156 @@ class _SetsScreenState extends State<_SetsScreenContent> {
       body: ValueListenableBuilder<Box<SetsScreenData>>(
         valueListenable: _setsScreenStateProvider.setsBox.listenable(),
         builder: (context, Box<SetsScreenData> box, _) {
-          return ListView.builder(
-            physics:const BouncingScrollPhysics(),
-            itemCount: _setsScreenStateProvider.setKeys.length,
-            itemBuilder: (context, index) {
-              final setIndex = index;
-              final setKey = _setsScreenStateProvider.setKeys[setIndex];
-              final set = box.get(setKey)!;
-              if (setIndex == 0 || set.date!.day != box.get(_setsScreenStateProvider.setKeys[setIndex - 1])!.date!.day) {
-                // Display date ListTile
-                final formattedDate = DateFormat('yyyy-MM-dd').format(set.date!);
-                return Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          tileColor: goldenColor,
-                          title: listTileText(title: formattedDate,),
-                        ),
-                      ),
-                    ),
-                    // Display set ListTile
-                    Container(
-                      margin: const EdgeInsets.only(top: 5),
-                      child: Padding(
-                        padding:const EdgeInsets.symmetric(horizontal: 5),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          tileColor: listTileColor,
-                          title: listTileText(title:'Set ${setIndex + 1}:    Reps ${set.reps} x  KG  ${set.kg}'),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.edit),
-                                onPressed: () async {
-                                  await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () {
-                                  _setsScreenStateProvider.deleteSet(setKey);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                // Display set ListTile without the date
-                return Container(
-                  margin: const EdgeInsets.only(top: 5),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      tileColor: listTileColor,
-                      title: listTileText(title: 'Set ${setIndex + 1}:   Reps ${set.reps} X KG  ${set.kg}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () async {
-                              await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              _setsScreenStateProvider.deleteSet(setKey);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                ListTile(
+                  contentPadding:const  EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                );
-              }
-            },
+                  title: normalText(title:'${_setsScreenStateProvider.exercise?.name}',textSize: 22.0,weight: FontWeight.w400),
+                  tileColor: listTileColor,
+                  leading: CircleAvatar(
+                    radius:25,
+                    backgroundImage:_setsScreenStateProvider.exercise!.image.toString().contains('assets/images') ? AssetImage(_setsScreenStateProvider.exercise!.image.toString()):FileImage(File(_setsScreenStateProvider.exercise!.image.toString()))  as ImageProvider,
+                    //
+                  ),
+                ),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics:const NeverScrollableScrollPhysics(),
+                  itemCount: _setsScreenStateProvider.setKeys.length,
+                  itemBuilder: (context, index) {
+                    final setIndex = index;
+                    final setKey = _setsScreenStateProvider.setKeys[setIndex];
+                    final set = box.get(setKey)!;
+                    if (setIndex == 0 || set.date!.day != box.get(_setsScreenStateProvider.setKeys[setIndex - 1])!.date!.day) {
+                      // Display date ListTile
+                      final formattedDate = DateFormat('MMMM d, yyyy').format(set.date!);
+                      return Column(
+                        children: [
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                          Container(
+                            alignment: Alignment.center,
+                            height: 35,
+                            width: MediaQuery.sizeOf(context).width * 0.5,
+                            decoration: BoxDecoration(
+                              color: buttonColors,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Center(child: listTileText(title: formattedDate,)),
+                          ),
+                          // Display set ListTile
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: Padding(
+                              padding:const EdgeInsets.symmetric(horizontal: 5),
+                              child: ListTile(
+                                leading:  Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    smallText(title:'Set ${setIndex + 1}',textSize:14.0,color: iconColor),
+                                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.15,),
+                                    normalText(title:set.reps.toString(),color: buttonColors,textSize: 20.0),
+                                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.02,),
+                                    smallText(title:'reps'),
+                                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
+                                    smallText(title:'x',color: iconColor,textSize:14.0),
+                                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
+                                    normalText(title:set.kg.toString(),color: buttonColors,textSize: 20.0),
+                                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.02,),
+                                    smallText(title:'kg'),
+                                  ],
+                                ),
+                                contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                tileColor: listTileColor,
+                                // trailing: Container(
+                                //   width: 20,
+                                //   child: Row(
+                                //     mainAxisSize: MainAxisSize.min,
+                                //     children: [
+                                //       IconButton(
+                                //         icon: Icon(Icons.edit),
+                                //         onPressed: () async {
+                                //           await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
+                                //         },
+                                //       ),
+                                //       IconButton(
+                                //         icon: Icon(Icons.delete),
+                                //         onPressed: () {
+                                //           _setsScreenStateProvider.deleteSet(setKey);
+                                //         },
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      );
+                    } else {
+                      // Display set ListTile without the date
+                      return Container(
+                        margin: const EdgeInsets.only(top: 5),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            tileColor: listTileColor,
+                            leading :Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                smallText(title:'Set ${setIndex + 1}',textSize:14.0,color: iconColor),
+                                SizedBox(width: MediaQuery.sizeOf(context).width * 0.15,),
+                                normalText(title:set.reps.toString(),color: buttonColors,textSize: 20.0),
+                                SizedBox(width: MediaQuery.sizeOf(context).width * 0.02,),
+                                smallText(title:'reps'),
+                                SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
+                                smallText(title:'x',color: iconColor,textSize:14.0),
+                                SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
+                                normalText(title:set.kg.toString(),color: buttonColors,textSize: 20.0),
+                                SizedBox(width: MediaQuery.sizeOf(context).width * 0.02,),
+                                smallText(title:'kg'),
+                              ],
+                            ),
+                            // trailing: Row(
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   children: [
+                            //     IconButton(
+                            //       icon: Icon(Icons.edit),
+                            //       onPressed: () async {
+                            //         await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
+                            //       },
+                            //     ),
+                            //     IconButton(
+                            //       icon: Icon(Icons.delete),
+                            //       onPressed: () {
+                            //         _setsScreenStateProvider.deleteSet(setKey);
+                            //       },
+                            //     ),
+                            //   ],
+                            // ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),
