@@ -5,12 +5,30 @@ import 'package:mikococo/module/models.dart';
 class RoutineProvider extends ChangeNotifier {
   List<Routine> _routines = []; // Initialize with your data
 
+
   List<Routine> get routines => _routines;
+
+  void updateRoutineList(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex = newIndex -1;
+      // Print for debugging
+      print("Reordered: $oldIndex to $newIndex");
+    }
+
+    final routine = _routines.removeAt(oldIndex);
+    _routines.insert(newIndex, routine);
+
+    // Notify listeners
+    notifyListeners();
+  }
 
   void loadRoutines() {
     var routineBox = Hive.box<Routine>('RoutineBox');
     _routines = routineBox.values.toList();
-    notifyListeners();
+    // Schedule the notification after the build phase is complete
+    Future.delayed(Duration.zero, () {
+      notifyListeners();
+    });
   }
 
   void deleteRoutine(int index) {
@@ -33,15 +51,4 @@ class RoutineProvider extends ChangeNotifier {
     loadRoutines(); // Refresh the list after addition
   }
 
-  void updateRoutineList(int oldIndex, int newIndex) {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-
-    final routine = _routines.removeAt(oldIndex);
-    _routines.insert(newIndex, routine);
-
-    // Notify listeners
-    notifyListeners();
-  }
 }
