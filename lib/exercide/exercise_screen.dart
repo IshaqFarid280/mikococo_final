@@ -58,11 +58,6 @@ class ExercisesScreen extends StatelessWidget {
         centerTitle: true,
         title: normalText(title:appName),
         // title: normalText(title: 'Exercise ${workoutDay.name}'),
-        actions: [
-          AddThingsIcon(onTap: (){
-    Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> HomeScreen(workoutDay,isExerciseScreen: true,),),);
-    }),
-        ],
       ),
       body: Consumer<ExercisesScreenProvider>(
         builder: (context, exercisesScreenProvider, _){
@@ -126,6 +121,16 @@ class ExercisesScreen extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton:  floatingactionbutton(
+        onTap: (){
+
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (ctx) => HomeScreen(workoutDay,isExerciseScreen: true,),),);
+
+    },
+    ),
     );
   }
 

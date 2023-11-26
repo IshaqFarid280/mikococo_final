@@ -87,6 +87,7 @@ class trailingbutton extends StatelessWidget {
     );
   }
 }
+
 class AddThingsIcon extends StatelessWidget {
   final VoidCallback onTap;
   final String? svgAsset;
@@ -187,5 +188,31 @@ class SubmitButton extends StatelessWidget {
         ),),
       ),
     );
+  }
+}
+
+class floatingactionbutton extends StatelessWidget {
+
+  final VoidCallback onTap;
+
+  const floatingactionbutton({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+
+        onPressed:onTap,
+        backgroundColor: Colors.transparent,
+
+        child: Container(
+            height: MediaQuery.sizeOf(context).height *0.15,
+            width:MediaQuery.sizeOf(context).width *0.15,
+            decoration: ShapeDecoration(
+              shape: CircleBorder(),
+              color: goldenColor
+            ),
+            child: Icon(Icons.add, color: whiteColor, size: 30,)),
+      );
+
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/widgets_common/our_button.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 
 class EditRoutineForm extends StatefulWidget {
   final String initialName;
@@ -21,21 +24,25 @@ class _EditRoutineFormState extends State<EditRoutineForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextField(
-          controller: _controller,
-          decoration: InputDecoration(labelText: 'New Routine Name'),
-        ),
-        SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
+    return Container(
+      color: blackColor,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: textFormField(context: context, controller: _controller, text: 'New Routine Name'),
+          ),
+
+          SizedBox(height: 16),
+          SubmitButton(onTap: (){
+
             widget.onEdit(_controller.text);
           },
-          child: Text('Save'),
-        ),
-      ],
+            primaryColor: goldenColor, titlee: 'Save',),
+
+        ],
+      ),
     );
   }
 

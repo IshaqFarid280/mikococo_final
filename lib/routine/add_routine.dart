@@ -29,60 +29,58 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: TextFormField(
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(1),
-              ],
-              decoration:
-                  InputDecoration(hintText: 'Enter a Text, letter or symbol'),
-              controller: leadingcontroller,
-              style: TextStyle(),
+          return Theme(
+            data: ThemeData(
+              canvasColor: Colors.black,
             ),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Wrap(
-                    alignment: WrapAlignment.start,
-                    spacing: 8.0,
-                    runSpacing: 8.0,
-                    children: colorSelection
-                        .map((color) => GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedColor = color;
-                                  print(_selectedColor);
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CircleAvatar(
-                                  backgroundColor: color,
-                                  radius: 15,
+            child: AlertDialog(
+              backgroundColor: Colors.black,
+              title: onewordTextFormField(controller: leadingcontroller, hint: 'Enter a Text, letter or symbol'),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: colorSelection
+                          .map((color) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedColor = color;
+                                    print(_selectedColor);
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                    backgroundColor: color,
+                                    radius: 15,
+                                  ),
                                 ),
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ourButton(
-                          color: redColor,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          textColor: whiteColor,
-                          title: "Yes"),
-                      ourButton(
-                          color: redColor,
-                          onPressed: () {},
-                          textColor: whiteColor,
-                          title: "No"),
-                    ],
-                  )
-                ],
+                              ))
+                          .toList(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ourButton(
+                            color: redColor,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            textColor: whiteColor,
+                            title: "Yes"),
+                        ourButton(
+                            color: redColor,
+                            onPressed: () {},
+                            textColor: whiteColor,
+                            title: "No"),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           );

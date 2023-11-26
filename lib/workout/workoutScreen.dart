@@ -26,26 +26,13 @@ class WorkoutDaysScreen extends StatelessWidget {
         leading:  LeadingIcon(),
         centerTitle: false,
         title: normalText(title:'Workout Days ${routine.name}'),
-        actions: [
-          trailingbutton(
-              svgColor: leadingBtnColor,
-              svgAsset: 'assets/svg/plusicon.svg',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (ctx) => AddWorkoutDayForm(
-                      onAdd: (String name, String leadingtext,
-                          String leadingavatarcolor) {
-                        workoutDaysScreenProvider.addWorkoutDay(
-                            name, leadingtext, leadingavatarcolor, routine);
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                );
-              }),
-        ],
+        // actions: [
+        //   trailingbutton(
+        //       svgColor: leadingBtnColor,
+        //       svgAsset: 'assets/svg/plusicon.svg',
+        //       onTap: () {
+        //       }),
+        // ],
       ),
       body: Consumer<WorkoutDaysScreenProvider>(
         builder: (context, workoutDaysScreenProvider, _) {
@@ -92,20 +79,29 @@ class WorkoutDaysScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     tileColor: listTileColor,
-                    leading: CircleAvatar(
-                        radius:25,
-                      backgroundColor: Color(
-                        int.parse(
+                    leading: Container(
+                      decoration: BoxDecoration(
+                          color:  Color(
+                            int.parse(
                               workoutDaysScreenProvider
                                   .workoutDays[index].avatarColors
                                   .replaceFirst('#', ''),
                               radix: 16,
                             ) |
                             0xff000000,
-                      ),
-                      child: listTileText(
-                        title :workoutDaysScreenProvider.workoutDays[index].leadingword.toUpperCase(),
-                      ),
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      height: MediaQuery.of(context).size.height * .1,
+                      width: MediaQuery.of(context).size.width * .15,
+                      child: Center(
+                          child: Text(
+                            workoutDaysScreenProvider.workoutDays[index].leadingword.toUpperCase(),
+                            style: TextStyle(
+                              color: whiteColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 22,
+                            ),
+                          )),
                     ),
                     title: listTileText(title :workoutDaysScreenProvider.workoutDays[index].name.toUpperCase(),textSize:18.0),
                     onTap: () {
@@ -143,6 +139,24 @@ class WorkoutDaysScreen extends StatelessWidget {
                 ),
               );
             },
+          );
+        },
+      ),
+      floatingActionButton: floatingactionbutton(
+        onTap: (){
+
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (ctx) => AddWorkoutDayForm(
+                onAdd: (String name, String leadingtext,
+                    String leadingavatarcolor) {
+                  workoutDaysScreenProvider.addWorkoutDay(
+                      name, leadingtext, leadingavatarcolor, routine);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
           );
         },
       ),

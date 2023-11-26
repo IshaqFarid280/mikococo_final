@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-const Color whiteColor = Color.fromRGBO(209, 209, 209, 1);
+const Color whiteColor = Colors.white;
 const Color greyColor = Color.fromRGBO(107, 115, 119, 1);
 const Color blackColor = Color.fromRGBO(0, 0, 0, 1.0);
 const Color redColor = Color.fromRGBO(255, 0, 0, 1.0);
@@ -19,4 +19,9 @@ const Color listTileEditColor = Color(0xff747474);
 const Color listTileColor = Color(0xff151515);
 const Color buttonColors = Color(0xffF06313);
 const Color leadingBtnColor = Color(0xff222222);
+const Color statusContainer1 = Color(0xff007F32);
+const Color statusContainer2 = Color(0xff00765E);
+const Color statusContainer3 = Color(0xff318300);
+
+
 
