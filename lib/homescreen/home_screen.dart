@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     tileColor: listTileColor,
-                                    trailing:widget.isExerciseScreen ?  IconButton(onPressed: ()  {
+                                    trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
                                       // add data into exercise list
                                       imageItem.isAsset ? imageItem.imagePath :imageItem.imagePath;
                                       homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       });
                                       Navigator.pop(context);
                                       Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
-                                    }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
+                                    },) : Container(height: 5,width: 5,),
                                     onTap: (){
                                       Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                     },
@@ -146,9 +146,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     margin: const EdgeInsets.only(top: 5),
                                     child: ListTile(
                                       contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-                                      trailing:widget.isExerciseScreen ?  IconButton(onPressed: (){
+                                      trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
                                         // add data into exercise list
-
                                         imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
                                         homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
                                         setState(() {
@@ -161,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         });
                                         Navigator.pop(context);
                                         Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
-                                      }, icon: Icon(Icons.add)) : Container(height: 5,width: 5,),
+                                      },) : Container(height: 5,width: 5,),
                                       onTap: (){
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                       },

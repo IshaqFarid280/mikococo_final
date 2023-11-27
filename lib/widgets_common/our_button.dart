@@ -108,7 +108,6 @@ class AddThingsIcon extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.all(8),
@@ -189,3 +188,30 @@ class SubmitButton extends StatelessWidget {
     );
   }
 }
+
+class HomeScreenAddExerciseButton extends StatelessWidget {
+   HomeScreenAddExerciseButton({required this.onTap});
+
+   final VoidCallback onTap ;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Container(
+        margin:const  EdgeInsets.only(right:5),
+        height: MediaQuery.sizeOf(context).height * 0.07,
+        width: MediaQuery.sizeOf(context).width * 0.16,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: listTileLeadingColor,
+        ),
+        child:const Center(child: Icon(Icons.data_saver_on_outlined ,color:goldenColor,size:30 ,)),
+// Icons.loupe_outlined
+// Icons.data_saver_on_outlined
+      ),
+    );
+  }
+}
+

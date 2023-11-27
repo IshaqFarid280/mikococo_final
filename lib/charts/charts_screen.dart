@@ -31,9 +31,11 @@ class _ChartScreenState extends State<ChartScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:5),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+            normalText(title: 'Statistics',textSize: 22.0),
             normalText(title: 'No of Reps',),
             SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
             RepsChart(data: widget.repsData, dates: widget.dates),  // Pass dates to RepsChart
@@ -62,6 +64,14 @@ class _RepsChartState extends State<RepsChart> {
   Set<int> uniqueIndices = Set<int>();
 
   List<String> cachedTitles = [];
+
+  LineChartBarData emptyData = LineChartBarData(
+    barWidth: 3,
+    spots: [FlSpot(1, 1,),FlSpot(2, 2,)],
+    isCurved: false,
+    colors: [buttonColors],
+    dotData: FlDotData(show: true),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +141,8 @@ class _RepsChartState extends State<RepsChart> {
             ),
           ),
           borderData: FlBorderData(show: false,),
-          lineBarsData: [
+          lineBarsData:widget.data.isEmpty
+          ? [emptyData] : [
             LineChartBarData(
               // aboveBarData:  BarAreaData(show: true,colors: [skinColor,redColor],gradientFrom:const Offset(0,1),gradientTo:const Offset(3, 0), ),
               preventCurveOverShooting:true,
@@ -166,6 +177,13 @@ class KGChart extends StatefulWidget {
 class _KGChartState extends State<KGChart> {
   Set<int> uniqueIndices = Set<int>();
   List<String> cachedTitles = [];
+  LineChartBarData emptyData = LineChartBarData(
+    barWidth: 3,
+    spots: [FlSpot(1, 1,),FlSpot(2, 2,)],
+    isCurved: false,
+    colors: [buttonColors],
+    dotData: FlDotData(show: true),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +253,8 @@ class _KGChartState extends State<KGChart> {
             ),
           ),
           borderData: FlBorderData(show: false,),
-          lineBarsData: [
+          lineBarsData:widget.data.isEmpty
+              ? [emptyData] : [
             LineChartBarData(
               // aboveBarData:  BarAreaData(show: true,colors: [skinColor,redColor],gradientFrom:const Offset(0,1),gradientTo:const Offset(3, 0), ),
               preventCurveOverShooting:true,
