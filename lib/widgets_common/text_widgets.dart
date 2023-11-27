@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mikococo/consts/colors.dart';
 
 Widget largeText(
@@ -35,11 +36,12 @@ Widget smallText(
   );
 }
 
+
 Widget listTileText(
     {title,
-    Color color = Colors.white,
+    Color color = whiteColor,
     textSize,
-    FontWeight weight = FontWeight.bold}) {
+      weight = FontWeight.bold}) {
   return AutoSizeText(
     title,
     style: TextStyle(color: color, fontSize: textSize, fontWeight: weight, fontFamily: "Poppins"),
@@ -71,8 +73,6 @@ Widget textFormField(
               fontFamily: "Poppins"
           ),
           decoration: InputDecoration(
-
-
             labelText: labelText,
             labelStyle: TextStyle(
               color: whiteColor,
@@ -100,4 +100,39 @@ Widget textFormField(
       ],
     ),
   );
+}
+Widget onewordTextFormField({required controller, hint}){
+  return
+    TextFormField(
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(1),
+      ],
+      cursorColor: whiteColor,
+      controller: controller,
+      style: TextStyle(
+          color: whiteColor,
+          fontFamily: "Poppins"
+      ),
+      decoration: InputDecoration(
+
+          hintText: hint,
+          hintStyle: TextStyle(
+              color: whiteColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w100
+          ),
+          isDense: true,
+          fillColor: Colors.transparent,
+          filled: true,
+          enabledBorder: const OutlineInputBorder(
+            borderSide: const BorderSide(color: greyColor, width: 0.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: greyColor
+              )
+          )
+      ),
+    );
+
 }

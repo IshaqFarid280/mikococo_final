@@ -19,6 +19,7 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
   final TextEditingController leadingworkoutcontroller =
       TextEditingController();
   Color _selectedworkoutColor = whiteColor; //initialize with  a default color
+  int _selectedColorIndex = 0;
 
   String getHexCodeWorkout(Color color) {
     return '#${color.value.toRadixString(16).substring(2)}';
@@ -28,59 +29,72 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: TextFormField(
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(1),
-              ],
-              decoration:
-                  InputDecoration(hintText: 'Enter a Text, letter or symbol'),
-              controller: leadingworkoutcontroller,
-              style: TextStyle(),
+          return Theme(
+            data: ThemeData(
+              canvasColor: blackColor,
             ),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Wrap(
-                    alignment: WrapAlignment.start,
-                    spacing: 8.0,
-                    runSpacing: 8.0,
-                    children: colorSelection
-                        .map((color) => GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedworkoutColor = color;
-                                  print(_selectedworkoutColor);
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CircleAvatar(
-                                  backgroundColor: color,
-                                  radius: 15,
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ourButton(
-                          color: redColor,
-                          onPressed: () {
-                            Navigator.pop(context);
+            child: AlertDialog(
+              backgroundColor: blackColor,
+              title: onewordTextFormField(
+                  controller: leadingworkoutcontroller,
+                  hint: 'Enter a Text, letter or symbol'),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: colorSelection.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        Color color = entry.value;
+                        bool isSelected = index == _selectedColorIndex;
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedworkoutColor = color;
+                              _selectedColorIndex = index;
+                              print(_selectedworkoutColor);
+                            });
                           },
-                          textColor: whiteColor,
-                          title: "Yes"),
-                      ourButton(
-                          color: redColor,
-                          onPressed: () {},
-                          textColor: whiteColor,
-                          title: "No"),
-                    ],
-                  )
-                ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child:
+                                Stack(alignment: Alignment.center, children: [
+                              CircleAvatar(
+                                backgroundColor: color,
+                                radius: 15,
+                              ),
+                              if (isSelected)
+                                Icon(
+                                  Icons.check,
+                                  color: whiteColor,
+                                  size: 20,
+                                )
+                            ]),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ourButton(
+                            color: redColor,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            textColor: whiteColor,
+                            title: "Yes"),
+                        ourButton(
+                            color: redColor,
+                            onPressed: () {},
+                            textColor: whiteColor,
+                            title: "No"),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -94,6 +108,19 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
         leading: LeadingIcon(),
         title: largeText(title: 'Add New Workout'),
       ),
+      bottomNavigationBar: SubmitButton(
+          titlee: 'Add Workout',
+          primaryColor: goldenColor,
+          onTap: () {
+            if (_workoutNameController.text.isNotEmpty &&
+                leadingworkoutcontroller.text.isNotEmpty) {
+              widget.onAdd(
+                  _workoutNameController.text,
+                  leadingworkoutcontroller.text,
+                  getHexCodeWorkout(_selectedworkoutColor));
+              print(getHexCodeWorkout(_selectedworkoutColor));
+            }
+          }),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -153,23 +180,6 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
               controller: _workoutNameController,
               hint: 'example - day 1',
               // labelText: 'Example - Mass Gain Program'
-            ),
-            Spacer(),
-            Positioned(
-              bottom: 10,
-              child: SubmitButton(
-                  titlee: 'Add Workout',
-                  primaryColor: goldenColor,
-                  onTap: () {
-                    if (_workoutNameController.text.isNotEmpty &&
-                        leadingworkoutcontroller.text.isNotEmpty) {
-                      widget.onAdd(
-                          _workoutNameController.text,
-                          leadingworkoutcontroller.text,
-                          getHexCodeWorkout(_selectedworkoutColor));
-                      print(getHexCodeWorkout(_selectedworkoutColor));
-                    }
-                  }),
             ),
           ],
         ),

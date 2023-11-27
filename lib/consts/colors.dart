@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-const Color whiteColor = Color.fromRGBO(209, 209, 209, 1);
+const Color whiteColor = Colors.white;
 const Color greyColor = Color.fromRGBO(107, 115, 119, 1);
 const Color blackColor = Color.fromRGBO(0, 0, 0, 1.0);
 const Color redColor = Color.fromRGBO(255, 0, 0, 1.0);
@@ -9,6 +9,7 @@ const Color greenColor = Color.fromRGBO(35, 255, 0, 1.0);
 const Color blueColor = Color.fromRGBO(0, 34, 255, 1.0);
 const Color goldenColor = Color.fromRGBO(255, 168, 0, 1);
 const Color deleteColor = Color.fromRGBO(240, 99, 19, 1);
+
 const Color skinColor = Color(0xfff1c48b);
 const Color iconColor = Color(0xff747474);
 const Color backGroundColor = Color(0xff060606);
@@ -21,3 +22,7 @@ const Color leadingBtnColor = Color(0xff222222);
 const Color statusContainer1 = Color(0xff007F32);
 const Color statusContainer2 = Color(0xff00765E);
 const Color statusContainer3 = Color(0xff318300);
+const Color transparentColor = Colors.transparent;
+
+
+

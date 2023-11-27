@@ -19,26 +19,6 @@ class MyRoutinesScreen extends StatelessWidget {
     var routineProvider = Provider.of<RoutineProvider>(context, listen: false);
     routineProvider.loadRoutines();
 
-    // void addRoutine(String name, String des, String leadword, String avatarColor) {
-    //   final routine = Routine(name, des, leadword, avatarColor, []);
-    //   Hive.box<Routine>('RoutineBox').add(routine);
-    // }
-    //
-    // void deleteRoutine(int index) {
-    //   Hive.box<Routine>('RoutineBox').deleteAt(index);
-    // }
-    //
-    // void updateRoutine(int index, String newName) {
-    //   final routine = Hive.box<Routine>('RoutineBox').getAt(index);
-    //   if (routine != null) {
-    //     routine.name = newName;
-    //     routine.save();
-    //   }
-    // }
-    //
-    //
-    // var routineBox = Hive.box<Routine>('RoutineBox');
-    // List<Routine> routines = routineBox.values.toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -111,15 +91,22 @@ class MyRoutinesScreen extends StatelessWidget {
                                     showDialog(
                                         context: context,
                                         builder: (context) {
-                                          return AlertDialog(
-                                            title: Text('Edit Routine'),
-                                            content: EditRoutineForm(
-                                              initialName: currentroutine.name,
-                                              onEdit: (String newName) {
-                                                routineProvider.updateRoutine(
-                                                    index, newName);
-                                                Navigator.of(context).pop();
-                                              },
+                                          return Theme(
+                                            data: ThemeData(
+                                              canvasColor: Colors.black,
+                                            ),
+                                            child: AlertDialog(
+                                              title: listTileText(title: 'Edit Routine', weight: FontWeight.w900),
+                                              backgroundColor: Colors.black,
+                                              content: EditRoutineForm(
+                                                initialName: currentroutine.name,
+                                                onEdit: (String newName) {
+                                                  routineProvider.updateRoutine(
+                                                      index, newName);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              contentPadding: EdgeInsets.symmetric(horizontal: 5),
                                             ),
                                           );
                                         });
@@ -146,19 +133,28 @@ class MyRoutinesScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 tileColor: listTileColor,
-                                leading: CircleAvatar(
-                                  radius: 25,
-                                  // backgroundColor: Color(int.parse("FF0000", radix: 16) | 0xFF000000),
-                                  backgroundColor: Color(int.parse(
+                                leading: Container(
+                                  decoration: BoxDecoration(
+                                      color:  Color(int.parse(
                                           currentroutine.avatarColor
                                               .replaceFirst('#', ''),
                                           radix: 16) |
                                       0xff000000),
-                                  child: listTileText(
-                                    title: currentroutine.leadingword
-                                        .toUpperCase(),
-                                  ),
+                                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                                  height: MediaQuery.of(context).size.height * .1,
+                                  width: MediaQuery.of(context).size.width * .15,
+                                  child: Center(
+                                      child: Text(
+                                        currentroutine.leadingword
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                          color: whiteColor,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 22,
+                                        ),
+                                      )),
                                 ),
+
                                 title: listTileText(
                                   title: currentroutine.name.toUpperCase(),
                                 ),
@@ -175,6 +171,7 @@ class MyRoutinesScreen extends StatelessWidget {
                                           0.02,
                                     ),
                                     listTileText(
+                                      textSize: 12.0,
                                       title: currentroutine.description,
                                       weight: FontWeight.w300,
                                     ),
@@ -197,30 +194,16 @@ class MyRoutinesScreen extends StatelessWidget {
               );
             });
       }),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: floatingActionButton(
+        onTap: (){
+      Navigator.of(context).push(CupertinoPageRoute(
+        builder: (ctx) => AddRoutineForm(onAdd: (String name, String desc,
+            String leadword, String avatarCOlor) {
+          routineProvider.addRoutine(name, desc, leadword, avatarCOlor);
+        }),
+      ));
+    },
 
-        onPressed: () {
-          Navigator.of(context).push(CupertinoPageRoute(
-            builder: (ctx) => AddRoutineForm(onAdd: (String name, String desc,
-                String leadword, String avatarCOlor) {
-              routineProvider.addRoutine(name, desc, leadword, avatarCOlor);
-            }),
-          ));
-        },
-        backgroundColor: Colors.transparent,
-
-        child: Container(
-            height: MediaQuery.sizeOf(context).height *0.13,
-            width:MediaQuery.sizeOf(context).width *0.13,
-            decoration: ShapeDecoration(
-              shape: CircleBorder(),
-              gradient: LinearGradient(
-                colors: [Color(0xffC04F0F), Color(0xFFF06313).withOpacity(0.92)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: Icon(Icons.add, color: whiteColor, )),
       ),
     );
   }

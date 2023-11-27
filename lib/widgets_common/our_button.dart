@@ -14,7 +14,7 @@ Widget ourButton({ onPressed, color = buttonColors, textColor, String? title}) {
     ),
     onPressed: onPressed,
     child: Text(
-      title!,
+      title.toString(),
       style: TextStyle(
         color: textColor,
         fontWeight: FontWeight.bold,
@@ -87,6 +87,7 @@ class trailingbutton extends StatelessWidget {
     );
   }
 }
+
 class AddThingsIcon extends StatelessWidget {
   final VoidCallback onTap;
   final String? svgAsset;
@@ -108,6 +109,7 @@ class AddThingsIcon extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
+
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.all(8),
@@ -162,8 +164,8 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(4),
+      padding:const EdgeInsets.all(8),
+      margin:const EdgeInsets.only(bottom: 40,left: 7,right: 7),
       width: MediaQuery.of(context).size.width*1,
       height: MediaQuery.of(context).size.height*0.08,
       decoration: BoxDecoration(
@@ -189,10 +191,28 @@ class SubmitButton extends StatelessWidget {
   }
 }
 
-class HomeScreenAddExerciseButton extends StatelessWidget {
-   HomeScreenAddExerciseButton({required this.onTap});
+class floatingActionButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final Color colors ;
+   floatingActionButton({required this.onTap,this.colors = buttonColors});
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+        elevation:10,
+        onPressed:onTap,
+        backgroundColor: colors,
+        child:const  Icon(Icons.loupe_outlined, color: whiteColor, size: 30,));
+  }
+}
 
-   final VoidCallback onTap ;
+
+class HomeScreenAddExerciseButton extends StatelessWidget {
+  HomeScreenAddExerciseButton({required this.onTap});
+
+  final VoidCallback onTap ;
 
   @override
   Widget build(BuildContext context) {
@@ -214,4 +234,3 @@ class HomeScreenAddExerciseButton extends StatelessWidget {
     );
   }
 }
-

@@ -1,4 +1,4 @@
-// ... (your existing imports)
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -34,14 +34,15 @@ class _ChartScreenState extends State<ChartScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+
             normalText(title: 'Statistics',textSize: 22.0),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
             normalText(title: 'No of Reps',),
-            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
             RepsChart(data: widget.repsData, dates: widget.dates),  // Pass dates to RepsChart
-            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
             normalText(title : 'Weight ( kg ) ',),
-            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
             KGChart(data: widget.kgData, dates: widget.dates),  // Pass dates to KGChart
           ],
         ),
@@ -76,10 +77,12 @@ class _RepsChartState extends State<RepsChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.sizeOf(context).height * 0.35,
+      height: MediaQuery.sizeOf(context).height * 0.34,
       width: MediaQuery.sizeOf(context).width * 1,// Adjust the height as needed
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-          color: listTileColor),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
+          color: listTileColor,
+        border: Border.all(color: buttonColors),
+      ),
       padding:const  EdgeInsets.all(5),
       child: LineChart(
         LineChartData(
@@ -141,7 +144,7 @@ class _RepsChartState extends State<RepsChart> {
             ),
           ),
           borderData: FlBorderData(show: false,),
-          lineBarsData:widget.data.isEmpty
+          lineBarsData:widget.data.length <= 2
           ? [emptyData] : [
             LineChartBarData(
               // aboveBarData:  BarAreaData(show: true,colors: [skinColor,redColor],gradientFrom:const Offset(0,1),gradientTo:const Offset(3, 0), ),
@@ -188,10 +191,12 @@ class _KGChartState extends State<KGChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.sizeOf(context).height * 0.35,
+      height: MediaQuery.sizeOf(context).height * 0.34,
       width: MediaQuery.sizeOf(context).width * 1,// Adjust the height as needed
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-          color: listTileColor),
+          color: listTileColor,
+        border: Border.all(color: buttonColors),
+      ),
       padding:const  EdgeInsets.all(5),
       child: LineChart(
         LineChartData(
@@ -253,7 +258,7 @@ class _KGChartState extends State<KGChart> {
             ),
           ),
           borderData: FlBorderData(show: false,),
-          lineBarsData:widget.data.isEmpty
+          lineBarsData:widget.data.length <= 2
               ? [emptyData] : [
             LineChartBarData(
               // aboveBarData:  BarAreaData(show: true,colors: [skinColor,redColor],gradientFrom:const Offset(0,1),gradientTo:const Offset(3, 0), ),

@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:mikococo/sets/sets_scren_top_listTile.dart';
 import 'package:mikococo/sets/sets_timer.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:provider/provider.dart';
@@ -30,19 +30,19 @@ class SetsScreen extends StatelessWidget {
         builder: (context, setsProvider, _) {
           setsProvider
               .setExercise(exercise); // Set the exercise when it's available
-          return _SetsScreenContent();
+          return SetsScreenContent();
         },
       ),
     );
   }
 }
 
-class _SetsScreenContent extends StatefulWidget {
+class SetsScreenContent extends StatefulWidget {
   @override
   _SetsScreenState createState() => _SetsScreenState();
 }
 
-class _SetsScreenState extends State<_SetsScreenContent> {
+class _SetsScreenState extends State<SetsScreenContent> {
   late SetsScreenStateProvider _setsScreenStateProvider;
 
   @override
@@ -51,8 +51,12 @@ class _SetsScreenState extends State<_SetsScreenContent> {
     _setsScreenStateProvider = SetsScreenStateProvider.of(context);
   }
 
+  String  ? exerciseName ;
+  String ? exercisePath ;
   @override
   Widget build(BuildContext context) {
+    exerciseName = _setsScreenStateProvider.exercise?.name ;
+    exercisePath = _setsScreenStateProvider.exercise!.image;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -66,31 +70,7 @@ class _SetsScreenState extends State<_SetsScreenContent> {
             scrollDirection: Axis.vertical,
             child: Column(
               children: [
-                ListTile(
-                  contentPadding:
-                      const EdgeInsets.only(left: 15, top: 5, bottom: 5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  title: normalText(
-                      title: '${_setsScreenStateProvider.exercise?.name}',
-                      textSize: 22.0,
-                      weight: FontWeight.w400),
-                  tileColor: listTileColor,
-                  leading: CircleAvatar(
-                    radius: 25,
-                    backgroundImage: _setsScreenStateProvider.exercise!.image
-                            .toString()
-                            .contains('assets/images')
-                        ? AssetImage(
-                            _setsScreenStateProvider.exercise!.image.toString(),
-                          )
-                        : FileImage(File(_setsScreenStateProvider
-                            .exercise!.image
-                            .toString())) as ImageProvider,
-                    //
-                  ),
-                ),
+                SetsScreenTopListTile(exerciseName: _setsScreenStateProvider.exercise?.name,exercisePath:_setsScreenStateProvider.exercise!.image,),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
                 ),
@@ -298,11 +278,10 @@ class _SetsScreenState extends State<_SetsScreenContent> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
+      floatingActionButton: floatingActionButton(
+        onTap: () async {
           await _showAddSetBottomSheet(context);
         },
-        child: Icon(Icons.add),
       ),
       bottomNavigationBar:
           Consumer<TimerModel>(builder: (context, timerModel, _) {
@@ -322,23 +301,23 @@ class _SetsScreenState extends State<_SetsScreenContent> {
                         context,
                         CupertinoPageRoute(
                             builder: (context) => StatusScreen(
-                              bestReps: _setsScreenStateProvider.bestReps
-                                  .toString(),
-                              bestKg: _setsScreenStateProvider.bestKg
-                                  .toString(),
-                              averageKg: _setsScreenStateProvider.averageKg
-                                  .toStringAsFixed(2),
-                              totalReps: _setsScreenStateProvider.totalReps
-                                  .toString(),
-                              totalKg: _setsScreenStateProvider.totalKg
-                                  .toString(),
-                              exerciseName: _setsScreenStateProvider
-                                  .exercise!.name
-                                  .toString(),
-                              exercisePath: _setsScreenStateProvider
-                                  .exercise!.image
-                                  .toString(),
-                            )));
+                                  bestReps: _setsScreenStateProvider.bestReps
+                                      .toString(),
+                                  bestKg: _setsScreenStateProvider.bestKg
+                                      .toString(),
+                                  averageKg: _setsScreenStateProvider.averageKg
+                                      .toStringAsFixed(2),
+                                  totalReps: _setsScreenStateProvider.totalReps
+                                      .toString(),
+                                  totalKg: _setsScreenStateProvider.totalKg
+                                      .toString(),
+                                  exerciseName: _setsScreenStateProvider
+                                      .exercise!.name
+                                      .toString(),
+                                  exercisePath: _setsScreenStateProvider
+                                      .exercise!.image
+                                      .toString(),
+                                )));
                   },
                   icon: const Icon(
                     Icons.stacked_bar_chart_outlined,
@@ -377,11 +356,12 @@ class _SetsScreenState extends State<_SetsScreenContent> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     normalText(
-                      title: timerModel.selectedBox != -1
-                          ? '00: ${timerModel.currentValues[timerModel.selectedBox]}s'
-                          : '00: ${timerModel.dummyTimerValue}',
-                      color: timerModel.isTimerRunning ? buttonColors : whiteColor
-                    ),
+                        title: timerModel.selectedBox != -1
+                            ? '00: ${timerModel.currentValues[timerModel.selectedBox]}s'
+                            : '00: ${timerModel.dummyTimerValue}',
+                        color: timerModel.isTimerRunning
+                            ? buttonColors
+                            : whiteColor),
                     IconButton(
                         onPressed: timerModel.isTimerRunning
                             ? () {
@@ -399,40 +379,40 @@ class _SetsScreenState extends State<_SetsScreenContent> {
                                     'isDummy: ${timerModel.isDummy}, selectedBox: ${timerModel.selectedBox}');
 
                                 if (timerModel.isDummy) {
-                                    print('Starting dummy timer');
-                                    timerModel.startDummyTimer(true);
+                                  print('Starting dummy timer');
+                                  timerModel.startDummyTimer(true);
                                 } else {
-                                    print('Starting or stopping the timer');
+                                  print('Starting or stopping the timer');
 // Start or stop the timer in TimerScreen for the selected box
-                                    if (timerModel.selectedBox != -1) {
-                                      if (timerModel.timers[
-                                                  timerModel.selectedBox] !=
-                                              null &&
-                                          timerModel
-                                              .timers[timerModel.selectedBox]!
-                                              .isActive) {
-                                        print('Stopping the timer');
+                                  if (timerModel.selectedBox != -1) {
+                                    if (timerModel.timers[
+                                                timerModel.selectedBox] !=
+                                            null &&
                                         timerModel
-                                            .stopTimer(timerModel.selectedBox);
-                                      } else {
-                                        print('Starting the timer');
+                                            .timers[timerModel.selectedBox]!
+                                            .isActive) {
+                                      print('Stopping the timer');
+                                      timerModel
+                                          .stopTimer(timerModel.selectedBox);
+                                    } else {
+                                      print('Starting the timer');
 // Adjust the initial value as needed
-                                        timerModel.startTimer(
-                                            timerModel.selectedBox, 45);
-                                      }
+                                      timerModel.startTimer(
+                                          timerModel.selectedBox, 45);
                                     }
+                                  }
                                 }
                               },
                         icon: timerModel.isTimerRunning
                             ? const Icon(
                                 Icons.stop_circle_outlined,
                                 color: iconColor,
-                          size: 30,
+                                size: 30,
                               )
                             : const Icon(
                                 Icons.play_circle_outlined,
                                 color: iconColor,
-                          size: 30,
+                                size: 30,
                               )),
                   ],
                 ),
@@ -442,7 +422,7 @@ class _SetsScreenState extends State<_SetsScreenContent> {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                            builder: (context) => DummyTimerScreen()));
+                            builder: (context) => DummyTimerScreen(exerciseName: exerciseName.toString(),exercisePath: exercisePath.toString(),)));
                   },
                   icon: const Icon(
                     Icons.more_time_outlined,

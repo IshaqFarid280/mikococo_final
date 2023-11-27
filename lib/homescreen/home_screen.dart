@@ -32,20 +32,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var homeScreenProvider = Provider.of<HomeScreenProvider>(context);
     return Scaffold(
+      floatingActionButton: floatingActionButton(onTap: (){
+        Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddPictureScreen(
+          pictures: homeScreenProvider.pictures,
+          filteredPictures: homeScreenProvider.filteredPictures,
+          demo: homeScreenProvider.demo,
+          filteredDemo: homeScreenProvider.filteredDemo,
+        )));
+      },
+        colors: iconColor,
+      ),
       appBar: AppBar(
         centerTitle: true,
         leading: LeadingIcon(),
-        title: normalText(title: 'My Workout'),
-        actions: [
-          AddThingsIcon(onTap: (){
-            Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddPictureScreen(
-              pictures: homeScreenProvider.pictures,
-              filteredPictures: homeScreenProvider.filteredPictures,
-              demo: homeScreenProvider.demo,
-              filteredDemo: homeScreenProvider.filteredDemo,
-            )));
-          }),
-        ],
+        title: normalText(title: 'Globalfit'),
       ),
       body: Consumer<HomeScreenProvider>(
         builder: (ctx, homeScreenProvider, _){
