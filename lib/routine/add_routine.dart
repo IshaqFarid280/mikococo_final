@@ -96,7 +96,8 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(children: [
+        child: Column(
+            children: [
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.04,
           ),
@@ -161,7 +162,9 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
           ),
           Spacer(),
           Positioned(
-            bottom: 10,
+            bottom: 0,
+              left: 0,
+            right: 0,
             child: SubmitButton(
               titlee: 'Add Routine',
                 primaryColor: goldenColor,

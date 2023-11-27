@@ -35,9 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         leading: LeadingIcon(),
-        title: normalText(title: 'My Workout'),
+
+        title: normalText(title: 'Globalfit'),
         actions: [
-          AddThingsIcon(onTap: (){
+          AddThingsIcon(
+            svgAsset: 'assets/svg/plusicon.svg',svgColor: iconColor,
+              onTap: (){
             Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddPictureScreen(
               pictures: homeScreenProvider.pictures,
               filteredPictures: homeScreenProvider.filteredPictures,

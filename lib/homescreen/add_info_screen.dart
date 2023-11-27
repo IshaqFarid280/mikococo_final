@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 
 import '../module/models.dart';
 import '../services/Boxes.dart';
+import '../widgets_common/our_button.dart';
 import 'home_screen.dart';
 
 class AddPictureScreen extends StatefulWidget {
@@ -87,7 +89,11 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Picture'),
+        leading: LeadingIcon(),
+        title: normalText(title: 'Globalfit'),
+        actions: [
+
+        ],
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
