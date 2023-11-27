@@ -22,6 +22,7 @@ const Color leadingBtnColor = Color(0xff222222);
 const Color statusContainer1 = Color(0xff007F32);
 const Color statusContainer2 = Color(0xff00765E);
 const Color statusContainer3 = Color(0xff318300);
+const Color transparentColor = Colors.transparent;
 
 
 
