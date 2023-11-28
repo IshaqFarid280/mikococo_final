@@ -22,51 +22,78 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   //   });
   //   print(_selectedindexx);
   // }
+  // void _onItemTapped(int index) {
+  //   // if (index == 1) {
+  //   //   // If the selected item is the CalenderScreen, navigate to a new screen
+  //   //   Navigator.push(
+  //   //     context,
+  //   //     MaterialPageRoute(builder: (context) => HomeScreen(null)),
+  //   //   );
+  //   //   print(index);}
+  //   //  if (index == 2) {
+  //   //   // If the selected item is the CalenderScreen, navigate to a new screen
+  //   //   Navigator.push(
+  //   //     context,
+  //   //     MaterialPageRoute(builder: (context) => TimerScreen()),
+  //   //   );
+  //   // }
+  //   //  if (index == 3) {
+  //   //   // If the selected item is the CalenderScreen, navigate to a new screen
+  //   //   Navigator.push(
+  //   //     context,
+  //   //     MaterialPageRoute(builder: (context) => CalenderScreen()),
+  //   //   );
+  //   // }
+  //   // Define a list of destinations for each index
+  //   List<Widget> destinations = [
+  //     MyRoutinesScreen(),
+  //     HomeScreen(null,isExerciseScreen: false,),
+  //     TimerScreen(),
+  //     ShareScreen(),
+  //   ];
+  //
+  //   // Check if the index corresponds to a specific destination
+  //   if (index == 0 && index < destinations.length) {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => destinations[index ]),
+  //     );
+  //     print(index);
+  //   }
+  //   else {
+  //     // If the selected item is not CalenderScreen, update the selected index
+  //     setState(() {
+  //       _selectedindexx = index;
+  //     });
+  //   }
+  // }
   void _onItemTapped(int index) {
-    // if (index == 1) {
-    //   // If the selected item is the CalenderScreen, navigate to a new screen
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => HomeScreen(null)),
-    //   );
-    //   print(index);}
-    //  if (index == 2) {
-    //   // If the selected item is the CalenderScreen, navigate to a new screen
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => TimerScreen()),
-    //   );
-    // }
-    //  if (index == 3) {
-    //   // If the selected item is the CalenderScreen, navigate to a new screen
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => CalenderScreen()),
-    //   );
-    // }
     // Define a list of destinations for each index
     List<Widget> destinations = [
       MyRoutinesScreen(),
-      HomeScreen(null,isExerciseScreen: false,),
+      HomeScreen(null, isExerciseScreen: false,),
       TimerScreen(),
       ShareScreen(),
     ];
 
     // Check if the index corresponds to a specific destination
-    if (index >= 0 && index < destinations.length) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => destinations[index ]),
-      );
-      print(index);
-    }
-    else {
-      // If the selected item is not CalenderScreen, update the selected index
+    if (index == 0 && index < destinations.length) {
+      // If the selected item is the HomeScreen, navigate to it only if not already on it
+      if (_selectedindexx != index) {
+        Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(builder: (context) => destinations[index]),
+        );
+        print(index);
+      }
+    } else {
+      // If the selected item is not HomeScreen, update the selected index
       setState(() {
         _selectedindexx = index;
       });
     }
   }
+
   List<Widget> screens = [
     MyRoutinesScreen(),
     HomeScreen(null),
@@ -79,8 +106,10 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: listTileColor,
-        // currentIndex: _selectedindexx,
+        currentIndex: _selectedindexx,
         unselectedItemColor: listTileColor,
+        selectedIconTheme:const IconThemeData(size: 15,color: buttonColors),
+        unselectedIconTheme:const IconThemeData(size: 15,color: buttonColors),
         backgroundColor: blackColor,
         onTap: _onItemTapped,
           items: [

@@ -22,8 +22,11 @@ class MyRoutinesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: LeadingIcon(
-          icon: Icons.menu,
+        leading: IconButton(
+          icon: Icon(Icons.menu), // Replace with your custom icon
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
         ),
         centerTitle: true,
         title: normalText(title: 'My Routines'),
@@ -35,6 +38,34 @@ class MyRoutinesScreen extends StatelessWidget {
           ),
         ],
       ),
+      drawer: Drawer(
+    // Add your drawer content here
+    child: ListView(
+    padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+          ),
+          child: Text('Drawer Header'),
+        ),
+        ListTile(
+          title: Text('Item 1'),
+          onTap: () {
+            // Add your drawer item 1 logic here
+            Navigator.pop(context);
+          },
+        ),
+        ListTile(
+          title: Text('Item 2'),
+          onTap: () {
+            // Add your drawer item 2 logic here
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    ),
+    ),
       body: Consumer<RoutineProvider>(builder: (context, routineProvider, _) {
         List<Routine> routines = routineProvider.routines;
         if (routines.isEmpty) {
