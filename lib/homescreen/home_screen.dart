@@ -198,8 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context,box,_) {
                             return Column(
                               children: List.generate(
-                                homeScreenProvider.demo.length, (index) {
-                                final imageItem = homeScreenProvider.demo[index];
+                                homeScreenProvider.triceps.length, (index) {
+                                final imageItem = homeScreenProvider.triceps[index];
                                 if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
                                   // var data = box.values.toList().cast<AddingPictures>();
                                   return Container(
@@ -252,8 +252,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context,box,_) {
                             return Column(
                               children: List.generate(
-                                homeScreenProvider.demo.length, (index) {
-                                final imageItem = homeScreenProvider.demo[index];
+                                homeScreenProvider.biceps.length, (index) {
+                                final imageItem = homeScreenProvider.biceps[index];
                                 if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
                                   // var data = box.values.toList().cast<AddingPictures>();
                                   return Container(
@@ -306,8 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context,box,_) {
                             return Column(
                               children: List.generate(
-                                homeScreenProvider.demo.length, (index) {
-                                final imageItem = homeScreenProvider.demo[index];
+                                homeScreenProvider.chest.length, (index) {
+                                final imageItem = homeScreenProvider.chest[index];
                                 if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
                                   // var data = box.values.toList().cast<AddingPictures>();
                                   return Container(

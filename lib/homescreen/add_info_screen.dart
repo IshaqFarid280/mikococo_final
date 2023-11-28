@@ -265,7 +265,7 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                         style: TextStyle(color: whiteColor),
                         items: [
                           //null, //represents the initial state
-                          'pictures','demo','Triceps','Biceps','Chest'
+                          'pictures','demo','Triceps','Biceps','Chest',
                         ]
                             .map((list) {
                               return DropdownMenuItem<String>(
