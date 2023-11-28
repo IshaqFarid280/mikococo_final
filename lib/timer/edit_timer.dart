@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/widgets_common/our_button.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 
 import '../module/models.dart';
 
@@ -26,11 +29,14 @@ class _EditTimerScreenState extends State<EditTimerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Timers'),
+        centerTitle: true,
+        leading: LeadingIcon(),
+        title: normalText(title: 'Globalfit'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () async {
+          AddThingsIcon(
+            svgAsset: 'assets/svg/saveicon.svg',
+            svgColor: whiteColor,
+            onTap: () async {
               // Save the edited values to Hive
               final timerValuesBox = Hive.box<TimerValues>('timerValues');
               await timerValuesBox.put('values', TimerValues(editedValues));
@@ -42,31 +48,50 @@ class _EditTimerScreenState extends State<EditTimerScreen> {
         ],
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          widget.timerValues.length,
-              (index) => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text('Timer ${index + 1}: '),
-                IconButton(
-                  icon: Icon(Icons.remove),
-                  onPressed: () {
-                    _decrementTimer(index);
-                  },
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: MediaQuery.of(context).size.height*0.04,),
+          Padding(
+            padding: const EdgeInsets.only(left: 12.0, right: 8),
+            child: largeText(title: 'Edit Timer'),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height*0.01,),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: List.generate(
+              widget.timerValues.length,
+                  (index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: leadingBtnColor,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: goldenColor)
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      normalText(title: 'Timer ${index + 1}: '),
+                      IconButton(
+                        icon: Icon(Icons.remove, color: whiteColor,),
+                        onPressed: () {
+                          _decrementTimer(index);
+                        },
+                      ),
+                      normalText(title: '${editedValues[index]}s'),
+                      IconButton(
+                        icon: Icon(Icons.add, color: whiteColor,),
+                        onPressed: () {
+                          _incrementTimer(index);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                Text('${editedValues[index]}s'),
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    _incrementTimer(index);
-                  },
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
