@@ -135,27 +135,36 @@ Widget onewordTextFormField({required controller, hint}){
           )
       ),
     );
-
 }
-Widget listTileDrawer({assetsvg, title, ontap}){
-  return ListTile(
-    onTap: ontap,
-    leading: Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: SvgPicture.asset(assetsvg, width: 15, height: 18, color: whiteColor,),
-    ),
-    title: Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Text
-        (title,
 
-        style: TextStyle(
-          color: whiteColor,
-        fontSize: 14,
-        fontFamily: "Poppins",
-        fontWeight: FontWeight.bold,
+class listTileDrawer extends StatelessWidget {
+  final VoidCallback ontap;
+  final String? title ;
+  final String assetsvg ;
+  listTileDrawer({required this.ontap, this.title, required this.assetsvg});
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: ontap,
+      leading: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: SvgPicture.asset(assetsvg, width: 15, height: 18, color: whiteColor,),
+      ),
+      title: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Text
+          (title!,
 
-      ),),
-    ),
-  );
+          style: TextStyle(
+            color: whiteColor,
+            fontSize: 14,
+            fontFamily: "Poppins",
+            fontWeight: FontWeight.bold,
+
+          ),),
+      ),
+    );
+  }
 }
+
+
