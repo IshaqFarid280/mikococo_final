@@ -25,8 +25,8 @@ class SetsScreenTopListTile extends StatelessWidget {
         title: normalText(
             title: exerciseName,
             textSize: 22.0,
-            weight: FontWeight.w400),
-        tileColor: listTileColor,
+            weight: FontWeight.bold),
+        tileColor: listTileLeadingColor,
         // subtitle: smallText(title: goals,color: iconColor),
         leading: CircleAvatar(
           radius: 25,

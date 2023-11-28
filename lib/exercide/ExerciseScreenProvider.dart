@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import '../module/models.dart';
+import '../timer/timer.model.dart';
 
 class ExercisesScreenProvider extends ChangeNotifier {
   WorkoutDay? _workoutDay;
   List<Exercise> _exercises = [];
-
   WorkoutDay? get workoutDay => _workoutDay;
   List<Exercise> get exercises => _exercises;
+
 
   void updateExcerciseList(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) {
