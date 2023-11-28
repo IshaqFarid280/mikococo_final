@@ -43,7 +43,7 @@ class LeadingIcon extends StatelessWidget {
             color: leadingBtnColor,
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Center(child: Icon(icon,color:iconColor,),),
+          child: Center(child: Icon(icon,color:whiteColor,),),
         ),
       ),
     );
@@ -57,7 +57,7 @@ class trailingbutton extends StatelessWidget {
   final VoidCallback onTap;
 
   const trailingbutton({
-    super.key, this.svgAsset,  this.svgColor, required this.onTap,
+    super.key, this.svgAsset,  this.svgColor = whiteColor, required this.onTap,
   });
 
   @override
@@ -174,7 +174,6 @@ class SubmitButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-
             primary: primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),

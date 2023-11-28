@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
@@ -91,7 +90,7 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
       setState(() {
         pickedImagePath = null; // Reset the picked image path
       });
-      Navigator.push(
+      Navigator.pushReplacement(
           context, CupertinoPageRoute(builder: (context) => HomeScreen(null)));
     }
   }
@@ -104,209 +103,218 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
         title: normalText(title: 'Globalfit'),
         actions: [],
       ),
-      bottomNavigationBar: SubmitButton(
-        onTap: () {
-          _addPicture();
-        },
-        titlee: 'Add',
-        primaryColor: goldenColor,
-      ),
-      body: SingleChildScrollView(
-        physics:const  BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.28,
-                    height: MediaQuery.of(context).size.height * 0.13,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.28,
+                  height: MediaQuery.of(context).size.height * 0.13,
 
-                    child: pickedImagePath != null
-                        ? ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                          child: Image.file(
+                  child: pickedImagePath != null
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                        child: Image.file(
 
 
-                              File(pickedImagePath!),
-                              fit: BoxFit.fitWidth,
-                            height: MediaQuery.of(context).size.height*0.13,
-                            width: MediaQuery.of(context).size.width*0.28,
-                            ),
-                        )
-                        : Center(
-                            child: Icon(
-                              Icons.image,
-                              color: whiteColor,
-                              size: MediaQuery.of(context).size.width*0.28,
-                            ),
+                            File(pickedImagePath!),
+                            fit: BoxFit.fitWidth,
+                          height: MediaQuery.of(context).size.height*0.13,
+                          width: MediaQuery.of(context).size.width*0.28,
                           ),
+                      )
+                      : Center(
+                          child: Icon(
+                            Icons.image,
+                            color: whiteColor,
+                            size: MediaQuery.of(context).size.width*0.28,
+                          ),
+                        ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: () async {
+                      final imagePath = await pickImageFromGallery();
+                      if (imagePath != null) {
+                        setState(() {
+                          pickedImagePath = imagePath;
+                        });
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
+                      ),
+                      padding: EdgeInsets.all(4),
+                      child: Icon(
+                        Icons.edit,
+                        size: 18,
+                        color: goldenColor,
+                      ),
+                    ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: InkWell(
-                      onTap: () async {
-                        final imagePath = await pickImageFromGallery();
-                        if (imagePath != null) {
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: greyColor
+                    )
+                  ),
+                  child: Center(
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        highlightColor: transparentColor,
+                              splashColor: transparentColor,
+                        hoverColor: transparentColor,
+                      ),
+                      child: DropdownButton<String>(
+                        borderRadius: BorderRadius.circular(10),
+                        dropdownColor: leadingBtnColor,
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        isExpanded: true,
+
+
+                        value: selectedList,
+                        icon: Icon(Icons.arrow_drop_down, color: whiteColor),
+                        iconEnabledColor: whiteColor,
+                        underline: Container(), // or underline: SizedBox(),
+                        hint: Text('--Select--', style: TextStyle(
+                          color: whiteColor
+                        ),),
+                        style: TextStyle(color: whiteColor),
+                        items: [//null, //represents the initial state
+                          'pictures', 'demo'].map((list) {
+                          return DropdownMenuItem<String>(
+                            alignment: Alignment.center,
+                            value: list,
+                            child: Text(list,
+                              style: TextStyle(color: whiteColor),),
+                          );
+                        }).where((item) => item.value != null)
+                            .toList(),
+                        onChanged: (value) {
                           setState(() {
-                            pickedImagePath = imagePath;
+                            selectedList = value!;
                           });
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey,
-                        ),
-                        padding: EdgeInsets.all(4),
-                        child: Icon(
-                          Icons.edit,
-                          size: 18,
-                          color: goldenColor,
-                        ),
+                        },
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
 
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: greyColor
-                      )
-                    ),
-                    child: Center(
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          highlightColor: transparentColor,
-                                splashColor: transparentColor,
-                          hoverColor: transparentColor,
-                        ),
-                        child: DropdownButton<String>(
-                          autofocus: true,
-                          borderRadius: BorderRadius.circular(12),
-                          elevation: 20,
-                          dropdownColor: leadingBtnColor,
-                          underline: Container(color: goldenColor,height:1),
-                          padding:const  EdgeInsets.only(left: 16, right: 16),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: greyColor
+                    )
+                  ),
+                  child: Center(
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        highlightColor: transparentColor,
+                              splashColor: transparentColor,
+                        hoverColor: transparentColor,
+                      ),
+                      child: DropdownButton<String>(
+                        borderRadius: BorderRadius.circular(10),
+                        dropdownColor: leadingBtnColor,
+                        padding: EdgeInsets.only(left: 16, right: 16),
+
+
+
+                        value: dummyselectedList,
+                        icon: Icon(Icons.arrow_drop_down, color: whiteColor),
+                        iconEnabledColor: whiteColor,
+                        underline: Container(), // or underline: SizedBox(),
+                        hint: Text('--Select--', style: TextStyle(
+                          color: whiteColor
+                        ),),
                           isExpanded: true,
-                          value: selectedList,
-                          icon:const Icon(Icons.arrow_drop_down, color: whiteColor),
-                          iconEnabledColor: whiteColor, // or underline: SizedBox(),
-                          hint:const Text(' -- Select --', style: TextStyle(
-                            color: whiteColor
-                          ),),
-                          style:const TextStyle(color: whiteColor),
-                          items: [//null, //represents the initial state
-                            'pictures', 'demo'].map((list) {
-                            return DropdownMenuItem<String>(
-                              enabled: true,
-                              alignment: Alignment.center,
-                              value: list,
-                              child: Text(list,
-                                style:const TextStyle(color: whiteColor),),
-                            );
-                          }).where((item) => item.value != null)
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedList = value!;
-                            });
-                          },
-                        ),
+                        style: TextStyle(color: whiteColor),
+                        items: [//null, //represents the initial state
+                          'Weight & Reps', 'Time'].map((list) {
+                          return DropdownMenuItem<String>(
+                            alignment: Alignment.center,
+                            value: list,
+
+                               child: Text(
+                                list,
+                                style: TextStyle(color: whiteColor),),
+
+
+                          );
+                        }).where((item) => item.value != null)
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            dummyselectedList = value!;
+                          });
+                        },
                       ),
                     ),
                   ),
+                ),
 
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: greyColor
-                      )
-                    ),
-                    child: Center(
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          highlightColor: transparentColor,
-                                splashColor: transparentColor,
-                          hoverColor: transparentColor,
-                        ),
-                        child: DropdownButton<String>(
-                          autofocus: true,
-                          borderRadius: BorderRadius.circular(12),
-                          elevation: 10,
-                          dropdownColor: leadingBtnColor,
-                          padding:const EdgeInsets.only(left: 16, right: 16),
-                          value: dummyselectedList,
-                          icon:const Icon(Icons.arrow_drop_down, color: whiteColor),
-                          iconEnabledColor: whiteColor,
-                          underline: Container(color: goldenColor,height:1), // or underline: SizedBox(),
-                          hint:const Text(' -- Select --', style: TextStyle(
-                            color: whiteColor
-                          ),),
-                            isExpanded: true,
-                          style:const TextStyle(color: whiteColor),
-                          items: [//null, //represents the initial state
-                            'pictures', 'demo'].map((list) {
-                            return DropdownMenuItem<String>(
-                              alignment: Alignment.center,
-                              value: list,
-                              child: Text(list,
-                                style:const  TextStyle(color: whiteColor),),
-                            );
-                          }).where((item) => item.value != null)
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              dummyselectedList = value!;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
+              ],
+            ),
+             SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,),
+            textFormField(
+              context: context,
+              text: 'Exercise Name',
+              controller: titleController,
+              hint: 'exercise name',
+              // labelText: 'Example - Mass Gain Program'
+            ),
+             SizedBox(
+               height: MediaQuery.of(context).size.height * 0.01,
+            ),
+            textFormField(
+              context: context,
+              text: 'Description',
+              controller: descriptionController,
+              hint: 'description',
+              // labelText: 'Example - Mass Gain Program'
+            ),
+             SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+            Spacer(),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: SubmitButton(
+                    onTap: () {
+                      _addPicture();
+                    },
+                    titlee: 'Add',
+                    primaryColor: goldenColor,
                   ),
+                ),
+              ),
+            ),
 
-                ],
-              ),
-               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,),
-              textFormField(
-                context: context,
-                text: 'Exercise Name',
-                controller: titleController,
-                hint: 'exercise name',
-                // labelText: 'Example - Mass Gain Program'
-              ),
-               SizedBox(
-                 height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              textFormField(
-                context: context,
-                text: 'Description',
-                controller: descriptionController,
-                hint: 'description',
-                // labelText: 'Example - Mass Gain Program'
-              ),
-               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-
-            ],
-          ),
+          ],
         ),
       ),
     );

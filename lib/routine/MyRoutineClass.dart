@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
@@ -14,18 +15,27 @@ import '../widgets_common/our_button.dart';
 import 'add_routine.dart';
 
 class MyRoutinesScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     var routineProvider = Provider.of<RoutineProvider>(context, listen: false);
     routineProvider.loadRoutines();
 
-
     return Scaffold(
+
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu), // Replace with your custom icon
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
+        automaticallyImplyLeading: false,
+        leading:Builder(
+          builder: (BuildContext context){
+            return IconButton(
+              icon: SvgPicture.asset('assets/svg/applogo.svg', width: 50, height: 50,),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+                debugPrint('sdfsdf');
+              },
+
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip
+            );
           },
         ),
         centerTitle: true,
@@ -38,6 +48,96 @@ class MyRoutinesScreen extends StatelessWidget {
           ),
         ],
       ),
+      drawer: Drawer(
+          backgroundColor: blackColor,
+          child: ListView(
+            children: [
+              DrawerHeader(
+                child: SvgPicture.asset('assets/svg/applogo.svg',
+                    height: 100, width: 100),
+              ),
+              listTileDrawer(
+                assetsvg: 'assets/svg/dumbel.svg',
+                title: 'My Exercises',
+                ontap: () {},
+              ),
+              listTileDrawer(
+                assetsvg: 'assets/svg/calnder.svg',
+                title: 'Diary',
+                ontap: () {},
+              ),
+              listTileDrawer(
+                assetsvg: 'assets/svg/clock.svg',
+                title: 'Timer',
+                ontap: () {},
+              ),
+              listTileDrawer(
+                assetsvg: 'assets/svg/personicon.svg',
+                title: 'Measurements',
+                ontap: () {},
+              ),
+              listTileDrawer(
+                assetsvg: 'assets/svg/setting.svg',
+                title: 'Setting',
+                ontap: () {},
+              ),
+              listTileDrawer(
+                assetsvg: 'assets/svg/facebooklogo.svg',
+                title: 'Facebook',
+                ontap: () {},
+              ),
+              listTileDrawer(
+                assetsvg: 'assets/svg/sync.svg',
+                title: 'Sync',
+                ontap: () {},
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height*0.1,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 38.0, right: 38),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: (){
+
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height*0.05,
+                      decoration: BoxDecoration(
+                        color: goldenColor,
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset('assets/svg/premiumlogo.svg', color: whiteColor,),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Get Premium',
+                              style: TextStyle(
+                                fontFamily: "Poppins",
+                                color: whiteColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+
+            ],
+          )),
       body: Consumer<RoutineProvider>(builder: (context, routineProvider, _) {
         List<Routine> routines = routineProvider.routines;
         if (routines.isEmpty) {
@@ -75,7 +175,7 @@ class MyRoutinesScreen extends StatelessWidget {
                   children: [
                     ReorderableListView.builder(
                       shrinkWrap: true,
-                      physics:const NeverScrollableScrollPhysics(),
+                      physics: NeverScrollableScrollPhysics(),
                       onReorder: (oldIndex, newIndex) {
                         routineProvider.updateRoutineList(oldIndex, newIndex);
                       },
@@ -98,24 +198,28 @@ class MyRoutinesScreen extends StatelessWidget {
                                               canvasColor: Colors.black,
                                             ),
                                             child: AlertDialog(
-                                              title: listTileText(title: 'Edit Routine', weight: FontWeight.w900),
+                                              title: listTileText(
+                                                  title: 'Edit Routine',
+                                                  weight: FontWeight.w900),
                                               backgroundColor: Colors.black,
                                               content: EditRoutineForm(
-                                                initialName: currentroutine.name,
+                                                initialName:
+                                                    currentroutine.name,
                                                 onEdit: (String newName) {
                                                   routineProvider.updateRoutine(
                                                       index, newName);
                                                   Navigator.of(context).pop();
                                                 },
                                               ),
-                                              contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 5),
                                             ),
                                           );
                                         });
                                   },
                                   backgroundColor: greyColor,
                                   icon: Icons.edit,
-                                  borderRadius: BorderRadius.circular(12),
                                 ),
                                 // delete option
                                 SlidableAction(
@@ -124,7 +228,9 @@ class MyRoutinesScreen extends StatelessWidget {
                                   },
                                   backgroundColor: deleteColor,
                                   icon: Icons.delete,
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(10),
+                                      bottomRight: Radius.circular(20)),
                                 ),
                               ],
                             ),
@@ -137,26 +243,27 @@ class MyRoutinesScreen extends StatelessWidget {
                                 tileColor: listTileColor,
                                 leading: Container(
                                   decoration: BoxDecoration(
-                                      color:  Color(int.parse(
-                                          currentroutine.avatarColor
-                                              .replaceFirst('#', ''),
-                                          radix: 16) |
-                                      0xff000000),
-                                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                                  height: MediaQuery.of(context).size.height * .1,
-                                  width: MediaQuery.of(context).size.width * .15,
+                                      color: Color(int.parse(
+                                              currentroutine.avatarColor
+                                                  .replaceFirst('#', ''),
+                                              radix: 16) |
+                                          0xff000000),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                  height:
+                                      MediaQuery.of(context).size.height * .1,
+                                  width:
+                                      MediaQuery.of(context).size.width * .15,
                                   child: Center(
                                       child: Text(
-                                        currentroutine.leadingword
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                          color: whiteColor,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 22,
-                                        ),
-                                      )),
+                                    currentroutine.leadingword.toUpperCase(),
+                                    style: TextStyle(
+                                      color: whiteColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 22,
+                                    ),
+                                  )),
                                 ),
-
                                 title: listTileText(
                                   title: currentroutine.name.toUpperCase(),
                                 ),
@@ -197,15 +304,14 @@ class MyRoutinesScreen extends StatelessWidget {
             });
       }),
       floatingActionButton: floatingActionButton(
-        onTap: (){
-      Navigator.of(context).push(CupertinoPageRoute(
-        builder: (ctx) => AddRoutineForm(onAdd: (String name, String desc,
-            String leadword, String avatarCOlor) {
-          routineProvider.addRoutine(name, desc, leadword, avatarCOlor);
-        }),
-      ));
-    },
-
+        onTap: () {
+          Navigator.of(context).push(CupertinoPageRoute(
+            builder: (ctx) => AddRoutineForm(onAdd: (String name, String desc,
+                String leadword, String avatarCOlor) {
+              routineProvider.addRoutine(name, desc, leadword, avatarCOlor);
+            }),
+          ));
+        },
       ),
     );
   }

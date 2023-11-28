@@ -1,4 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/homescreen/add_info_screen.dart';
+import 'package:mikococo/widgets_common/our_button.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:provider/provider.dart';
 import 'edit_timer.dart';
 import 'timer.model.dart'; // Adjust the import path based on your project structure
@@ -25,31 +30,47 @@ class _TimerScreenState extends State<TimerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Timer Screen'),
+        centerTitle: true,
+        leading: LeadingIcon(),
+        title: normalText(title: 'Globalfit'),
+        // title: Text('Timer Screen'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () async {
+          AddThingsIcon(
+            svgAsset: 'assets/svg/editicon.svg',
+            svgColor: whiteColor,
+            onTap: () async {
               _editTimer(context);
             },
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: _loadTimerValues,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Consumer<TimerModel>(
-              builder: (context, timerModel, child) {
-                return TimerButtons(timerModel: timerModel);
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 16),
+            child: largeText(title: 'Timer Screen', weight: FontWeight.bold),
+          ),
+
+          Expanded(
+            child: FutureBuilder(
+              future: _loadTimerValues,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Consumer<TimerModel>(
+                    builder: (context, timerModel, child) {
+                      return TimerButtons(timerModel: timerModel);
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
               },
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: TimerBottomNavigationBar(),
     );
@@ -61,7 +82,8 @@ class _TimerScreenState extends State<TimerScreen> {
     List<int>? editedValues = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditTimerScreen(timerValues: timerModel.timerValues),
+        builder: (context) =>
+            EditTimerScreen(timerValues: timerModel.timerValues),
       ),
     );
 
@@ -79,17 +101,16 @@ class TimerButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(
-            timerModel.timers.length,
-                (index) => TimerButton(index: index, timerModel: timerModel),
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: GridView(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
+        children: List.generate(
+          timerModel.timers.length,
+          (index) => TimerButton(index: index, timerModel: timerModel),
         ),
-      ],
+      ),
     );
   }
 }
@@ -105,13 +126,16 @@ class TimerButton extends StatelessWidget {
     return GestureDetector(
       onTap: () => _handleTimerTap(context),
       child: Container(
-        width: 50,
-        height: 50,
-        color: timerModel.selectedBox == index ? Colors.blue : Colors.grey,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: timerModel.selectedBox == index ? goldenColor : Colors.grey,
+        ),
+          width: MediaQuery.of(context).size.width*0.4,
+        height: MediaQuery.of(context).size.height*0.4,
         child: Center(
           child: Text(
             '${timerModel.currentValues[index]}s',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontFamily: "Poppins", fontSize: 22, ),
           ),
         ),
       ),
@@ -121,8 +145,10 @@ class TimerButton extends StatelessWidget {
   void _handleTimerTap(BuildContext context) {
     timerModel.stopTimer(timerModel.selectedBox);
     timerModel.selectedBox = index;
-    timerModel.currentValues[timerModel.selectedBox] = timerModel.timerValues[timerModel.selectedBox];
-    timerModel.startTimer(timerModel.selectedBox, timerModel.currentValues[timerModel.selectedBox]);
+    timerModel.currentValues[timerModel.selectedBox] =
+        timerModel.timerValues[timerModel.selectedBox];
+    timerModel.startTimer(timerModel.selectedBox,
+        timerModel.currentValues[timerModel.selectedBox]);
   }
 }
 
