@@ -174,7 +174,6 @@ class SubmitButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-
             primary: primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),

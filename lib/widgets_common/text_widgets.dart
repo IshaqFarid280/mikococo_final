@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
 
 Widget largeText(
@@ -135,4 +136,26 @@ Widget onewordTextFormField({required controller, hint}){
       ),
     );
 
+}
+Widget listTileDrawer({assetsvg, title, ontap}){
+  return ListTile(
+    onTap: ontap,
+    leading: Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: SvgPicture.asset(assetsvg, width: 15, height: 18, color: whiteColor,),
+    ),
+    title: Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Text
+        (title,
+
+        style: TextStyle(
+          color: whiteColor,
+        fontSize: 14,
+        fontFamily: "Poppins",
+        fontWeight: FontWeight.bold,
+
+      ),),
+    ),
+  );
 }
