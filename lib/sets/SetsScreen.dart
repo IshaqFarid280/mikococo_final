@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -111,84 +112,81 @@ class _SetsScreenState extends State<SetsScreenContent> {
                             )),
                           ),
                           // Display set ListTile
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).height * 0.01,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 5),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: ListTile(
-                                leading: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    smallText(
-                                        title: 'Set ${setIndex + 1}',
-                                        textSize: 14.0,
-                                        color: iconColor),
-                                    SizedBox(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.15,
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                          Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Container(
+                              child: Slidable(
+                              endActionPane:ActionPane(
+                                motion: const StretchMotion(),
+                                children: [
+                                  SlidableAction(onPressed: (index) async {
+                                 await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
+                               },
+                                    backgroundColor: greyColor,
+                                    icon: Icons.brush_outlined,),
+                                  SlidableAction(onPressed: (index) async {
+                                    _setsScreenStateProvider.deleteSet(setKey);
+                                  },
+                                    borderRadius:const BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
                                     ),
-                                    normalText(
-                                        title: set.reps.toString(),
-                                        color: buttonColors,
-                                        textSize: 20.0),
-                                    SizedBox(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.02,
-                                    ),
-                                    smallText(title: 'reps'),
-                                    SizedBox(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.05,
-                                    ),
-                                    smallText(
-                                        title: 'x',
-                                        color: iconColor,
-                                        textSize: 14.0),
-                                    SizedBox(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.05,
-                                    ),
-                                    normalText(
-                                        title: set.kg.toString(),
-                                        color: buttonColors,
-                                        textSize: 20.0),
-                                    SizedBox(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.02,
-                                    ),
-                                    smallText(title: 'kg'),
-                                  ],
+                                    backgroundColor: deleteColor,
+                                    icon: Icons.delete,),
+                                ],
+                              ),
+                                child: ListTile(
+                                  leading: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      smallText(
+                                          title: 'Set ${setIndex + 1}',
+                                          textSize: 14.0,
+                                          color: iconColor),
+                                      SizedBox(
+                                        width: MediaQuery.sizeOf(context).width *
+                                            0.15,
+                                      ),
+                                      normalText(
+                                          title: set.reps.toString(),
+                                          color: buttonColors,
+                                          textSize: 20.0),
+                                      SizedBox(
+                                        width: MediaQuery.sizeOf(context).width *
+                                            0.02,
+                                      ),
+                                      smallText(title: 'reps'),
+                                      SizedBox(
+                                        width: MediaQuery.sizeOf(context).width *
+                                            0.05,
+                                      ),
+                                      smallText(
+                                          title: 'x',
+                                          color: iconColor,
+                                          textSize: 14.0),
+                                      SizedBox(
+                                        width: MediaQuery.sizeOf(context).width *
+                                            0.05,
+                                      ),
+                                      normalText(
+                                          title: set.kg.toString(),
+                                          color: buttonColors,
+                                          textSize: 20.0),
+                                      SizedBox(
+                                        width: MediaQuery.sizeOf(context).width *
+                                            0.02,
+                                      ),
+                                      smallText(title: 'kg'),
+                                    ],
+                                  ),
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15, top: 5, bottom: 5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  tileColor: listTileColor,
                                 ),
-                                contentPadding: EdgeInsets.only(
-                                    left: 15, top: 5, bottom: 5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                tileColor: listTileColor,
-                                // trailing: Container(
-                                //   width: 20,
-                                //   child: Row(
-                                //     mainAxisSize: MainAxisSize.min,
-                                //     children: [
-                                //       IconButton(
-                                //         icon: Icon(Icons.edit),
-                                //         onPressed: () async {
-                                //           await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
-                                //         },
-                                //       ),
-                                //       IconButton(
-                                //         icon: Icon(Icons.delete),
-                                //         onPressed: () {
-                                //           _setsScreenStateProvider.deleteSet(setKey);
-                                //         },
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
                               ),
                             ),
                           ),
@@ -196,77 +194,79 @@ class _SetsScreenState extends State<SetsScreenContent> {
                       );
                     } else {
                       // Display set ListTile without the date
-                      return Container(
-                        margin: const EdgeInsets.only(top: 5),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: ListTile(
-                            contentPadding:
-                                EdgeInsets.only(left: 15, top: 5, bottom: 5),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            tileColor: listTileColor,
-                            leading: Row(
-                              mainAxisSize: MainAxisSize.min,
+                      return Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Container(
+                          child: Slidable(
+                            endActionPane:ActionPane(
+                              motion: const StretchMotion(),
                               children: [
-                                smallText(
-                                    title: 'Set ${setIndex + 1}',
-                                    textSize: 14.0,
-                                    color: iconColor),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.sizeOf(context).width * 0.15,
-                                ),
-                                normalText(
-                                    title: set.reps.toString(),
-                                    color: buttonColors,
-                                    textSize: 20.0),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.sizeOf(context).width * 0.02,
-                                ),
-                                smallText(title: 'reps'),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.sizeOf(context).width * 0.05,
-                                ),
-                                smallText(
-                                    title: 'x',
-                                    color: iconColor,
-                                    textSize: 14.0),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.sizeOf(context).width * 0.05,
-                                ),
-                                normalText(
-                                    title: set.kg.toString(),
-                                    color: buttonColors,
-                                    textSize: 20.0),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.sizeOf(context).width * 0.02,
-                                ),
-                                smallText(title: 'kg'),
+                                SlidableAction(onPressed: (index) async {
+                                  await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
+                                },backgroundColor: greyColor,
+                                  icon: Icons.brush_outlined,),
+                                SlidableAction(onPressed: (index) async {
+                                  _setsScreenStateProvider.deleteSet(setKey);
+                                },
+                                  borderRadius:const BorderRadius.only(
+                                    topRight: Radius.circular(15),
+                                    bottomRight: Radius.circular(15),
+                                  ),
+                                  backgroundColor: deleteColor,
+                                  icon: Icons.delete,),
                               ],
                             ),
-                            // trailing: Row(
-                            //   mainAxisSize: MainAxisSize.min,
-                            //   children: [
-                            //     IconButton(
-                            //       icon: Icon(Icons.edit),
-                            //       onPressed: () async {
-                            //         await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
-                            //       },
-                            //     ),
-                            //     IconButton(
-                            //       icon: Icon(Icons.delete),
-                            //       onPressed: () {
-                            //         _setsScreenStateProvider.deleteSet(setKey);
-                            //       },
-                            //     ),
-                            //   ],
-                            // ),
+                            child: ListTile(
+                              contentPadding:
+                                  EdgeInsets.only(left: 15, top: 5, bottom: 5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              tileColor: listTileColor,
+                              leading: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  smallText(
+                                      title: 'Set ${setIndex + 1}',
+                                      textSize: 14.0,
+                                      color: iconColor),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.15,
+                                  ),
+                                  normalText(
+                                      title: set.reps.toString(),
+                                      color: buttonColors,
+                                      textSize: 20.0),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.02,
+                                  ),
+                                  smallText(title: 'reps'),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.05,
+                                  ),
+                                  smallText(
+                                      title: 'x',
+                                      color: iconColor,
+                                      textSize: 14.0),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.05,
+                                  ),
+                                  normalText(
+                                      title: set.kg.toString(),
+                                      color: buttonColors,
+                                      textSize: 20.0),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.02,
+                                  ),
+                                  smallText(title: 'kg'),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       );
@@ -541,7 +541,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
           height: MediaQuery.of(context).size.height *
               0.35, // Adjust the height as needed
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
                 children: [
@@ -603,23 +603,10 @@ class _SetsScreenState extends State<SetsScreenContent> {
                     _setsScreenStateProvider.editSet(setKey, editedSet);
                     Navigator.of(context).pop();
                   },
-                  title: 'Validate the Set',
+                  title: 'Edit the set',
                   textColor: whiteColor,
                 ),
               ),
-              // CupertinoButton(
-              //   onPressed: () {
-              //     final editedSet = SetsScreenData(
-              //       editedReps,
-              //       editedKg.toDouble(),
-              //       DateTime.now(),
-              //       _setsScreenStateProvider.exercise?.key,
-              //     );
-              //     _setsScreenStateProvider.editSet(setKey, editedSet);
-              //     Navigator.of(context).pop();
-              //   },
-              //   child: Text('Edit Set'),
-              // ),
             ],
           ),
         );
@@ -627,68 +614,4 @@ class _SetsScreenState extends State<SetsScreenContent> {
     );
   }
 
-  // not in cupertino style
-  // Future<void> _showEditSetBottomSheet(BuildContext context, int setKey, int initialReps, int initialKg) async {
-  //   int editedReps = initialReps;
-  //   int editedKg = initialKg;
-  //
-  //   showModalBottomSheet<void>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return StatefulBuilder(
-  //         builder: (context, setState) {
-  //           return Container(
-  //             padding: EdgeInsets.all(16.0),
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: <Widget>[
-  //                 DropdownButton<int>(
-  //                   value: editedReps,
-  //                   onChanged: (int? newValue) {
-  //                     setState(() {
-  //                       editedReps = newValue!;
-  //                     });
-  //                   },
-  //                   items: List.generate(20, (index) {
-  //                     return DropdownMenuItem<int>(
-  //                       value: index + 1,
-  //                       child: Text((index + 1).toString()),
-  //                     );
-  //                   }),
-  //                 ),
-  //                 DropdownButton<int>(
-  //                   value: editedKg,
-  //                   onChanged: (int? newValue) {
-  //                     setState(() {
-  //                       editedKg = newValue!;
-  //                     });
-  //                   },
-  //                   items: List.generate(20, (index) {
-  //                     return DropdownMenuItem<int>(
-  //                       value: index + 1,
-  //                       child: Text((index + 1).toString()),
-  //                     );
-  //                   }),
-  //                 ),
-  //                 ElevatedButton(
-  //                   onPressed: () {
-  //                     final editedSet = SetsScreenData(
-  //                       editedReps,
-  //                       editedKg.toDouble(),
-  //                       DateTime.now(),
-  //                       _setsScreenStateProvider.exercise?.key,
-  //                     );
-  //                     _setsScreenStateProvider.editSet(setKey, editedSet);
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   child: Text('Edit Set'),
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 }

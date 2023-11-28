@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
@@ -229,6 +230,50 @@ class HomeScreenAddExerciseButton extends StatelessWidget {
         child:const Center(child: Icon(Icons.data_saver_on_outlined ,color:goldenColor,size:30 ,)),
 // Icons.loupe_outlined
 // Icons.data_saver_on_outlined
+      ),
+    );
+  }
+}
+
+
+class CustomSlider extends StatelessWidget {
+   CustomSlider({required this.child,required this.deleteOnPressed,required this.editOnPressed,this.key});
+   final void Function(BuildContext) editOnPressed;
+   final void Function(BuildContext)  deleteOnPressed;
+   final Widget child ;
+   final Key ? key;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: Container(
+        key:Key(key.toString()),
+        child: Slidable(
+          key: Key(key.toString()),
+            endActionPane: ActionPane(
+              motion:const StretchMotion(),
+              children: [
+                // settings option
+                SlidableAction(
+                  onPressed: editOnPressed,
+                  backgroundColor: greyColor,
+                  icon: Icons.brush_outlined,
+                ),
+                // delete option
+                SlidableAction(
+                  autoClose:true,
+                  onPressed: deleteOnPressed,
+                  backgroundColor: deleteColor,
+                  icon: Icons.delete_sweep_outlined,
+                  borderRadius:const BorderRadius.only(
+                    topRight: Radius.circular(15),
+                    bottomRight: Radius.circular(15),
+                  ),
+                ),
+              ],
+            ),
+            child: child ),
       ),
     );
   }
