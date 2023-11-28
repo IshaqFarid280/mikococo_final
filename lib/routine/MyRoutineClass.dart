@@ -4,17 +4,25 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mikococo/calender/calender_screen.dart';
+import 'package:mikococo/homescreen/home_screen.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
 import 'package:mikococo/routine/edit_routine.dart';
+import 'package:mikococo/setting/settingScreen.dart';
+import 'package:mikococo/timer/timer_screen.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:mikococo/workout/workoutScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../consts/colors.dart';
 import '../module/models.dart';
 import '../widgets_common/our_button.dart';
 import 'add_routine.dart';
 
 class MyRoutinesScreen extends StatelessWidget {
+  Future<void> _launchYoutubeVideo(String url) async {
+    await launch(url);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,32 +67,50 @@ class MyRoutinesScreen extends StatelessWidget {
               listTileDrawer(
                 assetsvg: 'assets/svg/dumbel.svg',
                 title: 'My Exercises',
-                ontap: () {},
+
+                ontap: () {
+                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => HomeScreen(null)));
+                },
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/calnder.svg',
                 title: 'Diary',
-                ontap: () {},
+                ontap: () {
+
+                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => ShareScreen()));
+                },
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/clock.svg',
                 title: 'Timer',
-                ontap: () {},
+                ontap: () {
+
+                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => TimerScreen()));
+                },
               ),
-              listTileDrawer(
-                assetsvg: 'assets/svg/personicon.svg',
-                title: 'Measurements',
-                ontap: () {},
-              ),
+              // listTileDrawer(
+              //   assetsvg: 'assets/svg/personicon.svg',
+              //   title: 'Measurements',
+              //   ontap: () {
+              //
+              //   },
+              // ),
               listTileDrawer(
                 assetsvg: 'assets/svg/setting.svg',
                 title: 'Setting',
-                ontap: () {},
+                ontap: () {
+
+                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => SettingScreen()));
+                },
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/facebooklogo.svg',
                 title: 'Facebook',
-                ontap: () {},
+                ontap: () async {
+                  const facebookProfileUrl = 'https://www.google.com';
+                  _launchYoutubeVideo(facebookProfileUrl);
+
+                },
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/sync.svg',
@@ -146,8 +172,8 @@ class MyRoutinesScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/emptyIcon.png',
+                SvgPicture.asset(
+                  'assets/images/emptybox.svg',
                   height: 100,
                   width: 100,
                 ),
