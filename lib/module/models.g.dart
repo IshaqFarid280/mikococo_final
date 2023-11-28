@@ -285,3 +285,114 @@ class TimerValuesAdapter extends TypeAdapter<TimerValues> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class TricepsModelAdapter extends TypeAdapter<TricepsModel> {
+  @override
+  final int typeId = 7;
+
+  @override
+  TricepsModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return TricepsModel(
+      image: fields[0] as String?,
+      title: fields[1] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, TricepsModel obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.image)
+      ..writeByte(1)
+      ..write(obj.title);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TricepsModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class BicepsModelAdapter extends TypeAdapter<BicepsModel> {
+  @override
+  final int typeId = 8;
+
+  @override
+  BicepsModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return BicepsModel(
+      image: fields[0] as String?,
+      title: fields[1] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, BicepsModel obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.image)
+      ..writeByte(1)
+      ..write(obj.title);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BicepsModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ChestModelAdapter extends TypeAdapter<ChestModel> {
+  @override
+  final int typeId = 9;
+
+  @override
+  ChestModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ChestModel(
+      image: fields[0] as String?,
+      title: fields[1] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ChestModel obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.image)
+      ..writeByte(1)
+      ..write(obj.title);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ChestModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

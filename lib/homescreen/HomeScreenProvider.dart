@@ -30,6 +30,18 @@ class HomeScreenProvider extends ChangeNotifier {
     final demoBox = BoxesClass.getDemoData();
     final demoListUserImages = demoBox.values.map((value) =>
         ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
+    // Load user-added images from Hive and append them to the triceps list
+    final tricepsBox = BoxesClass.getTricepsData();
+    final tricepsListUserImages = tricepsBox.values.map((value) =>
+        ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
+    // Load user-added images from Hive and append them to the biceps list
+    final bicepsBox = BoxesClass.getBicepsData();
+    final bicepsListUserImages = bicepsBox.values.map((value) =>
+        ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
+    // Load user-added images from Hive and append them to the chest list
+    final chestBox = BoxesClass.getChestData();
+    final chestListUserImages = chestBox.values.map((value) =>
+        ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
     // Initialize filteredPictures with the combined list of assets and Hive data
     pictures.addAll(pictureListUserImages);
     pictures.addAll([
@@ -47,10 +59,40 @@ class HomeScreenProvider extends ChangeNotifier {
       ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
       ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
     ]);
+    triceps.addAll(tricepsListUserImages);
+    triceps.addAll([
+      ImageItem('assets/images/demon.gif', 'Goku', isAsset: true),
+      ImageItem('assets/images/demon1.gif', 'Vegeta', isAsset: true),
+      ImageItem('assets/images/demon2.gif', 'Rengoku', isAsset: true),
+      ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
+      ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
+    ]);
+    biceps.addAll(bicepsListUserImages);
+    biceps.addAll([
+      ImageItem('assets/images/demon.gif', 'Goku', isAsset: true),
+      ImageItem('assets/images/demon1.gif', 'Vegeta', isAsset: true),
+      ImageItem('assets/images/demon2.gif', 'Rengoku', isAsset: true),
+      ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
+      ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
+    ]);
+    chest.addAll(chestListUserImages);
+    chest.addAll([
+      ImageItem('assets/images/demon.gif', 'Goku', isAsset: true),
+      ImageItem('assets/images/demon1.gif', 'Vegeta', isAsset: true),
+      ImageItem('assets/images/demon2.gif', 'Rengoku', isAsset: true),
+      ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
+      ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
+    ]);
     // Initialize filteredPictures with the combined list
     filteredPictures = List.from(pictures);
     // Initialize filteredDemo with the demo list
     filteredDemo = List.from(demo);
+    // Initialize filteredDemo with the triceps list
+    filteredTriceps = List.from(triceps);
+    // Initialize filteredDemo with the triceps list
+    filteredBiceps = List.from(biceps);
+    // Initialize filteredDemo with the triceps list
+    filteredChest = List.from(chest);
   }
 
   void addExercise(String name, String imagePath, WorkoutDay workoutDay) {
@@ -68,9 +110,15 @@ class HomeScreenProvider extends ChangeNotifier {
   }
 
   List<ImageItem> pictures = [];
-  List<ImageItem> demo = [];
   List<ImageItem> filteredPictures = [];
+  List<ImageItem> demo = [];
   List<ImageItem> filteredDemo = [];
+  List<ImageItem> triceps = [];
+  List<ImageItem> filteredTriceps = [];
+  List<ImageItem> biceps = [];
+  List<ImageItem> filteredBiceps = [];
+  List<ImageItem> chest = [];
+  List<ImageItem> filteredChest = [];
 
   void filterLists(String searchText) {
     // Keep the logic to filter lists based on the search text.
@@ -79,6 +127,18 @@ class HomeScreenProvider extends ChangeNotifier {
         image.title.toString().toLowerCase().contains(searchText.toLowerCase()))
         .toList();
     filteredDemo = demo
+        .where((image) =>
+        image.title.toString().toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
+    filteredTriceps = triceps
+        .where((image) =>
+        image.title.toString().toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
+    filteredBiceps = biceps
+        .where((image) =>
+        image.title.toString().toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
+    filteredChest = chest
         .where((image) =>
         image.title.toString().toLowerCase().contains(searchText.toLowerCase()))
         .toList();
