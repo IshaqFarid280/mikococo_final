@@ -38,34 +38,6 @@ class MyRoutinesScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer: Drawer(
-    // Add your drawer content here
-    child: ListView(
-    padding: EdgeInsets.zero,
-      children: <Widget>[
-        DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.blue,
-          ),
-          child: Text('Drawer Header'),
-        ),
-        ListTile(
-          title: Text('Item 1'),
-          onTap: () {
-            // Add your drawer item 1 logic here
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          title: Text('Item 2'),
-          onTap: () {
-            // Add your drawer item 2 logic here
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    ),
-    ),
       body: Consumer<RoutineProvider>(builder: (context, routineProvider, _) {
         List<Routine> routines = routineProvider.routines;
         if (routines.isEmpty) {
@@ -101,10 +73,9 @@ class MyRoutinesScreen extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
-
                     ReorderableListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics:const NeverScrollableScrollPhysics(),
                       onReorder: (oldIndex, newIndex) {
                         routineProvider.updateRoutineList(oldIndex, newIndex);
                       },

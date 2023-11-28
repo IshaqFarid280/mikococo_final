@@ -1,9 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/exercide/edit_exercise.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
@@ -83,7 +80,7 @@ class ExercisesScreen extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          tileColor: listTileColor,
+                          tileColor: listTileColor ,
                           onTap: (){
                             Navigator.push(context, CupertinoPageRoute(builder: (context)=>SetsScreen(exercisesScreenProvider.exercises[index])));
                           },

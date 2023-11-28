@@ -59,7 +59,7 @@ class _ShareScreenState extends State<ShareScreen> {
 
   Widget _buildCalendar() {
     return TableCalendar(
-      weekNumbersVisible: true,
+      weekNumbersVisible: false,
       daysOfWeekVisible: true,
       headerVisible: true,
       headerStyle: HeaderStyle(
@@ -77,19 +77,16 @@ class _ShareScreenState extends State<ShareScreen> {
       ),
       calendarStyle: const CalendarStyle(
           selectedTextStyle: TextStyle(color: buttonColors),
-          selectedDecoration:
-              BoxDecoration(shape: BoxShape.circle, color: goldenColor),
+          selectedDecoration: BoxDecoration(shape: BoxShape.circle, color: goldenColor),
           todayTextStyle: TextStyle(color: whiteColor),
           todayDecoration:
-              BoxDecoration(shape: BoxShape.circle, color: buttonColors),
-          rangeStartTextStyle: TextStyle(color: whiteColor),
-          withinRangeTextStyle: TextStyle(color: whiteColor),
+          BoxDecoration(shape: BoxShape.circle, color: buttonColors),
+          // rangeStartTextStyle: TextStyle(color: whiteColor),
+          // withinRangeTextStyle: TextStyle(color: whiteColor),
           defaultTextStyle: TextStyle(color: whiteColor),
           rangeHighlightColor: goldenColor,
           markerDecoration: BoxDecoration(color: goldenColor),
-          outsideDaysVisible: true,
-          outsideDecoration:
-              BoxDecoration(shape: BoxShape.circle, color: iconColor)),
+          outsideDaysVisible: true,),
       calendarFormat: _calendarFormat,
       focusedDay: _selectedDate,
       firstDay: DateTime.utc(2022, 1, 1),
@@ -104,6 +101,33 @@ class _ShareScreenState extends State<ShareScreen> {
           _selectedDate = selectedDay;
         });
       },
+
+      calendarBuilders: CalendarBuilders(
+        defaultBuilder: (context, date, _) {
+          bool hasExerciseData = _hasExerciseDataForDate(date);
+          return Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: hasExerciseData ? goldenColor : Colors.transparent,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  '${date.day}',
+                  style: TextStyle(
+                    color: hasExerciseData ? goldenColor : whiteColor,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -150,6 +174,11 @@ class _ShareScreenState extends State<ShareScreen> {
     return date1.year == date2.year &&
         date1.month == date2.month &&
         date1.day == date2.day;
+  }
+
+  bool _hasExerciseDataForDate(DateTime date) {
+    List<SetsScreenData> selectedDateSets = getSelectedDateSets(date);
+    return selectedDateSets.isNotEmpty;
   }
 
   void _shareExerciseData(String exerciseData) {
