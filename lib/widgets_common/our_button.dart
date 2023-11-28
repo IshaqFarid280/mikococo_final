@@ -14,7 +14,7 @@ Widget ourButton({ onPressed, color = buttonColors, textColor, String? title}) {
     ),
     onPressed: onPressed,
     child: Text(
-      title!,
+      title.toString(),
       style: TextStyle(
         color: textColor,
         fontWeight: FontWeight.bold,
@@ -164,8 +164,8 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(4),
+      padding:const EdgeInsets.all(8),
+      margin:const EdgeInsets.only(bottom: 40,left: 7,right: 7),
       width: MediaQuery.of(context).size.width*1,
       height: MediaQuery.of(context).size.height*0.08,
       decoration: BoxDecoration(
@@ -191,28 +191,46 @@ class SubmitButton extends StatelessWidget {
   }
 }
 
-class floatingactionbutton extends StatelessWidget {
-
+class floatingActionButton extends StatelessWidget {
   final VoidCallback onTap;
-
-  const floatingactionbutton({super.key, required this.onTap});
-
+  final Color colors ;
+   floatingActionButton({required this.onTap,this.colors = buttonColors});
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+        elevation:10,
         onPressed:onTap,
-        backgroundColor: Colors.transparent,
+        backgroundColor: colors,
+        child:const  Icon(Icons.loupe_outlined, color: whiteColor, size: 30,));
+  }
+}
 
-        child: Container(
-            height: MediaQuery.sizeOf(context).height *0.15,
-            width:MediaQuery.sizeOf(context).width *0.15,
-            decoration: ShapeDecoration(
-              shape: CircleBorder(),
-              color: goldenColor
-            ),
-            child: Icon(Icons.add, color: whiteColor, size: 30,)),
-      );
 
+class HomeScreenAddExerciseButton extends StatelessWidget {
+  HomeScreenAddExerciseButton({required this.onTap});
+
+  final VoidCallback onTap ;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Container(
+        margin:const  EdgeInsets.only(right:5),
+        height: MediaQuery.sizeOf(context).height * 0.07,
+        width: MediaQuery.sizeOf(context).width * 0.16,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: listTileLeadingColor,
+        ),
+        child:const Center(child: Icon(Icons.data_saver_on_outlined ,color:goldenColor,size:30 ,)),
+// Icons.loupe_outlined
+// Icons.data_saver_on_outlined
+      ),
+    );
   }
 }

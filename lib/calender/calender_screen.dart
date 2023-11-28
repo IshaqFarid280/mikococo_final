@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:mikococo/widgets_common/our_button.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:share/share.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../consts/colors.dart';
 import '../module/models.dart';
 
 class ShareScreen extends StatefulWidget {
@@ -39,15 +42,14 @@ class _ShareScreenState extends State<ShareScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildCalendar(),
-              SizedBox(height: 16),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
               _buildExerciseData(),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  _shareExerciseData(_formatExerciseData());
-                },
-                child: Text('Share'),
-              ),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
+              ourButton(
+                  onPressed: () {
+                    _shareExerciseData(_formatExerciseData());
+                  },
+                  title: 'Share Exercises'),
             ],
           ),
         ),
@@ -57,10 +59,41 @@ class _ShareScreenState extends State<ShareScreen> {
 
   Widget _buildCalendar() {
     return TableCalendar(
+      weekNumbersVisible: true,
+      daysOfWeekVisible: true,
+      headerVisible: true,
+      headerStyle: HeaderStyle(
+        titleCentered: true,
+        formatButtonDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), color: goldenColor),
+        formatButtonShowsNext: true,
+        formatButtonVisible: true,
+        titleTextStyle: TextStyle(
+            color: goldenColor, fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      daysOfWeekStyle: const DaysOfWeekStyle(
+        weekdayStyle: TextStyle(color: buttonColors),
+        weekendStyle: TextStyle(color: buttonColors),
+      ),
+      calendarStyle: const CalendarStyle(
+          selectedTextStyle: TextStyle(color: buttonColors),
+          selectedDecoration:
+              BoxDecoration(shape: BoxShape.circle, color: goldenColor),
+          todayTextStyle: TextStyle(color: whiteColor),
+          todayDecoration:
+              BoxDecoration(shape: BoxShape.circle, color: buttonColors),
+          rangeStartTextStyle: TextStyle(color: whiteColor),
+          withinRangeTextStyle: TextStyle(color: whiteColor),
+          defaultTextStyle: TextStyle(color: whiteColor),
+          rangeHighlightColor: goldenColor,
+          markerDecoration: BoxDecoration(color: goldenColor),
+          outsideDaysVisible: true,
+          outsideDecoration:
+              BoxDecoration(shape: BoxShape.circle, color: iconColor)),
       calendarFormat: _calendarFormat,
       focusedDay: _selectedDate,
       firstDay: DateTime.utc(2022, 1, 1),
-      lastDay: DateTime.utc(2023, 12, 31),
+      lastDay: DateTime.utc(2030, 12, 31),
       onFormatChanged: (format) {
         setState(() {
           _calendarFormat = format;
@@ -79,21 +112,14 @@ class _ShareScreenState extends State<ShareScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          'Exercise Data',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 16),
-        Text(
-          exerciseData,
-          style: TextStyle(fontSize: 16),
-        ),
+        SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+        normalText(title: exerciseData, textSize: 14.0),
       ],
     );
   }
 
   String _formatExerciseData() {
-    String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+    String formattedDate = DateFormat('dd / MM / yyyy').format(_selectedDate);
     String exerciseText = 'Workout : $formattedDate\n';
     List<SetsScreenData> selectedDateSets = getSelectedDateSets(_selectedDate);
 
@@ -102,7 +128,7 @@ class _ShareScreenState extends State<ShareScreen> {
 
       if (exercise != null) {
         String exerciseName = exercise.name ?? 'Unknown Exercise';
-        String setInfo = '$exerciseName: ${set.reps}x${set.kg}kg';
+        String setInfo = '$exerciseName:  ${set.reps} reps x ${set.kg} kg';
         exerciseText += '$setInfo\n';
       }
     }
@@ -121,7 +147,9 @@ class _ShareScreenState extends State<ShareScreen> {
   }
 
   bool _isSameDay(DateTime date1, DateTime date2) {
-    return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
   }
 
   void _shareExerciseData(String exerciseData) {

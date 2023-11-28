@@ -121,7 +121,7 @@ class ExercisesScreen extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton:  floatingactionbutton(
+      floatingActionButton:  floatingActionButton(
         onTap: (){
 
       Navigator.push(

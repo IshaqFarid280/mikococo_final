@@ -108,6 +108,19 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
         leading: LeadingIcon(),
         title: largeText(title: 'Add New Workout'),
       ),
+      bottomNavigationBar: SubmitButton(
+          titlee: 'Add Workout',
+          primaryColor: goldenColor,
+          onTap: () {
+            if (_workoutNameController.text.isNotEmpty &&
+                leadingworkoutcontroller.text.isNotEmpty) {
+              widget.onAdd(
+                  _workoutNameController.text,
+                  leadingworkoutcontroller.text,
+                  getHexCodeWorkout(_selectedworkoutColor));
+              print(getHexCodeWorkout(_selectedworkoutColor));
+            }
+          }),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -167,23 +180,6 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
               controller: _workoutNameController,
               hint: 'example - day 1',
               // labelText: 'Example - Mass Gain Program'
-            ),
-            Spacer(),
-            Positioned(
-              bottom: 10,
-              child: SubmitButton(
-                  titlee: 'Add Workout',
-                  primaryColor: goldenColor,
-                  onTap: () {
-                    if (_workoutNameController.text.isNotEmpty &&
-                        leadingworkoutcontroller.text.isNotEmpty) {
-                      widget.onAdd(
-                          _workoutNameController.text,
-                          leadingworkoutcontroller.text,
-                          getHexCodeWorkout(_selectedworkoutColor));
-                      print(getHexCodeWorkout(_selectedworkoutColor));
-                    }
-                  }),
             ),
           ],
         ),

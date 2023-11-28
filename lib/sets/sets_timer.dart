@@ -1,40 +1,61 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/consts/strnigs.dart';
+import 'package:mikococo/widgets_common/our_button.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:provider/provider.dart';
 import '../timer/timer.model.dart';
+import 'Sets_timer_button.dart';
+import 'sets_scren_top_listTile.dart';
 
-class DummyTimerScreen extends StatelessWidget {
+class DummyTimerScreen extends StatefulWidget {
+  final String  exerciseName ;
+  final String exercisePath ;
+  DummyTimerScreen({required this.exercisePath, required this.exerciseName});
+
+  @override
+  State<DummyTimerScreen> createState() => _DummyTimerScreenState();
+}
+
+class _DummyTimerScreenState extends State<DummyTimerScreen> {
+  TextEditingController goalsController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final timerModel = Provider.of<TimerModel>(context);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dummy Timer Settings'),
+        leading: LeadingIcon(),
+        centerTitle: true,
+        title: normalText(title: appName),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Dummy Timer Value: ${timerModel.dummyTimerValue}s'),
-            SizedBox(height: 16),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
+            SetsScreenTopListTile(exerciseName: widget.exerciseName,exercisePath: widget.exercisePath,),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.1),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    timerModel.increaseDummyTimer();
-                  },
-                  child: Icon(Icons.add),
-                ),
-                SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    timerModel.decreaseDummyTimer();
-                  },
-                  child: Icon(Icons.remove),
-                ),
+                SetsTimerButton(onTap:(){
+                  timerModel.increaseDummyTimer();},
+                icon: Icons.add,),
+                SizedBox(width: MediaQuery.sizeOf(context).width * 0.03,),
+                largeText(title:'00 : ${timerModel.dummyTimerValue}',color:timerModel.isTimerRunning ? goldenColor :whiteColor),
+                SizedBox(width: MediaQuery.sizeOf(context).width * 0.03,),
+                SetsTimerButton(onTap:(){
+                  timerModel.decreaseDummyTimer();
+                }, icon: Icons.remove,),
               ],
             ),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.1),
+
           ],
         ),
       ),

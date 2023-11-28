@@ -194,7 +194,7 @@ class MyRoutinesScreen extends StatelessWidget {
               );
             });
       }),
-      floatingActionButton: floatingactionbutton(
+      floatingActionButton: floatingActionButton(
         onTap: (){
       Navigator.of(context).push(CupertinoPageRoute(
         builder: (ctx) => AddRoutineForm(onAdd: (String name, String desc,

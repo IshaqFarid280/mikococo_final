@@ -90,6 +90,20 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: SubmitButton(
+          titlee: 'Add Routine',
+          primaryColor: goldenColor,
+          onTap: () {
+            if (_controller.text.isNotEmpty &&
+                _desccontroller.text.isNotEmpty &&
+                leadingcontroller.text.isNotEmpty) {
+              widget.onAdd(_controller.text, _desccontroller.text,
+                  leadingcontroller.text, getHexCode(_selectedColor));
+              print(getHexCode(_selectedColor));
+              _controller.clear();
+              Navigator.pop(context);
+            }
+          }),
       appBar: AppBar(
         leading: LeadingIcon(),
         title: largeText(title: 'Add New Routine'),
@@ -160,26 +174,6 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
             hint: 'example - december',
             // labelText: 'Example - Mass Gain Program'
           ),
-          Spacer(),
-          Positioned(
-            bottom: 0,
-              left: 0,
-            right: 0,
-            child: SubmitButton(
-              titlee: 'Add Routine',
-                primaryColor: goldenColor,
-                onTap: () {
-              if (_controller.text.isNotEmpty &&
-                  _desccontroller.text.isNotEmpty &&
-                  leadingcontroller.text.isNotEmpty) {
-                widget.onAdd(_controller.text, _desccontroller.text,
-                    leadingcontroller.text, getHexCode(_selectedColor));
-                print(getHexCode(_selectedColor));
-                _controller.clear();
-                Navigator.pop(context);
-              }
-            }),
-          )
         ]),
       ),
     );
