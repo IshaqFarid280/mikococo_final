@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/setting/SettingProvider.dart';
 import 'package:mikococo/setting/SoundModel.dart';
+import 'package:mikococo/setting/motionToastConstructor.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -186,7 +187,7 @@ class SettingScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: normalText(title: 'Cancel'),
+                    child: normalText(title: 'Cancel', textSize: 12.0),
                   ),
 
                   ElevatedButton(
@@ -197,21 +198,9 @@ class SettingScreen extends StatelessWidget {
                         )
                     ),
                     onPressed: () {
-                      MotionToast.success(
-                        iconType: IconType.materialDesign,
-
-                        height: MediaQuery.of(context).size.height * 0.07,
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        title: Text("This option is only included in", style: TextStyle(fontSize: 12)),
-                        borderRadius: 5,
-                        dismissable: true,
-
-                        animationDuration: Duration(seconds: 3),
-                        description: Text('the Premium Version', style: TextStyle(fontSize: 12),),
-                      ).show(context);
-                      // Handle the save logic here if needed
+                      CustomMotionToast.showSuccessToast(context, "This option is only included in", "premium Version");
                     },
-                    child: normalText(title: 'Save'),
+                    child: normalText(title: 'Save', textSize: 12.0),
                   ),
                 ],
               ),
@@ -329,17 +318,26 @@ class SettingScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       listTileDrawer(
-                        ontap: () {},
+                        ontap: () {
+                          CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
+
+                        },
                         assetsvg: 'assets/svg/importDB.svg',
                         title: 'Import Database',
                       ),
                       listTileDrawer(
-                        ontap: () {},
+                        ontap: () {
+                          CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
+
+                        },
                         assetsvg: 'assets/svg/exportDB.svg',
                         title: 'Export Database',
                       ),
                       listTileDrawer(
-                        ontap: () {},
+                        ontap: () {
+                          CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
+
+                        },
                         assetsvg: 'assets/svg/exportcsv.svg',
                         title: 'Export CSV',
                       ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/widgets_common/our_button.dart';
+import 'package:mikococo/widgets_common/text_widgets.dart';
 
 class EditExerciseForm extends StatelessWidget {
   final String initialName;
@@ -13,18 +16,23 @@ class EditExerciseForm extends StatelessWidget {
     _controller.text = initialName;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        TextField(
+        textFormField(
+          context: context,
+          text: 'Edit Exercise Name',
           controller: _controller,
-          decoration: InputDecoration(labelText: 'New Exercise Name'),
+          // labelText: 'Example - Mass Gain Program'
         ),
+
         SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
-            onEdit(_controller.text);
-          },
-          child: Text('Update Exercise'),
+        SubmitButton(onTap: (){
+          onEdit(_controller.text);
+        }, titlee: 'Update Exercise',
+          primaryColor: goldenColor,
+
         ),
+
       ],
     );
   }

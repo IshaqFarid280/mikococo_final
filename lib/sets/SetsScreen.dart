@@ -60,6 +60,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
     exercisePath = _setsScreenStateProvider.exercise!.image;
     return Scaffold(
       appBar: AppBar(
+        leading: LeadingIcon(),
         centerTitle: true,
         title: normalText(title: appName),
       ),

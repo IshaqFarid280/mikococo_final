@@ -7,8 +7,10 @@ import 'package:mikococo/calender/calender_screen.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
 import 'package:mikococo/routine/edit_routine.dart';
+import 'package:mikococo/setting/motionToastConstructor.dart';
 import 'package:mikococo/setting/settingScreen.dart';
 import 'package:mikococo/timer/timer_screen.dart';
+import 'package:mikococo/widgets_common/emptybox.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:mikococo/workout/workoutScreen.dart';
 import 'package:provider/provider.dart';
@@ -29,29 +31,32 @@ class MyRoutinesScreen extends StatelessWidget {
     var routineProvider = Provider.of<RoutineProvider>(context, listen: false);
     routineProvider.loadRoutines();
 
-
     return Scaffold(
-
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        leading:Builder(
-          builder: (BuildContext context){
+        leading: Builder(
+          builder: (BuildContext context) {
             return IconButton(
-              icon: SvgPicture.asset('assets/svg/applogo.svg', width: 50, height: 50,),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-                debugPrint('sdfsdf');
-              },
-
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip
-            );
+                icon: SvgPicture.asset(
+                  'assets/svg/applogo.svg',
+                  width: 50,
+                  height: 50,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                  debugPrint('sdfsdf');
+                },
+                tooltip:
+                    MaterialLocalizations.of(context).openAppDrawerTooltip);
           },
         ),
         centerTitle: true,
         title: normalText(title: 'My Routines'),
         actions: [
           trailingbutton(
-            onTap: () {},
+            onTap: () {
+              CustomMotionToast.showSuccessToast(context, 'This Option will implemented', 'in next Milestone');
+            },
             svgAsset: 'assets/svg/language.svg',
             svgColor: leadingBtnColor,
           ),
@@ -68,17 +73,17 @@ class MyRoutinesScreen extends StatelessWidget {
               listTileDrawer(
                 assetsvg: 'assets/svg/dumbel.svg',
                 title: 'My Exercises',
-
                 ontap: () {
-                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => HomeScreen(null)));
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (ctx) => HomeScreen(null)));
                 },
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/calnder.svg',
                 title: 'Diary',
                 ontap: () {
-
-                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => ShareScreen()));
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (ctx) => ShareScreen()));
                 },
               ),
 
@@ -86,8 +91,8 @@ class MyRoutinesScreen extends StatelessWidget {
                 assetsvg: 'assets/svg/clock.svg',
                 title: 'Timer',
                 ontap: () {
-
-                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => TimerScreen()));
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (ctx) => TimerScreen()));
                 },
               ),
               // listTileDrawer(
@@ -101,8 +106,8 @@ class MyRoutinesScreen extends StatelessWidget {
                 assetsvg: 'assets/svg/setting.svg',
                 title: 'Setting',
                 ontap: () {
-
-                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => SettingScreen()));
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (ctx) => SettingScreen()));
                 },
               ),
               listTileDrawer(
@@ -111,7 +116,6 @@ class MyRoutinesScreen extends StatelessWidget {
                 ontap: () async {
                   const facebookProfileUrl = 'https://www.google.com';
                   _launchYoutubeVideo(facebookProfileUrl);
-
                 },
               ),
               listTileDrawer(
@@ -121,7 +125,7 @@ class MyRoutinesScreen extends StatelessWidget {
               ),
 
               Container(
-                height: MediaQuery.of(context).size.height*0.1,
+                height: MediaQuery.of(context).size.height * 0.1,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 38.0, right: 38),
@@ -129,21 +133,21 @@ class MyRoutinesScreen extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(10),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                     child: Container(
-                      height: MediaQuery.of(context).size.height*0.05,
+                      height: MediaQuery.of(context).size.height * 0.05,
                       decoration: BoxDecoration(
-                        color: goldenColor,
-                        borderRadius: BorderRadius.circular(10)
-                      ),
+                          color: goldenColor,
+                          borderRadius: BorderRadius.circular(10)),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SvgPicture.asset('assets/svg/premiumlogo.svg', color: whiteColor,),
+                            SvgPicture.asset(
+                              'assets/svg/premiumlogo.svg',
+                              color: whiteColor,
+                            ),
                             SizedBox(
                               width: 10,
                             ),
@@ -154,7 +158,6 @@ class MyRoutinesScreen extends StatelessWidget {
                                 color: whiteColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
-
                               ),
                             )
                           ],
@@ -164,34 +167,17 @@ class MyRoutinesScreen extends StatelessWidget {
                   ),
                 ),
               )
-
             ],
           )),
       body: Consumer<RoutineProvider>(builder: (context, routineProvider, _) {
         List<Routine> routines = routineProvider.routines;
         if (routines.isEmpty) {
           // If there are no routines, display a message
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/images/emptybox.svg',
-                  height: 100,
-                  width: 100,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'No Items',
-                  style: TextStyle(fontSize: 30),
-                ),
-                Text(
-                  "You don't have any routines. Add a routine using the '+' button.",
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          );
+          return emptyBox(
+              svgPicture: 'assets/svg/emptybox.svg',
+              largetexttitle: 'No items',
+              normaltexttitle:
+              "You don't have any Routines. Add a Routine using the '+' button.");
         }
 
         return ValueListenableBuilder<Box<Routine>>(
@@ -211,92 +197,99 @@ class MyRoutinesScreen extends StatelessWidget {
                       itemCount: routine.length,
                       itemBuilder: (context, index) {
                         final currentroutine = routine[index];
-                        return CustomSlider(child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                        return CustomSlider(
+                          child: ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            tileColor: listTileColor,
+                            leading: Container(
+                              decoration: BoxDecoration(
+                                  color: Color(int.parse(
+                                          currentroutine.avatarColor
+                                              .replaceFirst('#', ''),
+                                          radix: 16) |
+                                      0xff000000),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              height: MediaQuery.of(context).size.height * .1,
+                              width: MediaQuery.of(context).size.width * .15,
+                              child: Center(
+                                  child: Text(
+                                currentroutine.leadingword.toUpperCase(),
+                                style: TextStyle(
+                                  color: whiteColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 22,
+                                ),
+                              )),
+                            ),
+                            title: listTileText(
+                              title: currentroutine.name.toUpperCase(),
+                            ),
+                            subtitle: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.gps_fixed_outlined,
+                                  color: iconColor,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.sizeOf(context).width * 0.02,
+                                ),
+                                listTileText(
+                                  textSize: 12.0,
+                                  title: currentroutine.description,
+                                  weight: FontWeight.w300,
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                CupertinoPageRoute(
+                                  builder: (context) =>
+                                      WorkoutDaysScreen(currentroutine),
+                                ),
+                              );
+                            },
                           ),
-                          tileColor: listTileColor,
-                          leading: Container(
-                            decoration: BoxDecoration(
-                                color: Color(int.parse(
-                                    currentroutine.avatarColor
-                                        .replaceFirst('#', ''),
-                                    radix: 16) |
-                                0xff000000),
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(10))),
-                            height:
-                            MediaQuery.of(context).size.height * .1,
-                            width:
-                            MediaQuery.of(context).size.width * .15,
-                            child: Center(
-                                child: Text(
-                                  currentroutine.leadingword.toUpperCase(),
-                                  style: TextStyle(
-                                    color: whiteColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 22,
-                                  ),
-                                )),
-                          ),
-                          title: listTileText(
-                            title: currentroutine.name.toUpperCase(),
-                          ),
-                          subtitle: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.gps_fixed_outlined,
-                                color: iconColor,
-                                size: 20,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.sizeOf(context).width *
-                                    0.02,
-                              ),
-                              listTileText(
-                                textSize: 12.0,
-                                title: currentroutine.description,
-                                weight: FontWeight.w300,
-                              ),
-                            ],
-                          ),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              CupertinoPageRoute(
-                                builder: (context) =>
-                                    WorkoutDaysScreen(currentroutine),
-                              ),
-                            );
+                          deleteOnPressed: (context) {
+                            routineProvider.deleteRoutine(index);
                           },
-                        ), deleteOnPressed: (context){routineProvider.deleteRoutine(index);},
-                          editOnPressed: (context){{
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Theme(
-                                  data: ThemeData(
-                                    canvasColor: Colors.black,
-                                  ),
-                                  child: AlertDialog(
-                                    title: listTileText(
-                                        title: 'Edit Routine',
-                                        weight: FontWeight.w900),
-                                    backgroundColor: Colors.black,
-                                    content: EditRoutineForm(
-                                      initialName:
-                                      currentroutine.name,
-                                      onEdit: (String newName) {
-                                        routineProvider.updateRoutine(
-                                            index, newName);
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    contentPadding:const EdgeInsets.symmetric(horizontal: 5),
-                                  ),
-                                );
-                              });
-                        }},key: ValueKey<int>(index),);
+                          editOnPressed: (context) {
+                            {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Theme(
+                                      data: ThemeData(
+                                        canvasColor: Colors.black,
+                                      ),
+                                      child: AlertDialog(
+                                        title: listTileText(
+                                            title: 'Edit Routine',
+                                            weight: FontWeight.w900),
+                                        backgroundColor: Colors.black,
+                                        content: EditRoutineForm(
+                                          initialName: currentroutine.name,
+                                          onEdit: (String newName) {
+                                            routineProvider.updateRoutine(
+                                                index, newName);
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                      ),
+                                    );
+                                  });
+                            }
+                          },
+                          key: ValueKey<int>(index),
+                        );
                       },
                     ),
                   ],

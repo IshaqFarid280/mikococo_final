@@ -44,10 +44,10 @@ class LeadingIcon extends StatelessWidget {
           height: MediaQuery.sizeOf(context).height *0.01,
           width:MediaQuery.sizeOf(context).width *0.01,
           decoration: BoxDecoration(
-            color: leadingBtnColor,
+            color: listTileColor,
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Center(child: Icon(icon,color:whiteColor,),),
+          child: Center(child: Icon(icon,color:listTileEditColor,),),
         ),
       ),
     );
@@ -61,7 +61,7 @@ class trailingbutton extends StatelessWidget {
   final VoidCallback onTap;
 
   const trailingbutton({
-    super.key, this.svgAsset,  this.svgColor = whiteColor, required this.onTap,
+    super.key, this.svgAsset,  this.svgColor = listTileColor, required this.onTap,
   });
 
   @override
@@ -70,6 +70,8 @@ class trailingbutton extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
 
       child: InkWell(
+        splashColor: Colors.transparent,
+
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Container(

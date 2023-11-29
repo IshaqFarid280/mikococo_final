@@ -38,21 +38,50 @@ class _DummyTimerScreenState extends State<DummyTimerScreen> {
           children: [
             SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
             SetsScreenTopListTile(exerciseName: widget.exerciseName,exercisePath: widget.exercisePath,),
-            SizedBox(height: MediaQuery.sizeOf(context).height * 0.1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SetsTimerButton(onTap:(){
-                  timerModel.increaseDummyTimer();},
-                icon: Icons.add,),
-                SizedBox(width: MediaQuery.sizeOf(context).width * 0.03,),
-                largeText(title:'00 : ${timerModel.dummyTimerValue}',color:timerModel.isTimerRunning ? goldenColor :whiteColor),
-                SizedBox(width: MediaQuery.sizeOf(context).width * 0.03,),
-                SetsTimerButton(onTap:(){
-                  timerModel.decreaseDummyTimer();
-                }, icon: Icons.remove,),
-              ],
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.05),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: [
+            //     SetsTimerButton(onTap:(){
+            //       timerModel.increaseDummyTimer();
+            //       },
+            //     icon: Icons.add,),
+            //     SizedBox(width: MediaQuery.sizeOf(context).width * 0.03,),
+            //     largeText(title:'00 : ${timerModel.dummyTimerValue}',color:timerModel.isTimerRunning ? goldenColor :whiteColor),
+            //     SizedBox(width: MediaQuery.sizeOf(context).width * 0.03,),
+            //     SetsTimerButton(onTap:(){
+            //       timerModel.decreaseDummyTimer();
+            //     }, icon: Icons.remove,),
+            //   ],
+            // ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: leadingBtnColor,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: goldenColor)
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove, color: whiteColor,),
+                      onPressed: () {
+                        timerModel.decreaseDummyTimer();
+                      },
+                    ),
+                    largeText(title:'00 : ${timerModel.dummyTimerValue}',color:timerModel.isTimerRunning ? goldenColor :whiteColor),
+                    IconButton(
+                      icon: Icon(Icons.add, color: whiteColor,),
+                      onPressed: () {
+                        timerModel.increaseDummyTimer();
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
             SizedBox(height: MediaQuery.sizeOf(context).height * 0.1),
 
