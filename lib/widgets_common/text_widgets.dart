@@ -144,24 +144,77 @@ class listTileDrawer extends StatelessWidget {
   listTileDrawer({required this.ontap, this.title, required this.assetsvg});
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: ontap,
-      leading: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: SvgPicture.asset(assetsvg, width: 15, height: 18, color: whiteColor,),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        highlightColor: transparentColor,
+        splashColor: transparentColor,
+        hoverColor: transparentColor,
       ),
-      title: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Text
-          (title!,
+      child: ListTile(
+        onTap: ontap,
+        leading: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: SvgPicture.asset(assetsvg, width: 15, height: 18, color: whiteColor,),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text
+            (title!,
 
-          style: TextStyle(
-            color: whiteColor,
-            fontSize: 14,
-            fontFamily: "Poppins",
-            fontWeight: FontWeight.bold,
+            style: TextStyle(
+              color: whiteColor,
+              fontSize: 14,
+              fontFamily: "Poppins",
+              fontWeight: FontWeight.bold,
 
-          ),),
+            ),),
+        ),
+      ),
+    );
+  }
+}
+
+class settingListDrawer extends StatelessWidget {
+  final VoidCallback ontap;
+  final String? title ;
+  final String? subtitle ;
+  final String assetsvg ;
+  settingListDrawer({required this.ontap, this.title, this.subtitle, required this.assetsvg});
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+        highlightColor: transparentColor,
+        splashColor: transparentColor,
+        hoverColor: transparentColor,
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            onTap: ontap,
+            leading: SvgPicture.asset(assetsvg, width: 15, height: 18, color: whiteColor,),
+            subtitle: Text(subtitle!, style: TextStyle(
+
+              color: whiteColor,
+              fontSize: 12,
+              fontFamily: "Poppins",
+              fontWeight: FontWeight.normal,
+            ),),
+            title: Padding(
+              padding: const EdgeInsets.only(left: 2.0, right: 2),
+              child: Text
+                (title!,
+
+                style: TextStyle(
+                  color: whiteColor,
+                  fontSize: 14,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.bold,
+
+                ),),
+            ),
+          ),
+        ],
       ),
     );
   }

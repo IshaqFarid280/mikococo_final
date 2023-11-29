@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../consts/colors.dart';
 import '../module/models.dart';
+import '../setting/SettingProvider.dart';
 import '../widgets_common/our_button.dart';
 import 'add_routine.dart';
 
@@ -27,6 +28,7 @@ class MyRoutinesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var routineProvider = Provider.of<RoutineProvider>(context, listen: false);
     routineProvider.loadRoutines();
+
 
     return Scaffold(
 
@@ -79,6 +81,7 @@ class MyRoutinesScreen extends StatelessWidget {
                   Navigator.push(context, CupertinoPageRoute(builder: (ctx) => ShareScreen()));
                 },
               ),
+
               listTileDrawer(
                 assetsvg: 'assets/svg/clock.svg',
                 title: 'Timer',
@@ -116,6 +119,7 @@ class MyRoutinesScreen extends StatelessWidget {
                 title: 'Sync',
                 ontap: () {},
               ),
+
               Container(
                 height: MediaQuery.of(context).size.height*0.1,
               ),
@@ -265,7 +269,8 @@ class MyRoutinesScreen extends StatelessWidget {
                               ),
                             );
                           },
-                        ), deleteOnPressed: (context){routineProvider.deleteRoutine(index);}, editOnPressed: (context){{
+                        ), deleteOnPressed: (context){routineProvider.deleteRoutine(index);},
+                          editOnPressed: (context){{
                           showDialog(
                               context: context,
                               builder: (context) {

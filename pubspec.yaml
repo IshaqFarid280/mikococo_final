@@ -49,6 +49,8 @@ dependencies:
   auto_size_text: ^3.0.0
   flutter_svg: ^2.0.9
   url_launcher: ^6.2.1
+  flutter_switch: ^0.3.2
+  motion_toast:
 #  audioplayers:
 
 

@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/setting/SettingProvider.dart';
+import 'package:mikococo/setting/SoundModel.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
+import 'package:provider/provider.dart';
 
 
 Widget ourButton({ onPressed, color = buttonColors, textColor, String? title}) {
@@ -190,7 +193,39 @@ class SubmitButton extends StatelessWidget {
     );
   }
 }
+class SubmitButtonnoPadding extends StatelessWidget {
+  final VoidCallback onTap;
+  final String? titlee;
+  final Color? primaryColor;
 
+  const SubmitButtonnoPadding({super.key, required this.onTap,  this.titlee,  this.primaryColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width*1,
+      height: MediaQuery.of(context).size.height*0.06,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20)
+      ),
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+            primary: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            )
+        ),
+        child: AutoSizeText(titlee!, style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontFamily: "Poppins",
+            fontWeight: FontWeight.w800
+        ),),
+      ),
+    );
+  }
+}
 class floatingActionButton extends StatelessWidget {
   final VoidCallback onTap;
   final Color colors ;

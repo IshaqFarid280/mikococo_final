@@ -6,6 +6,7 @@ import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/homescreen/HomeScreenProvider.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
 import 'package:mikococo/sets/SetsProvider.dart';
+import 'package:mikococo/setting/SettingProvider.dart';
 import 'package:mikococo/timer/timer.model.dart';
 import 'package:mikococo/workout/WorkoutScreenProvider.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,6 +42,7 @@ void main() async  {
         ChangeNotifierProvider(create: (context) => TimerModel()),
         ChangeNotifierProvider(create: (context) => ExercisesScreenProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutDaysScreenProvider()),
+        ChangeNotifierProvider(create: (context) => SwitchProvider()),
 
       ],
         child: MyApp(),
