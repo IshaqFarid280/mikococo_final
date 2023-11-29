@@ -109,4 +109,42 @@ class TimerValues extends HiveObject {
   TimerValues(this.values);
 }
 
+@HiveType(typeId: 7)
+class TricepsModel extends HiveObject {
+
+  @HiveField(0)
+  String ? image ;
+
+  @HiveField(1)
+  String ? title;
+
+  TricepsModel({this.image,this.title});
+}
+
+@HiveType(typeId: 8)
+class BicepsModel extends HiveObject {
+
+  @HiveField(0)
+  String ? image ;
+
+  @HiveField(1)
+  String ? title;
+
+  BicepsModel({this.image,this.title});
+}
+
+
+@HiveType(typeId: 9)
+class ChestModel extends HiveObject {
+
+  @HiveField(0)
+  String ? image ;
+
+  @HiveField(1)
+  String ? title;
+
+  ChestModel({this.image,this.title});
+}
+
+
 

@@ -38,6 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
           filteredPictures: homeScreenProvider.filteredPictures,
           demo: homeScreenProvider.demo,
           filteredDemo: homeScreenProvider.filteredDemo,
+          triceps: homeScreenProvider.triceps,
+          filteredTriceps: homeScreenProvider.filteredTriceps,
+          biceps: homeScreenProvider.biceps,
+          filteredBiceps:homeScreenProvider.filteredBiceps,
+          chest: homeScreenProvider.chest,
+          filteredChest: homeScreenProvider.chest,
         )));
       },
         colors: iconColor,
@@ -184,6 +190,169 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }
                       ),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                      ExercisesNameListTile(exercisesCategoryName:'Triceps',),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                      ValueListenableBuilder<Box<TricepsModel>>(
+                          valueListenable: BoxesClass.getTricepsData().listenable(),
+                          builder: (context,box,_) {
+                            return Column(
+                              children: List.generate(
+                                homeScreenProvider.triceps.length, (index) {
+                                final imageItem = homeScreenProvider.triceps[index];
+                                if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
+                                  // var data = box.values.toList().cast<AddingPictures>();
+                                  return Container(
+                                    margin: const EdgeInsets.only(top: 5),
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                                      trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
+                                        // add data into exercise list
+                                        imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
+                                        homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
+                                        setState(() {
+                                          if(imageItem.imagePath.contains('assets/images')){
+                                            print('imageURlAssets: ${imageItem.imagePath}');
+                                            print('imageURlAssets: ${imageItem.title}');
+                                          }else{
+                                            print('imageURlFile: ${imageItem.imagePath}');
+                                          }
+                                        });
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
+                                      },) : Container(height: 5,width: 5,),
+                                      onTap: (){
+                                        Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
+                                      },
+                                      title: listTileText(title :imageItem.title.toString().toUpperCase()),
+                                      tileColor: listTileColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      leading: CircleAvatar(
+                                        radius: 25,
+                                        backgroundImage: imageItem.isAsset
+                                            ? AssetImage(imageItem.imagePath)
+                                            : FileImage(File(imageItem.imagePath)) as ImageProvider,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                              ),
+                            );
+                          }
+                      ),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                      ExercisesNameListTile(exercisesCategoryName:'Biceps',),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                      ValueListenableBuilder<Box<BicepsModel>>(
+                          valueListenable: BoxesClass.getBicepsData().listenable(),
+                          builder: (context,box,_) {
+                            return Column(
+                              children: List.generate(
+                                homeScreenProvider.biceps.length, (index) {
+                                final imageItem = homeScreenProvider.biceps[index];
+                                if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
+                                  // var data = box.values.toList().cast<AddingPictures>();
+                                  return Container(
+                                    margin: const EdgeInsets.only(top: 5),
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                                      trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
+                                        // add data into exercise list
+                                        imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
+                                        homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
+                                        setState(() {
+                                          if(imageItem.imagePath.contains('assets/images')){
+                                            print('imageURlAssets: ${imageItem.imagePath}');
+                                            print('imageURlAssets: ${imageItem.title}');
+                                          }else{
+                                            print('imageURlFile: ${imageItem.imagePath}');
+                                          }
+                                        });
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
+                                      },) : Container(height: 5,width: 5,),
+                                      onTap: (){
+                                        Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
+                                      },
+                                      title: listTileText(title :imageItem.title.toString().toUpperCase()),
+                                      tileColor: listTileColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      leading: CircleAvatar(
+                                        radius: 25,
+                                        backgroundImage: imageItem.isAsset
+                                            ? AssetImage(imageItem.imagePath)
+                                            : FileImage(File(imageItem.imagePath)) as ImageProvider,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                              ),
+                            );
+                          }
+                      ),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                      ExercisesNameListTile(exercisesCategoryName:'Chest',),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                      ValueListenableBuilder<Box<ChestModel>>(
+                          valueListenable: BoxesClass.getChestData().listenable(),
+                          builder: (context,box,_) {
+                            return Column(
+                              children: List.generate(
+                                homeScreenProvider.chest.length, (index) {
+                                final imageItem = homeScreenProvider.chest[index];
+                                if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
+                                  // var data = box.values.toList().cast<AddingPictures>();
+                                  return Container(
+                                    margin: const EdgeInsets.only(top: 5),
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
+                                      trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
+                                        // add data into exercise list
+                                        imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
+                                        homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
+                                        setState(() {
+                                          if(imageItem.imagePath.contains('assets/images')){
+                                            print('imageURlAssets: ${imageItem.imagePath}');
+                                            print('imageURlAssets: ${imageItem.title}');
+                                          }else{
+                                            print('imageURlFile: ${imageItem.imagePath}');
+                                          }
+                                        });
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
+                                      },) : Container(height: 5,width: 5,),
+                                      onTap: (){
+                                        Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
+                                      },
+                                      title: listTileText(title :imageItem.title.toString().toUpperCase()),
+                                      tileColor: listTileColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      leading: CircleAvatar(
+                                        radius: 25,
+                                        backgroundImage: imageItem.isAsset
+                                            ? AssetImage(imageItem.imagePath)
+                                            : FileImage(File(imageItem.imagePath)) as ImageProvider,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                              ),
+                            );
+                          }
+                      ),
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
                     ],
                   ),
 

@@ -16,11 +16,23 @@ class AddPictureScreen extends StatefulWidget {
   final List<ImageItem> filteredPictures;
   final List<ImageItem> demo;
   final List<ImageItem> filteredDemo;
+  final List<ImageItem> triceps;
+  final List<ImageItem> filteredTriceps;
+  final List<ImageItem> biceps;
+  final List<ImageItem> filteredBiceps;
+  final List<ImageItem> chest;
+  final List<ImageItem> filteredChest;
   AddPictureScreen(
       {required this.pictures,
       required this.demo,
       required this.filteredPictures,
-      required this.filteredDemo});
+      required this.filteredDemo,
+      required this.triceps,
+      required this.biceps,
+      required this.chest,
+      required this.filteredChest,
+      required this.filteredBiceps,
+      required this.filteredTriceps});
   @override
   State<AddPictureScreen> createState() => _AddPictureScreenState();
 }
@@ -84,6 +96,66 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
             isAsset: false,
           ));
         });
+      }   else if  (selectedList == 'Triceps') {
+        var data = TricepsModel(
+          image: pickedImagePath!,
+          title: titleController.text.toString(),
+        );
+        final box = BoxesClass.getTricepsData();
+        box.add(data);
+        data.save();
+        setState(() {
+          widget.triceps.add(ImageItem(
+            pickedImagePath!,
+            titleController.text.toString(),
+            isAsset: false,
+          ));
+          widget.filteredTriceps.add(ImageItem(
+            pickedImagePath!,
+            titleController.text.toString(),
+            isAsset: false,
+          ));
+        });
+      }  else if  (selectedList == 'Biceps') {
+        var data = BicepsModel(
+          image: pickedImagePath!,
+          title: titleController.text.toString(),
+        );
+        final box = BoxesClass.getBicepsData();
+        box.add(data);
+        data.save();
+        setState(() {
+          widget.biceps.add(ImageItem(
+            pickedImagePath!,
+            titleController.text.toString(),
+            isAsset: false,
+          ));
+          widget.filteredBiceps.add(ImageItem(
+            pickedImagePath!,
+            titleController.text.toString(),
+            isAsset: false,
+          ));
+        });
+      }  else if  (selectedList == 'Chest') {
+        var data = ChestModel(
+          image: pickedImagePath!,
+          title: titleController.text.toString(),
+        );
+        final box = BoxesClass.getChestData();
+        box.add(data);
+        data.save();
+        setState(() {
+          widget.chest.add(ImageItem(
+            pickedImagePath!,
+            titleController.text.toString(),
+            isAsset: false,
+          ));
+          widget.filteredChest.add(ImageItem(
+            pickedImagePath!,
+            titleController.text.toString(),
+            isAsset: false,
+          ));
+        });
       }
       titleController.clear();
       descriptionController.clear();
@@ -112,24 +184,21 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.28,
                   height: MediaQuery.of(context).size.height * 0.13,
-
                   child: pickedImagePath != null
                       ? ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                        child: Image.file(
-
-
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.file(
                             File(pickedImagePath!),
                             fit: BoxFit.fitWidth,
-                          height: MediaQuery.of(context).size.height*0.13,
-                          width: MediaQuery.of(context).size.width*0.28,
+                            height: MediaQuery.of(context).size.height * 0.13,
+                            width: MediaQuery.of(context).size.width * 0.28,
                           ),
-                      )
+                        )
                       : Center(
                           child: Icon(
                             Icons.image,
                             color: whiteColor,
-                            size: MediaQuery.of(context).size.width*0.28,
+                            size: MediaQuery.of(context).size.width * 0.28,
                           ),
                         ),
                 ),
@@ -161,7 +230,6 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                 ),
               ],
             ),
-
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
             ),
@@ -171,16 +239,13 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.4,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: greyColor
-                    )
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: greyColor)),
                   child: Center(
                     child: Theme(
                       data: Theme.of(context).copyWith(
                         highlightColor: transparentColor,
-                              splashColor: transparentColor,
+                        splashColor: transparentColor,
                         hoverColor: transparentColor,
                       ),
                       child: DropdownButton<String>(
@@ -189,24 +254,30 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                         padding: EdgeInsets.only(left: 16, right: 16),
                         isExpanded: true,
 
-
                         value: selectedList,
                         icon: Icon(Icons.arrow_drop_down, color: whiteColor),
                         iconEnabledColor: whiteColor,
                         underline: Container(), // or underline: SizedBox(),
-                        hint: Text('--Select--', style: TextStyle(
-                          color: whiteColor
-                        ),),
+                        hint: Text(
+                          '--Select--',
+                          style: TextStyle(color: whiteColor),
+                        ),
                         style: TextStyle(color: whiteColor),
-                        items: [//null, //represents the initial state
-                          'pictures', 'demo'].map((list) {
-                          return DropdownMenuItem<String>(
-                            alignment: Alignment.center,
-                            value: list,
-                            child: Text(list,
-                              style: TextStyle(color: whiteColor),),
-                          );
-                        }).where((item) => item.value != null)
+                        items: [
+                          //null, //represents the initial state
+                          'pictures','demo','Triceps','Biceps','Chest',
+                        ]
+                            .map((list) {
+                              return DropdownMenuItem<String>(
+                                alignment: Alignment.center,
+                                value: list,
+                                child: Text(
+                                  list,
+                                  style: TextStyle(color: whiteColor),
+                                ),
+                              );
+                            })
+                            .where((item) => item.value != null)
                             .toList(),
                         onChanged: (value) {
                           setState(() {
@@ -217,20 +288,16 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                     ),
                   ),
                 ),
-
                 Container(
                   width: MediaQuery.of(context).size.width * 0.4,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: greyColor
-                    )
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: greyColor)),
                   child: Center(
                     child: Theme(
                       data: Theme.of(context).copyWith(
                         highlightColor: transparentColor,
-                              splashColor: transparentColor,
+                        splashColor: transparentColor,
                         hoverColor: transparentColor,
                       ),
                       child: DropdownButton<String>(
@@ -238,30 +305,31 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                         dropdownColor: leadingBtnColor,
                         padding: EdgeInsets.only(left: 16, right: 16),
 
-
-
                         value: dummyselectedList,
                         icon: Icon(Icons.arrow_drop_down, color: whiteColor),
                         iconEnabledColor: whiteColor,
                         underline: Container(), // or underline: SizedBox(),
-                        hint: Text('--Select--', style: TextStyle(
-                          color: whiteColor
-                        ),),
-                          isExpanded: true,
+                        hint: Text(
+                          '--Select--',
+                          style: TextStyle(color: whiteColor),
+                        ),
+                        isExpanded: true,
                         style: TextStyle(color: whiteColor),
-                        items: [//null, //represents the initial state
-                          'Weight & Reps', 'Time'].map((list) {
-                          return DropdownMenuItem<String>(
-                            alignment: Alignment.center,
-                            value: list,
-
-                               child: Text(
-                                list,
-                                style: TextStyle(color: whiteColor),),
-
-
-                          );
-                        }).where((item) => item.value != null)
+                        items: [
+                          //null, //represents the initial state
+                          'Weight & Reps', 'Time'
+                        ]
+                            .map((list) {
+                              return DropdownMenuItem<String>(
+                                alignment: Alignment.center,
+                                value: list,
+                                child: Text(
+                                  list,
+                                  style: TextStyle(color: whiteColor),
+                                ),
+                              );
+                            })
+                            .where((item) => item.value != null)
                             .toList(),
                         onChanged: (value) {
                           setState(() {
@@ -272,11 +340,11 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                     ),
                   ),
                 ),
-
               ],
             ),
-             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.01,),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
             textFormField(
               context: context,
               text: 'Exercise Name',
@@ -284,8 +352,8 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
               hint: 'exercise name',
               // labelText: 'Example - Mass Gain Program'
             ),
-             SizedBox(
-               height: MediaQuery.of(context).size.height * 0.01,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             textFormField(
               context: context,
@@ -294,7 +362,7 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
               hint: 'description',
               // labelText: 'Example - Mass Gain Program'
             ),
-             SizedBox(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.01,
             ),
             Spacer(),
@@ -313,7 +381,6 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                 ),
               ),
             ),
-
           ],
         ),
       ),
