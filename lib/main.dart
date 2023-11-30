@@ -27,7 +27,7 @@ void main() async  {
   Hive.registerAdapter(TricepsModelAdapter());
   Hive.registerAdapter(BicepsModelAdapter());
   Hive.registerAdapter(ChestModelAdapter());
-  await Hive.openBox<AddingPictures>('Pictures');
+  await Hive.openBox<AddingPictures>('Pictures', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<DemonPictures>('Demo');
   await Hive.openBox<TricepsModel>('triceps');
   await Hive.openBox<BicepsModel>('biceps');

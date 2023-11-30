@@ -108,6 +108,74 @@ class HomeScreenProvider extends ChangeNotifier {
     // If you need to modify the widget state, consider using a StateNotifierProvider.
 
   }
+//
+  void deletePicture(int index) {
+    try {
+      final box = BoxesClass.getData();
+      final pictureToDelete = pictures[index];
+
+      if (!pictureToDelete.isAsset) {
+        box.delete(pictureToDelete.imagePath);
+      }
+
+      // Convert Iterable to List before using removeWhere
+      final List<AddingPictures> boxValues = box.values.toList();
+
+      // Filter out the values that need to be removed
+      final List<AddingPictures> updatedBoxValues = boxValues
+          .where((value) => value.image != pictureToDelete.imagePath)
+          .toList();
+
+      // Clear the existing box and add the updated values
+      box.clear();
+      box.addAll(updatedBoxValues);
+
+      pictures.removeAt(index);
+      notifyListeners();
+      filteredPictures.removeWhere((item) => item == pictureToDelete);
+      notifyListeners();
+    } catch (e) {
+      print('Error during delete operation: $e');
+      // Handle or log the error as needed
+    }
+  }
+
+
+  Future<String?> pickNewImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    return pickedFile?.path;
+  }
+
+  void editPicture(int index, String newTitle, String? newImagePath) {
+    final box = BoxesClass.getData();
+    final pictureToEdit = pictures[index];
+
+    // Check if the picture is from user-added data or asset, and edit accordingly
+    if (pictureToEdit.isAsset) {
+      pictures[index] = ImageItem(
+        pictureToEdit.imagePath,
+        newTitle,
+        isAsset: true,
+      );
+      filteredPictures = List.from(pictures);
+      notifyListeners();
+    } else {
+      final updatedPicture = AddingPictures(
+        image: newImagePath ?? pictureToEdit.imagePath,
+        title: newTitle,
+      );
+      box.put(pictureToEdit.imagePath, updatedPicture);
+      pictures[index] = ImageItem(
+        updatedPicture.image!,
+        updatedPicture.title!,
+        isAsset: false,
+      );
+      filteredPictures = List.from(pictures);
+      notifyListeners();
+    }
+  }
+//
 
   List<ImageItem> pictures = [];
   List<ImageItem> filteredPictures = [];
