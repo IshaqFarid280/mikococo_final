@@ -123,6 +123,7 @@ class WorkoutDaysScreen extends StatelessWidget {
                             builder: (context) {
                               return AlertDialog(
                                 backgroundColor: blackColor,
+                                elevation: 10,
                                 title: largeText(title: 'Edit Workout Day'),
                                 content: EditWorkoutDayForm(
                                   initialName: workoutDaysScreenProvider

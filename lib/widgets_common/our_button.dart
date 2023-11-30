@@ -36,7 +36,7 @@ class LeadingIcon extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
         onTap: (){
           Navigator.pop(context);
         },
@@ -72,7 +72,7 @@ class trailingbutton extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.transparent,
 
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: Container(
             padding: EdgeInsets.all(8),

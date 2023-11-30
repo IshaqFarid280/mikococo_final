@@ -35,7 +35,7 @@ class _EditTimerScreenState extends State<EditTimerScreen> {
         actions: [
           AddThingsIcon(
             svgAsset: 'assets/svg/saveicon.svg',
-            svgColor: whiteColor,
+            svgColor: listTileEditColor,
             onTap: () async {
               // Save the edited values to Hive
               final timerValuesBox = Hive.box<TimerValues>('timerValues');

@@ -17,7 +17,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../consts/colors.dart';
 import '../module/models.dart';
-import '../setting/SettingProvider.dart';
 import '../widgets_common/our_button.dart';
 import 'add_routine.dart';
 
@@ -123,9 +122,8 @@ class MyRoutinesScreen extends StatelessWidget {
                 title: 'Sync',
                 ontap: () {},
               ),
-
               Container(
-                height: MediaQuery.of(context).size.height * 0.1,
+                height: MediaQuery.of(context).size.height * 0.16,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 38.0, right: 38),
@@ -133,7 +131,9 @@ class MyRoutinesScreen extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(10),
-                    onTap: () {},
+                    onTap: () {
+                      CustomMotionToast.showSuccessToast(context, 'This Feature will be implemented', 'in next milestone');
+                    },
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.05,
                       decoration: BoxDecoration(
@@ -265,13 +265,14 @@ class MyRoutinesScreen extends StatelessWidget {
                                   builder: (context) {
                                     return Theme(
                                       data: ThemeData(
-                                        canvasColor: Colors.black,
+                                        canvasColor: blackColor,
                                       ),
                                       child: AlertDialog(
                                         title: listTileText(
                                             title: 'Edit Routine',
                                             weight: FontWeight.w900),
-                                        backgroundColor: Colors.black,
+                                        backgroundColor: blackColor,
+                                        elevation: 10,
                                         content: EditRoutineForm(
                                           initialName: currentroutine.name,
                                           onEdit: (String newName) {

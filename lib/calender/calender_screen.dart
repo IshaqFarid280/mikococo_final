@@ -33,8 +33,14 @@ class _ShareScreenState extends State<ShareScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Share Exercise'),
+        leading: LeadingIcon(),
+        title: normalText(title: 'Share Exercise'),
       ),
+      bottomNavigationBar: SubmitButton(
+          onTap: () {
+            _shareExerciseData(_formatExerciseData());
+          },
+          titlee: 'Share Exercises', primaryColor: buttonColors),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -45,11 +51,7 @@ class _ShareScreenState extends State<ShareScreen> {
               SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
               _buildExerciseData(),
               SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
-              ourButton(
-                  onPressed: () {
-                    _shareExerciseData(_formatExerciseData());
-                  },
-                  title: 'Share Exercises'),
+
             ],
           ),
         ),

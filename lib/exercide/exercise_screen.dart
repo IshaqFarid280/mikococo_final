@@ -83,7 +83,7 @@ class ExercisesScreen extends StatelessWidget {
                           builder: (context) {
                             return AlertDialog(
                               backgroundColor: blackColor,
-                              elevation: 100,
+                              elevation: 10,
                               title: largeText(title: 'Edit Exercise'),
                               content: EditExerciseForm(
                                 initialName: exercisesScreenProvider.exercises[index].name,

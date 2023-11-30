@@ -37,7 +37,7 @@ class _TimerScreenState extends State<TimerScreen> {
         actions: [
           AddThingsIcon(
             svgAsset: 'assets/svg/editicon.svg',
-            svgColor: whiteColor,
+            svgColor: listTileEditColor,
             onTap: () async {
               _editTimer(context);
             },
@@ -51,7 +51,6 @@ class _TimerScreenState extends State<TimerScreen> {
             padding: const EdgeInsets.only(left: 16.0, top: 16),
             child: largeText(title: 'Timer Screen', weight: FontWeight.bold),
           ),
-
           Expanded(
             child: FutureBuilder(
               future: _loadTimerValues,
@@ -72,7 +71,7 @@ class _TimerScreenState extends State<TimerScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: TimerBottomNavigationBar(),
+      // bottomNavigationBar: TimerBottomNavigationBar(),
     );
   }
 
@@ -124,18 +123,20 @@ class TimerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _handleTimerTap(context),
+      onTap: () {
+        timerModel.handleTimerTap(context, index);
+        _handleTimerTap(context);
+      },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: timerModel.selectedBox == index ? goldenColor : Colors.grey,
         ),
-          width: MediaQuery.of(context).size.width*0.4,
-        height: MediaQuery.of(context).size.height*0.4,
+        width: MediaQuery.of(context).size.width * 0.4,
+        height: MediaQuery.of(context).size.height * 0.4,
         child: Center(
-          child: Text(
-            '${timerModel.currentValues[index]}s',
-            style: TextStyle(color: Colors.black, fontFamily: "Poppins", fontSize: 22, ),
+          child: largeText(
+            title: '${timerModel.currentValues[index]}s',
           ),
         ),
       ),
@@ -157,27 +158,23 @@ class TimerBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     var timerModel = Provider.of<TimerModel>(context);
 
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.stop),
-          label: 'Stop Timer',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.pause),
-          label: 'Pause Timer',
-        ),
-      ],
-      onTap: (index) => _handleBottomNavBarTap(index, timerModel),
+    return SubmitButton(
+      primaryColor: goldenColor,
+      onTap: () {
+        timerModel.stopTimer(timerModel.selectedBox);
+        Navigator.pop(context);
+      },
+      titlee: 'STOP',
     );
+
   }
 
-  void _handleBottomNavBarTap(int index, TimerModel timerModel) {
-    if (index == 0) {
-      timerModel.stopTimer(timerModel.selectedBox);
-    } else if (index == 1) {
-      // Handle the functionality for the second item (e.g., pause timer)
-      // Add your logic here
-    }
-  }
+  // void _handleBottomNavBarTap(int index, TimerModel timerModel) {
+  //   if (index == 0) {
+  //     timerModel.stopTimer(timerModel.selectedBox);
+  //   } else if (index == 1) {
+  //     // Handle the functionality for the second item (e.g., pause timer)
+  //     // Add your logic here
+  //   }
+  // }
 }
