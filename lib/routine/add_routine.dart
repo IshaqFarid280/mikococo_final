@@ -19,7 +19,7 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _desccontroller = TextEditingController();
   final TextEditingController leadingcontroller = TextEditingController();
-  Color _selectedColor = whiteColor; //initialize with  a default color
+  Color _selectedColor = greyColor; //initialize with  a default color
 
   String getHexCode(Color color) {
     return '#${color.value.toRadixString(16).substring(2)}';
@@ -31,10 +31,10 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
         builder: (context) {
           return Theme(
             data: ThemeData(
-              canvasColor: Colors.black,
+              canvasColor: leadingBtnColor,
             ),
             child: AlertDialog(
-              backgroundColor: Colors.black,
+              backgroundColor: leadingBtnColor,
               title: onewordTextFormField(controller: leadingcontroller, hint: 'Enter a Text, letter or symbol'),
               content: SingleChildScrollView(
                 child: Column(
@@ -62,23 +62,12 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
                               ))
                           .toList(),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ourButton(
-                            color: redColor,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            textColor: whiteColor,
-                            title: "Yes"),
-                        ourButton(
-                            color: redColor,
-                            onPressed: () {},
-                            textColor: whiteColor,
-                            title: "No"),
-                      ],
-                    )
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*0.02,
+                    ),
+                    SubmitButtonnoPadding(onTap: (){
+                      Navigator.of(context).pop();
+                    }, primaryColor: goldenColor, titlee: 'Submit',)
                   ],
                 ),
               ),
@@ -95,8 +84,13 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
           primaryColor: goldenColor,
           onTap: () {
             if (_controller.text.isNotEmpty &&
-                _desccontroller.text.isNotEmpty &&
-                leadingcontroller.text.isNotEmpty) {
+                _desccontroller.text.isNotEmpty ) {
+
+              if (leadingcontroller.text.isEmpty) {
+                // Set the first character of _controller to leadingcontroller
+                leadingcontroller.text = _controller.text.substring(0, 1);
+              }
+
               widget.onAdd(_controller.text, _desccontroller.text,
                   leadingcontroller.text, getHexCode(_selectedColor));
               print(getHexCode(_selectedColor));
@@ -128,7 +122,11 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
                     width: MediaQuery.of(context).size.width * .2,
                     child: Center(
                         child: Text(
-                      leadingcontroller.text.toUpperCase(),
+                      leadingcontroller.text.isNotEmpty
+                          ? leadingcontroller.text.toUpperCase()
+                          :_controller.text.isNotEmpty
+                          ? _controller.text.substring(0, 1).toUpperCase()
+                          : '',
                       style: TextStyle(
                         color: whiteColor,
                         fontWeight: FontWeight.w500,

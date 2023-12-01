@@ -120,7 +120,10 @@ class MyRoutinesScreen extends StatelessWidget {
               listTileDrawer(
                 assetsvg: 'assets/svg/sync.svg',
                 title: 'Sync',
-                ontap: () {},
+                ontap: () {
+                  CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
+
+                },
               ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.16,
