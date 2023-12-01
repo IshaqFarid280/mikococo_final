@@ -68,11 +68,14 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
           widget.pictures.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
+
             isAsset: false,
           ));
           widget.filteredPictures.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
         });
@@ -88,11 +91,13 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
           widget.demo.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
           widget.filteredDemo.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
         });
@@ -108,11 +113,13 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
           widget.triceps.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
           widget.filteredTriceps.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
         });
@@ -128,11 +135,13 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
           widget.biceps.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
           widget.filteredBiceps.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
         });
@@ -148,11 +157,13 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
           widget.chest.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
           widget.filteredChest.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
+            descriptionController.text.toString(),
             isAsset: false,
           ));
         });

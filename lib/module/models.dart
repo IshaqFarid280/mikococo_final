@@ -66,7 +66,10 @@ class AddingPictures extends HiveObject {
   @HiveField(1)
   String ? title;
 
-  AddingPictures({this.image,this.title});
+  @HiveField(2)
+  String ? description;
+
+  AddingPictures({this.image,this.title, this.description});
 }
 
 
@@ -79,7 +82,11 @@ class DemonPictures extends HiveObject {
   @HiveField(1)
   String ? title;
 
-  DemonPictures({this.image,this.title});
+
+  @HiveField(2)
+  String ? description;
+
+  DemonPictures({this.image,this.title, this.description});
 }
 
 
@@ -118,7 +125,11 @@ class TricepsModel extends HiveObject {
   @HiveField(1)
   String ? title;
 
-  TricepsModel({this.image,this.title});
+
+  @HiveField(2)
+  String ? description;
+
+  TricepsModel({this.image,this.title, this.description});
 }
 
 @HiveType(typeId: 8)
@@ -130,7 +141,11 @@ class BicepsModel extends HiveObject {
   @HiveField(1)
   String ? title;
 
-  BicepsModel({this.image,this.title});
+
+  @HiveField(2)
+  String ? description;
+
+  BicepsModel({this.image,this.title, this.description});
 }
 
 
@@ -143,7 +158,11 @@ class ChestModel extends HiveObject {
   @HiveField(1)
   String ? title;
 
-  ChestModel({this.image,this.title});
+
+  @HiveField(2)
+  String ? description;
+
+  ChestModel({this.image,this.title, this.description});
 }
 
 

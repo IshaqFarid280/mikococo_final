@@ -8,10 +8,10 @@ import '../widgets_common/text_widgets.dart';
 
 
 class SetsScreenTopListTile extends StatelessWidget {
-   SetsScreenTopListTile({required this.exerciseName,required this.exercisePath,});
-   final String  ? exerciseName ;
-   final String ? exercisePath ;
-   // final String goals ;
+  SetsScreenTopListTile({required this.exerciseName,required this.exercisePath,});
+  final String  ? exerciseName ;
+  final String ? exercisePath ;
+  // final String goals ;
   @override
   Widget build(BuildContext context) {
     return Container(

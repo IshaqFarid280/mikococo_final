@@ -66,6 +66,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
   List<int> getRepsData() {
     List<int> repsData = [];
     List<Map<String, dynamic>> setData = getSetData();
@@ -137,7 +138,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
     if (setKeys.isNotEmpty) {
       averageKg = totalKg / setKeys.length;
     }
-    calculateDailyTotals();
+   calculateDailyTotals();
     notifyListeners();
   }
 
@@ -172,14 +173,18 @@ class SetsScreenStateProvider extends ChangeNotifier {
     exercise?.sets?.remove(setKey);
     exercise?.save();
     loadSetKeys();
-    calculateStats();
+    Future.delayed(Duration.zero,(){
+      calculateStats();
+    });
   }
 
   void setExercise(Exercise newExercise) {
     exercise = newExercise;
     // Ensure sets is not null
     exercise?.sets ??= [];
-      notifyListeners();
+      Future.delayed(Duration.zero,(){
+        notifyListeners();
+      });
   }
 
   static SetsScreenStateProvider of(BuildContext context) {

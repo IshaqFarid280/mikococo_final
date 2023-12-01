@@ -152,9 +152,8 @@ class ExercisesNameListTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-      leading: Icon(Icons.fitness_center_outlined ,color: Colors.white,),
-      title:normalText(title: exercisesCategoryName,textSize:20.0),
-      tileColor: goldenColor,
+      title:normalText(title: exercisesCategoryName,textSize:16.0),
+      tileColor: buttonColors,
     );
   }
 }
@@ -295,14 +294,14 @@ class CustomSlider extends StatelessWidget {
                 SlidableAction(
                   onPressed: editOnPressed,
                   backgroundColor: greyColor,
-                  icon: Icons.brush_outlined,
+                  icon: Icons.edit
                 ),
                 // delete option
                 SlidableAction(
                   autoClose:true,
                   onPressed: deleteOnPressed,
                   backgroundColor: deleteColor,
-                  icon: Icons.delete_sweep_outlined,
+                  icon: Icons.delete,
                   borderRadius:const BorderRadius.only(
                     topRight: Radius.circular(15),
                     bottomRight: Radius.circular(15),

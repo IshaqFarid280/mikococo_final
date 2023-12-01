@@ -1,10 +1,12 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mikococo/sets/sets_scren_top_listTile.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mikococo/sets/sets_timer.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +74,46 @@ class _SetsScreenState extends State<SetsScreenContent> {
             scrollDirection: Axis.vertical,
             child: Column(
               children: [
-                SetsScreenTopListTile(exerciseName: _setsScreenStateProvider.exercise?.name,exercisePath:_setsScreenStateProvider.exercise!.image,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: ListTile(
+                  contentPadding:
+                  const EdgeInsets.only(left: 15, top: 5, bottom: 5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  title: normalText(
+                      title: _setsScreenStateProvider.exercise?.name,
+                      textSize: 18.0),
+                  tileColor: listTileLeadingColor,
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => DummyTimerScreen(exerciseName: exerciseName.toString(),exercisePath: exercisePath.toString(),)));
+                  },
+                  leading: _setsScreenStateProvider.exercise!.image.toString().toString().contains('assets/json')
+
+                    ? ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        child: Lottie.asset(
+                          _setsScreenStateProvider.exercise!.image.toString(),
+                          repeat: false,
+                        )))
+                    : ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image(
+                      fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.width * 0.15,
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      image: FileImage(File(_setsScreenStateProvider.exercise!.image.toString())) as ImageProvider,
+                    )),
+                ),
+              ),
+
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
                 ),
@@ -93,7 +134,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                                 .day) {
                       // Display date ListTile
                       final formattedDate =
-                          DateFormat('MMMM  d, yyyy').format(set.date!);
+                          DateFormat('MMMM d, yyyy').format(set.date!);
                       return Column(
                         children: [
                           SizedBox(
@@ -101,16 +142,58 @@ class _SetsScreenState extends State<SetsScreenContent> {
                           ),
                           Container(
                             alignment: Alignment.center,
-                            height: 35,
+                            height: MediaQuery.of(context).size.height*0.07,
                             width: MediaQuery.sizeOf(context).width * 0.85,
                             decoration: BoxDecoration(
                               color: buttonColors,
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: Center(
-                                child: listTileText(
-                              title: '$formattedDate    ${_setsScreenStateProvider.totalRepsDay} reps  x   ${_setsScreenStateProvider.totalKgDay} kgs'
-                            )),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+
+                                    children: [
+                                      Center(
+                                          child: listTileText(
+                                              title: DateFormat('MMM d').format(set.date!),
+                                            textSize: 14.0,
+
+                                      )),
+                                      // Vertical space between the two Text widgets
+                                      SizedBox(height: 1),
+
+                                      // Text for Year
+                                      listTileText(
+                                        title: DateFormat('yyyy').format(set.date!),
+                                        textSize: 14.0,
+                                      ),
+                                       ],
+                                  ),
+                                ),
+                                SizedBox(width: MediaQuery.of(context).size.width*0.081,),
+                                normalText(title: ' Total ', textSize: 16.0, color: whiteColor),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+
+                                  children: [
+                                    normalText(title:'${_setsScreenStateProvider.totalRepsDay}', textSize:12.0,color: skinColor),
+                                    normalText(title: ' reps ', textSize: 12.0, color: skinColor),
+                                  ],
+                                ),
+                                normalText(title: ' X ', textSize: 12.0, color: whiteColor),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [normalText(title: '${_setsScreenStateProvider.totalKgDay}', textSize:12.0,color: skinColor),
+                                    normalText(title: ' reps ', textSize: 12.0, color: skinColor),],
+                                )
+
+                              ],
+                            ),
                           ),
                           // Display set ListTile
                           SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
@@ -285,7 +368,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
         },
       ),
       bottomNavigationBar:
-          Consumer<TimerModel>(builder: (context, timerModel, _) {
+      Consumer<TimerModel>(builder: (context, timerModel, _) {
         return Container(
           height: MediaQuery.sizeOf(context).height * 0.065,
           decoration:const  BoxDecoration(
@@ -302,23 +385,23 @@ class _SetsScreenState extends State<SetsScreenContent> {
                         context,
                         CupertinoPageRoute(
                             builder: (context) => StatusScreen(
-                                  bestReps: _setsScreenStateProvider.bestReps
-                                      .toString(),
-                                  bestKg: _setsScreenStateProvider.bestKg
-                                      .toString(),
-                                  averageKg: _setsScreenStateProvider.averageKg
-                                      .toStringAsFixed(2),
-                                  totalReps: _setsScreenStateProvider.totalReps
-                                      .toString(),
-                                  totalKg: _setsScreenStateProvider.totalKg
-                                      .toString(),
-                                  exerciseName: _setsScreenStateProvider
-                                      .exercise!.name
-                                      .toString(),
-                                  exercisePath: _setsScreenStateProvider
-                                      .exercise!.image
-                                      .toString(),
-                                )));
+                              bestReps: _setsScreenStateProvider.bestReps
+                                  .toString(),
+                              bestKg: _setsScreenStateProvider.bestKg
+                                  .toString(),
+                              averageKg: _setsScreenStateProvider.averageKg
+                                  .toStringAsFixed(2),
+                              totalReps: _setsScreenStateProvider.totalReps
+                                  .toString(),
+                              totalKg: _setsScreenStateProvider.totalKg
+                                  .toString(),
+                              exerciseName: _setsScreenStateProvider
+                                  .exercise!.name
+                                  .toString(),
+                              exercisePath: _setsScreenStateProvider
+                                  .exercise!.image
+                                  .toString(),
+                            )));
                   },
                   icon: const Icon(
                     Icons.stacked_bar_chart_outlined,
@@ -332,7 +415,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                         CupertinoPageRoute(
                             builder: (context) => ChartScreen(
                                 repsData:
-                                    _setsScreenStateProvider.getRepsData(),
+                                _setsScreenStateProvider.getRepsData(),
                                 kgData: _setsScreenStateProvider.getKGData(),
                                 dates: _setsScreenStateProvider
                                     .getSetData()
@@ -366,55 +449,55 @@ class _SetsScreenState extends State<SetsScreenContent> {
                     IconButton(
                         onPressed: timerModel.isTimerRunning
                             ? () {
-                                if (timerModel.selectedBox != -1 &&
-                                    timerModel.timers[timerModel.selectedBox] !=
-                                        null &&
-                                    timerModel.timers[timerModel.selectedBox]!
-                                        .isActive) {
-                                  timerModel.stopTimer(timerModel.selectedBox);
-                                }
-                                timerModel.stopDummyTimer();
-                              }
+                          if (timerModel.selectedBox != -1 &&
+                              timerModel.timers[timerModel.selectedBox] !=
+                                  null &&
+                              timerModel.timers[timerModel.selectedBox]!
+                                  .isActive) {
+                            timerModel.stopTimer(timerModel.selectedBox);
+                          }
+                          timerModel.stopDummyTimer();
+                        }
                             : () {
-                                print(
-                                    'isDummy: ${timerModel.isDummy}, selectedBox: ${timerModel.selectedBox}');
+                          print(
+                              'isDummy: ${timerModel.isDummy}, selectedBox: ${timerModel.selectedBox}');
 
-                                if (timerModel.isDummy) {
-                                  print('Starting dummy timer');
-                                  timerModel.startDummyTimer(true);
-                                } else {
-                                  print('Starting or stopping the timer');
+                          if (timerModel.isDummy) {
+                            print('Starting dummy timer');
+                            timerModel.startDummyTimer(true);
+                          } else {
+                            print('Starting or stopping the timer');
 // Start or stop the timer in TimerScreen for the selected box
-                                  if (timerModel.selectedBox != -1) {
-                                    if (timerModel.timers[
-                                                timerModel.selectedBox] !=
-                                            null &&
-                                        timerModel
-                                            .timers[timerModel.selectedBox]!
-                                            .isActive) {
-                                      print('Stopping the timer');
-                                      timerModel
-                                          .stopTimer(timerModel.selectedBox);
-                                    } else {
-                                      print('Starting the timer');
+                            if (timerModel.selectedBox != -1) {
+                              if (timerModel.timers[
+                              timerModel.selectedBox] !=
+                                  null &&
+                                  timerModel
+                                      .timers[timerModel.selectedBox]!
+                                      .isActive) {
+                                print('Stopping the timer');
+                                timerModel
+                                    .stopTimer(timerModel.selectedBox);
+                              } else {
+                                print('Starting the timer');
 // Adjust the initial value as needed
-                                      timerModel.startTimer(
-                                          timerModel.selectedBox, 45);
-                                    }
-                                  }
-                                }
-                              },
+                                timerModel.startTimer(
+                                    timerModel.selectedBox, 45);
+                              }
+                            }
+                          }
+                        },
                         icon: timerModel.isTimerRunning
                             ? const Icon(
-                                Icons.stop_circle_outlined,
-                                color: buttonColors,
-                                size: 30,
-                              )
+                          Icons.stop_circle_outlined,
+                          color: buttonColors,
+                          size: 30,
+                        )
                             : const Icon(
-                                Icons.play_circle_outlined,
-                                color: iconColor,
-                                size: 30,
-                              )),
+                          Icons.play_circle_outlined,
+                          color: iconColor,
+                          size: 30,
+                        )),
                   ],
                 ),
               ),
@@ -467,7 +550,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                         print("Selected Reps: ${index + 1}");
                         selectedReps = index + 1;
                       },
-                      children: List.generate(100, (index) {
+                      children: List.generate(50, (index) {
                         return Center(
                             child: normalText(
                                 title: ('${index + 1}  reps').toString(),
@@ -498,8 +581,8 @@ class _SetsScreenState extends State<SetsScreenContent> {
               ),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.8,
-                child: ourButton(
-                  onPressed: () {
+                child: SubmitButton(
+                  onTap: () {
                     print("Add Set Pressed");
                     if (selectedReps != null && selectedKg != null) {
                       final set = SetsScreenData(
@@ -513,8 +596,8 @@ class _SetsScreenState extends State<SetsScreenContent> {
                     }
                     Navigator.of(context).pop();
                   },
-                  title: 'Validate the Set',
-                  textColor: whiteColor,
+                  titlee: 'Validate the Set',
+                  primaryColor: goldenColor,
                 ),
               ),
             ],
@@ -557,7 +640,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                           print("Edited Reps: ${index + 1}");
                           editedReps = index + 1;
                         },
-                        children: List.generate(100, (index) {
+                        children: List.generate(50, (index) {
                           return Center(
                               child: normalText(
                                   title: ('${index + 1}  reps').toString(),

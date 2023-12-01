@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
@@ -49,11 +51,13 @@ void main() async  {
         ChangeNotifierProvider(create: (context) => ExercisesScreenProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutDaysScreenProvider()),
         ChangeNotifierProvider(create: (context) => SwitchProvider()),
-
       ],
         child: MyApp(),
       )
   );
+
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
 
 Future<void> initializeDummyData() async {
@@ -71,9 +75,9 @@ Future<void> initializeDummyData() async {
   await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
   // Dummy Exercises
   final exercisesBox = Hive.box<Exercise>('ExercisesBox');
-  final exercise1 = Exercise('Push-ups',null,null);
-  final exercise2 = Exercise('Squats',null,null);
-  final exercise3 = Exercise('Pull-ups',null,null);
+  final exercise1 = Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null,);
+  final exercise2 = Exercise('Squats','assets/json/crunch a la poulie pour les obliques.json',null);
+  final exercise3 = Exercise('Pull-ups','assets/json/crunch a la poulie pour les obliques.json',null);
   await exercisesBox.addAll([exercise1, exercise2, exercise3]);
   // Link routines with workout days
   routine1.workoutDays.add(workoutDay1.key);
@@ -100,8 +104,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // builder: (context, widget) => ResponsiveWrapper.builder(
+      //     BouncingScrollWrapper.builder(context, widget!),
+      //     maxWidth: 1200,
+      //     minWidth: 450,
+      //     defaultScale: true,
+      //     breakpoints: [
+      //       const ResponsiveBreakpoint.resize(550, name: MOBILE),
+      //       const ResponsiveBreakpoint.autoScale(800, name: TABLET),
+      //       const ResponsiveBreakpoint.autoScale(1000, name: TABLET),
+      //       const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+      //       const ResponsiveBreakpoint.autoScale(2460, name: "4K"),
+      //     ],
+      // ),
       title: 'Flutter Demo',
-
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: ' ',
         appBarTheme:const  AppBarTheme(
