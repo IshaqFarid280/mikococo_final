@@ -6,6 +6,7 @@ import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/exercide/edit_exercise.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
 import 'package:mikococo/sets/SetsScreen.dart';
+import 'package:mikococo/widgets_common/emptybox.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:provider/provider.dart';
 import '../consts/colors.dart';
@@ -20,34 +21,9 @@ class ExercisesScreen extends StatelessWidget {
 
   ExercisesScreen(this.workoutDay);
 
-  // void deleteExercise(int index) {
-  //   final exerciseKey = widget.workoutDay.exercises[index];
-  //   Hive.box<Exercise>('ExercisesBox').deleteAt(exerciseKey);
-  //   widget.workoutDay.exercises.removeAt(index);
-  //   widget.workoutDay.save();
-  // }
-  // void updateExercise(int index, String newName) {
-  //   final exerciseKey = widget.workoutDay.exercises[index];
-  //   final exercise = Hive.box<Exercise>('ExercisesBox').get(exerciseKey);
-  //   if (exercise != null) {
-  //     exercise.name = newName;
-  //     exercise.save();
-  //   }
-  // }
-  //
-  // void addExerciseToWorkout(Exercise exercise) {
-  //   setState(() {
-  //     widget.workoutDay.exercises.add(exercise.key);
-  //     widget.workoutDay.save();
-  //   });
-  //
-  // }
 
   Widget build(BuildContext context) {
-    // var exercisesBox = Hive.box<Exercise>('ExercisesBox');
-    // List<Exercise> exercises = exercisesBox.values
-    //     .where((exercise) => widget.workoutDay.exercises.contains(exercise.key))
-    //     .toList();
+
     var exercisesScreenProvider = Provider.of<ExercisesScreenProvider>(context);
     exercisesScreenProvider.setWorkoutDay(workoutDay);
     return Scaffold(
@@ -55,17 +31,27 @@ class ExercisesScreen extends StatelessWidget {
         leading: LeadingIcon(),
         centerTitle: true,
         title: normalText(title:appName),
-        // title: normalText(title: 'Exercise ${workoutDay.name}'),
       ),
       body: Consumer<ExercisesScreenProvider>(
         builder: (context, exercisesScreenProvider, _){
+          if (exercisesScreenProvider.exercises.isEmpty) {
+            // If there are no routines, display a message
+            return emptyBox(
+                svgPicture: 'assets/svg/emptybox.svg',
+                largetexttitle: 'No items',
+                normaltexttitle:
+                "You don't have any Exercises. Add a Exercise using the '+' button.");
+          }
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                normalText(title: 'Exercise ( ${workoutDay.name} )',textSize: 20.0,weight: FontWeight.w400),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0, top: 8),
+                  child: normalText(title: 'Exercise ( ${workoutDay.name} )',textSize: 20.0,weight: FontWeight.w400),
+                ),
                 SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
                 ListView.builder(
                   shrinkWrap: true,
@@ -96,7 +82,9 @@ class ExercisesScreen extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('Edit Exercise'),
+                              backgroundColor: blackColor,
+                              elevation: 10,
+                              title: largeText(title: 'Edit Exercise'),
                               content: EditExerciseForm(
                                 initialName: exercisesScreenProvider.exercises[index].name,
                                 onEdit: (String newName) {
@@ -104,6 +92,9 @@ class ExercisesScreen extends StatelessWidget {
                                   Navigator.of(context).pop();
                                 },
                               ),
+                              contentPadding:
+                              const EdgeInsets.symmetric(
+                                  horizontal: 15),
                             );
                           },
                         );

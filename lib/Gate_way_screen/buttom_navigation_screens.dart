@@ -85,7 +85,6 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           selectedItemColor: listTileColor,
-          // currentIndex: _selectedindexx,
           unselectedItemColor: listTileColor,
           backgroundColor: blackColor,
           onTap: _onItemTapped,

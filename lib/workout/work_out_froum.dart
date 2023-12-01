@@ -105,6 +105,7 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: LeadingIcon(),
         title: largeText(title: 'Add New Workout'),
       ),

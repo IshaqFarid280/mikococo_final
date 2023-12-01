@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/setting/SettingProvider.dart';
+import 'package:mikococo/setting/SoundModel.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
+import 'package:provider/provider.dart';
 
 
 Widget ourButton({ onPressed, color = buttonColors, textColor, String? title}) {
@@ -33,7 +36,7 @@ class LeadingIcon extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
         onTap: (){
           Navigator.pop(context);
         },
@@ -41,10 +44,10 @@ class LeadingIcon extends StatelessWidget {
           height: MediaQuery.sizeOf(context).height *0.01,
           width:MediaQuery.sizeOf(context).width *0.01,
           decoration: BoxDecoration(
-            color: leadingBtnColor,
+            color: listTileColor,
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Center(child: Icon(icon,color:whiteColor,),),
+          child: Center(child: Icon(icon,color:listTileEditColor,),),
         ),
       ),
     );
@@ -58,7 +61,7 @@ class trailingbutton extends StatelessWidget {
   final VoidCallback onTap;
 
   const trailingbutton({
-    super.key, this.svgAsset,  this.svgColor = whiteColor, required this.onTap,
+    super.key, this.svgAsset,  this.svgColor = listTileColor, required this.onTap,
   });
 
   @override
@@ -67,7 +70,9 @@ class trailingbutton extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
 
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        splashColor: Colors.transparent,
+
+        borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: Container(
             padding: EdgeInsets.all(8),
@@ -190,7 +195,39 @@ class SubmitButton extends StatelessWidget {
     );
   }
 }
+class SubmitButtonnoPadding extends StatelessWidget {
+  final VoidCallback onTap;
+  final String? titlee;
+  final Color? primaryColor;
 
+  const SubmitButtonnoPadding({super.key, required this.onTap,  this.titlee,  this.primaryColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width*1,
+      height: MediaQuery.of(context).size.height*0.06,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20)
+      ),
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+            primary: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            )
+        ),
+        child: AutoSizeText(titlee!, style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontFamily: "Poppins",
+            fontWeight: FontWeight.w800
+        ),),
+      ),
+    );
+  }
+}
 class floatingActionButton extends StatelessWidget {
   final VoidCallback onTap;
   final Color colors ;

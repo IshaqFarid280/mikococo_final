@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/timer/timer_screen.dart';
 import '../module/models.dart';
 
 class TimerModel extends ChangeNotifier {
@@ -14,8 +17,30 @@ class TimerModel extends ChangeNotifier {
   bool isDummy = true ;
    Timer  ? _timer;
    bool isTimerRunning = false ;
-  
 
+  void handleTimerTap(BuildContext context, int index) {
+    // Stop any running timer
+    stopTimer(selectedBox);
+
+    // Set the selected box to the current timer button
+    selectedBox = index;
+
+    // Set the current values for the selected box
+    currentValues[selectedBox] = timerValues[selectedBox];
+
+    // Start the timer for the selected box
+    startTimer(selectedBox, currentValues[selectedBox]);
+
+    // Show the bottom navigation bar
+    showModalBottomSheet(
+      backgroundColor: transparentColor,
+      elevation: 0.0,
+      context: context,
+      builder: (BuildContext context) {
+        return TimerBottomNavigationBar();
+      },
+    );
+  }
 
   void playTimerReachedZeroSound() {
     AssetsAudioPlayer().open(

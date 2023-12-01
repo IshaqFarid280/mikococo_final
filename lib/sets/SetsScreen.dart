@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
@@ -60,6 +60,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
     exercisePath = _setsScreenStateProvider.exercise!.image;
     return Scaffold(
       appBar: AppBar(
+        leading: LeadingIcon(),
         centerTitle: true,
         title: normalText(title: appName),
       ),
@@ -92,7 +93,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                                 .day) {
                       // Display date ListTile
                       final formattedDate =
-                          DateFormat('MMMM d, yyyy').format(set.date!);
+                          DateFormat('MMMM  d, yyyy').format(set.date!);
                       return Column(
                         children: [
                           SizedBox(
@@ -101,14 +102,14 @@ class _SetsScreenState extends State<SetsScreenContent> {
                           Container(
                             alignment: Alignment.center,
                             height: 35,
-                            width: MediaQuery.sizeOf(context).width * 0.5,
+                            width: MediaQuery.sizeOf(context).width * 0.85,
                             decoration: BoxDecoration(
                               color: buttonColors,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Center(
                                 child: listTileText(
-                              title: formattedDate,
+                              title: '$formattedDate    ${_setsScreenStateProvider.totalRepsDay} reps  x   ${_setsScreenStateProvider.totalKgDay} kgs'
                             )),
                           ),
                           // Display set ListTile
@@ -287,7 +288,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
           Consumer<TimerModel>(builder: (context, timerModel, _) {
         return Container(
           height: MediaQuery.sizeOf(context).height * 0.065,
-          decoration: BoxDecoration(
+          decoration:const  BoxDecoration(
             color: listTileLeadingColor,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10), topLeft: Radius.circular(10)),
@@ -321,7 +322,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                   },
                   icon: const Icon(
                     Icons.stacked_bar_chart_outlined,
-                    color: buttonColors,
+                    color: iconColor,
                     size: 30,
                   )),
               IconButton(
@@ -340,7 +341,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                   },
                   icon: const Icon(
                     Icons.poll_outlined,
-                    color: buttonColors,
+                    color: iconColor,
                     size: 30,
                   )),
               Container(
@@ -348,7 +349,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                 width: MediaQuery.sizeOf(context).width * 0.45,
                 decoration: BoxDecoration(
                   color: listTileColor,
-                  border: Border.all(color: buttonColors),
+                  border: Border.all(color: timerModel.isTimerRunning ? buttonColors : iconColor),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
@@ -406,7 +407,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                         icon: timerModel.isTimerRunning
                             ? const Icon(
                                 Icons.stop_circle_outlined,
-                                color: iconColor,
+                                color: buttonColors,
                                 size: 30,
                               )
                             : const Icon(
@@ -426,7 +427,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                   },
                   icon: const Icon(
                     Icons.more_time_outlined,
-                    color: buttonColors,
+                    color: iconColor,
                     size: 30,
                   )),
             ],
@@ -466,7 +467,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                         print("Selected Reps: ${index + 1}");
                         selectedReps = index + 1;
                       },
-                      children: List.generate(50, (index) {
+                      children: List.generate(100, (index) {
                         return Center(
                             child: normalText(
                                 title: ('${index + 1}  reps').toString(),
@@ -556,7 +557,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                           print("Edited Reps: ${index + 1}");
                           editedReps = index + 1;
                         },
-                        children: List.generate(50, (index) {
+                        children: List.generate(100, (index) {
                           return Center(
                               child: normalText(
                                   title: ('${index + 1}  reps').toString(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../module/models.dart';
@@ -13,6 +14,11 @@ class SetsScreenStateProvider extends ChangeNotifier {
   int bestKg = 0;
   double averageKg = 0.0;
   Exercise? exercise;
+  int totalRepsDay = 0 ;
+  int totalKgDay = 0 ;
+  // New properties to track daily totals
+  Map<String, int> dailyRepsMap = {};
+  Map<String, int> dailyKgMap = {};
 
   SetsScreenStateProvider(this.exercise) {
     _initializeSetsBox();
@@ -33,6 +39,33 @@ class SetsScreenStateProvider extends ChangeNotifier {
     return date.isAfter(now.subtract(Duration(days: 30))) && date.isBefore(now);
   }
 
+  void calculateDailyTotals() {
+    dailyRepsMap.clear();
+    dailyKgMap.clear();
+
+    List<Map<String, dynamic>> setData = getSetData();
+
+    for (var data in setData) {
+      final DateTime? date = data['date'] as DateTime?;
+      final int? reps = data['reps'] as int?;
+      final double? kg = data['kg'] as double?;
+
+      if (date != null && reps != null && kg != null) {
+        final String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
+        dailyRepsMap[formattedDate] ??= 0;
+        dailyKgMap[formattedDate] ??= 0;
+
+        dailyRepsMap[formattedDate] = (dailyRepsMap[formattedDate] ?? 0) + reps;
+        dailyKgMap[formattedDate] = (dailyKgMap[formattedDate] ?? 0) + kg.round();
+      }
+    }
+
+    totalRepsDay = dailyRepsMap.values.fold(0, (sum, reps) => sum + reps);
+    totalKgDay = dailyKgMap.values.fold(0, (sum, kg) => sum + kg);
+
+    notifyListeners();
+  }
   List<int> getRepsData() {
     List<int> repsData = [];
     List<Map<String, dynamic>> setData = getSetData();
@@ -104,7 +137,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
     if (setKeys.isNotEmpty) {
       averageKg = totalKg / setKeys.length;
     }
-
+    calculateDailyTotals();
     notifyListeners();
   }
 
@@ -125,6 +158,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
 
     loadSetKeys();
     calculateStats();
+    calculateDailyTotals();
   }
 
   void editSet(int setKey, SetsScreenData editedSet) {
