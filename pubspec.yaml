@@ -51,6 +51,8 @@ dependencies:
   url_launcher: ^6.2.1
   flutter_switch: ^0.3.2
   motion_toast:
+  lottie: ^2.7.0
+  responsive_framework: ^0.1.7
 #  audioplayers:
 
 

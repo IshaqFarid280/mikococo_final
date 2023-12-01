@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
@@ -54,6 +56,9 @@ void main() async  {
         child: MyApp(),
       )
   );
+
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
 
 Future<void> initializeDummyData() async {
@@ -100,8 +105,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // builder: (context, widget) => ResponsiveWrapper.builder(
+      //     BouncingScrollWrapper.builder(context, widget!),
+      //     maxWidth: 1200,
+      //     minWidth: 450,
+      //     defaultScale: true,
+      //     breakpoints: [
+      //       const ResponsiveBreakpoint.resize(550, name: MOBILE),
+      //       const ResponsiveBreakpoint.autoScale(800, name: TABLET),
+      //       const ResponsiveBreakpoint.autoScale(1000, name: TABLET),
+      //       const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+      //       const ResponsiveBreakpoint.autoScale(2460, name: "4K"),
+      //     ],
+      // ),
       title: 'Flutter Demo',
-
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: ' ',
         appBarTheme:const  AppBarTheme(

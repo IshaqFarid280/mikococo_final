@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 
@@ -59,11 +61,37 @@ class ExerciseStatusContainer extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                largeText(title: exerciseName,textSize:24.0),
-                const  SizedBox(height:15,),
-                normalText(title: 'All Rounds Included',textSize: 16.0,weight: FontWeight.w300,),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*0.43,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        largeText(
+                          title: getImageTitleLine(exerciseName, 0),
+                          color: whiteColor,
+                          textSize: 20.0,
+                        ),
+                        SizedBox(height: 8),
+                        largeText(
+                          title: getImageTitleLine(exerciseName, 1),
+                          color: goldenColor,
+                          textSize: 18.0,
+                        ),
+                        SizedBox(height: 8),
+                        largeText(
+                          title: getImageTitleLine(exerciseName, 2),
+                          color: whiteColor,
+                          textSize: 18.0,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -75,11 +103,73 @@ class ExerciseStatusContainer extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: listTileLeadingColor,
-                image: DecorationImage(image:exerciseImagePath.contains('assets/images') ? AssetImage(exerciseImagePath.toString(),) : FileImage(File(exerciseImagePath.toString()),) as ImageProvider,isAntiAlias: true,fit: BoxFit.cover) ,
+
               ),
+            child:     exerciseImagePath.contains('assets/json')
+                ? Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                clipBehavior: Clip.antiAlias,
+                width:MediaQuery.sizeOf(context).width * 0.35,
+                height:140,
+                child: Lottie.asset(
+                  exerciseImagePath.toString(),
+                  repeat: false,
+                  fit: BoxFit.cover,
+                ))
+                : Container(
+                clipBehavior: Clip.antiAlias,
+                width:MediaQuery.sizeOf(context).width * 0.35,
+                height:140,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    isAntiAlias:true,
+                    image: FileImage(File(
+                        exerciseImagePath.toString())) as ImageProvider,
+                  ),)
+            ),
               ),
+
+
+          // exerciseImagePath.contains('assets/json')
+          //     ? Container(
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(8),
+          //     ),
+          //     clipBehavior: Clip.antiAlias,
+          //     width:MediaQuery.sizeOf(context).width * 0.35,
+          //     height:140,
+          //     child: Lottie.asset(
+          //       exerciseImagePath.toString(),
+          //       repeat: false,
+          //       fit: BoxFit.cover,
+          //     ))
+          //     : Container(
+          //     clipBehavior: Clip.antiAlias,
+          //     width:MediaQuery.sizeOf(context).width * 0.35,
+          //     height:140,
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(10),
+          //       image: DecorationImage(
+          //         isAntiAlias:true,
+          //         image: FileImage(File(
+          //             exerciseImagePath.toString())) as ImageProvider,
+          //       ),)
+          // ),
         ],
       ),
     );
+  }
+  String getImageTitleLine(String? title, int lineIndex) {
+    if (title == null) return '';
+    final words = title.split(' ');
+
+    final start = lineIndex * 2;
+    if (start >= words.length) return ''; // Check if start index is out of bounds
+
+    final end = (lineIndex + 1) * 2;
+    return words.sublist(start, min(end, words.length)).join(' ');
   }
 }

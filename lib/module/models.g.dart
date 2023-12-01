@@ -148,17 +148,20 @@ class AddingPicturesAdapter extends TypeAdapter<AddingPictures> {
     return AddingPictures(
       image: fields[0] as String?,
       title: fields[1] as String?,
+      description: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, AddingPictures obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
-      ..write(obj.title);
+      ..write(obj.title)
+      ..writeByte(2)
+      ..write(obj.description);
   }
 
   @override
@@ -185,17 +188,20 @@ class DemonPicturesAdapter extends TypeAdapter<DemonPictures> {
     return DemonPictures(
       image: fields[0] as String?,
       title: fields[1] as String?,
+      description: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, DemonPictures obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
-      ..write(obj.title);
+      ..write(obj.title)
+      ..writeByte(2)
+      ..write(obj.description);
   }
 
   @override
@@ -299,17 +305,20 @@ class TricepsModelAdapter extends TypeAdapter<TricepsModel> {
     return TricepsModel(
       image: fields[0] as String?,
       title: fields[1] as String?,
+      description: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TricepsModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
-      ..write(obj.title);
+      ..write(obj.title)
+      ..writeByte(2)
+      ..write(obj.description);
   }
 
   @override
@@ -336,17 +345,20 @@ class BicepsModelAdapter extends TypeAdapter<BicepsModel> {
     return BicepsModel(
       image: fields[0] as String?,
       title: fields[1] as String?,
+      description: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, BicepsModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
-      ..write(obj.title);
+      ..write(obj.title)
+      ..writeByte(2)
+      ..write(obj.description);
   }
 
   @override
@@ -373,17 +385,20 @@ class ChestModelAdapter extends TypeAdapter<ChestModel> {
     return ChestModel(
       image: fields[0] as String?,
       title: fields[1] as String?,
+      description: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ChestModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
-      ..write(obj.title);
+      ..write(obj.title)
+      ..writeByte(2)
+      ..write(obj.description);
   }
 
   @override

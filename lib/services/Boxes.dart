@@ -22,6 +22,7 @@ class ImageItem {
   String imagePath;
   bool isAsset;
   String  ? title;
+  String  ? description;
 
-  ImageItem(this.imagePath,  this.title ,{this.isAsset = false,});
+  ImageItem(  this.imagePath,  this.title, this.description ,{this.isAsset = false,});
 }

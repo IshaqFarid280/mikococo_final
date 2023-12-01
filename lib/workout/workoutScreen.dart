@@ -100,8 +100,7 @@ class WorkoutDaysScreen extends StatelessWidget {
                           ),
                           title: listTileText(
                               title: workoutDaysScreenProvider
-                                  .workoutDays[index].name
-                                  .toUpperCase(),
+                                  .workoutDays[index].name,
                               textSize: 18.0),
                           onTap: () {
                             Navigator.of(context).push(

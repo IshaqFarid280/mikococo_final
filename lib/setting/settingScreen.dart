@@ -235,265 +235,278 @@ class SettingScreen extends StatelessWidget {
       body: Consumer<SwitchProvider>(
         builder: (context, switchProvider, _) {
           return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 8, top: 12),
-                  child: normalText(title: 'Setting', textSize: 14.0),
-                ),
-                Container(
-                  color: listTileColor,
-                  child: Column(
-                    children: [
-                      ListTile(
-                        onTap: () {},
-                        leading: SvgPicture.asset(
-                          'assets/svg/keyboard.svg',
-                          width: 15,
-                          height: 18,
-                          color: whiteColor,
-                        ),
-
-                        trailing: Container(
-                          width: 80,
-                          child: FlutterSwitch(
-                            width: 65.0,
-                            height: 30.0,
-                            valueFontSize: 12.0,
-                            toggleSize: 20.0,
-                            value: switchProvider.status,
-                            borderRadius: 20.0,
-                            padding: 6.0,
-                            showOnOff: true,
-                            onToggle: (val) {
-                              switchProvider.toggleSwitch(context, val);
-                            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0, right: 8, top: 12, bottom: 4),
+                    child: normalText(title: 'Setting', textSize: 14.0),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6.0),
+                      color: listTileColor,
+                    ),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          onTap: () {},
+                          leading: SvgPicture.asset(
+                            'assets/svg/keyboard.svg',
+                            width: 15,
+                            height: 18,
+                            color: whiteColor,
                           ),
-                        ),
-                        title: Padding(
-                          padding: const EdgeInsets.only(left: 2.0, right: 2),
-                          child: Text(
-                            'Use the Roller Mode',
-                            style: TextStyle(
-                              color: whiteColor,
-                              fontSize: 14,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.bold,
+
+                          trailing: Container(
+                            width: 80,
+                            child: FlutterSwitch(
+                              width: 65.0,
+                              height: 30.0,
+                              valueFontSize: 12.0,
+                              toggleSize: 20.0,
+                              value: switchProvider.status,
+                              borderRadius: 20.0,
+                              padding: 6.0,
+                              showOnOff: true,
+                              onToggle: (val) {
+                                switchProvider.toggleSwitch(context, val);
+                              },
+                            ),
+                          ),
+                          title: Padding(
+                            padding: const EdgeInsets.only(left: 2.0, right: 2),
+                            child: Text(
+                              'Use the Roller Mode',
+                              style: TextStyle(
+                                color: whiteColor,
+                                fontSize: 14,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      settingListDrawer(
-                        ontap: () {
-                          _showUnitSelectionDialog(context);
-                        },
-                        assetsvg: 'assets/svg/weight.svg',
-                        title: 'Weight',
-                        subtitle: switchProvider.selectedUnit,
-                      ),
-                      settingListDrawer(
-                        ontap: () {
-                          _showSoundSelectionDialog(context);
-                        },
-                        assetsvg: 'assets/svg/notification.svg',
-                        title: 'Notification Sound',
-                        // subtitle: switchProvider.selectedSound?.name ??
-                        //     'Select a Sound',
-                        subtitle: 'Beep 1',
-                      ),
-                    ],
+                        settingListDrawer(
+                          ontap: () {
+                            _showUnitSelectionDialog(context);
+                          },
+                          assetsvg: 'assets/svg/weight.svg',
+                          title: 'Weight',
+                          subtitle: switchProvider.selectedUnit,
+                        ),
+                        settingListDrawer(
+                          ontap: () {
+                            _showSoundSelectionDialog(context);
+                          },
+                          assetsvg: 'assets/svg/notification.svg',
+                          title: 'Notification Sound',
+                          // subtitle: switchProvider.selectedSound?.name ??
+                          //     'Select a Sound',
+                          subtitle: 'Beep 1',
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 8,
-                    top: 12,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 4.0,
+                      right: 8,
+                      top: 12,
+                      bottom: 4
+                    ),
+                    child: normalText(title: 'Data', textSize: 14.0),
                   ),
-                  child: normalText(title: 'Data', textSize: 14.0),
-                ),
-                Container(
-                  color: listTileColor,
-                  child: Column(
-                    children: [
-                      listTileDrawer(
-                        ontap: () {
-                          CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6.0),
+                      color: listTileColor,
+                    ),
+                    child: Column(
+                      children: [
+                        listTileDrawer(
+                          ontap: () {
+                            CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
 
-                        },
-                        assetsvg: 'assets/svg/importDB.svg',
-                        title: 'Import Database',
-                      ),
-                      listTileDrawer(
-                        ontap: () {
-                          CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
+                          },
+                          assetsvg: 'assets/svg/importDB.svg',
+                          title: 'Import Database',
+                        ),
+                        listTileDrawer(
+                          ontap: () {
+                            CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
 
-                        },
-                        assetsvg: 'assets/svg/exportDB.svg',
-                        title: 'Export Database',
-                      ),
-                      listTileDrawer(
-                        ontap: () {
-                          CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
+                          },
+                          assetsvg: 'assets/svg/exportDB.svg',
+                          title: 'Export Database',
+                        ),
+                        listTileDrawer(
+                          ontap: () {
+                            CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
 
-                        },
-                        assetsvg: 'assets/svg/exportcsv.svg',
-                        title: 'Export CSV',
-                      ),
-                    ],
+                          },
+                          assetsvg: 'assets/svg/exportcsv.svg',
+                          title: 'Export CSV',
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 8, top: 12),
-                  child: normalText(title: 'About', textSize: 14.0),
-                ),
-                Container(
-                  color: listTileColor,
-                  child: Column(
-                    children: [
-                      listTileDrawer(
-                        ontap: () {
-                          return _openMap();
-                        },
-                        assetsvg: 'assets/svg/star.svg',
-                        title: 'Rate this app',
-                      ),
-                      listTileDrawer(
-                        ontap: () {
-                          return _Share();
-                        },
-                        assetsvg: 'assets/svg/share.svg',
-                        title: 'Share app',
-                      ),
-                      listTileDrawer(
-                        ontap: () {
-                          showDialog(context: context, builder: (context) {
-                            return Theme(
-                              data: ThemeData(
-                                canvasColor: leadingBtnColor,
-                              ),
-                              child: AlertDialog(
-
-                                backgroundColor: leadingBtnColor,
-                                title: normalText(title: 'Preference for ads',
-                                    color: whiteColor,
-                                    textSize: 18.0),
-                                content: normalText(title:
-                                'In its free use, this app will display advertising managed by Google and its partners. you can now choose whether or not you want to receive custom ads based on your browsing preferences. you can change your choice at any time in the preferences.',
-                                    color: whiteColor,
-                                    textSize: 12.0
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0, right: 8, top: 12, bottom: 4),
+                    child: normalText(title: 'About', textSize: 14.0),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6.0),
+                      color: listTileColor,
+                    ),
+                    child: Column(
+                      children: [
+                        listTileDrawer(
+                          ontap: () {
+                            return _openMap();
+                          },
+                          assetsvg: 'assets/svg/star.svg',
+                          title: 'Rate this app',
+                        ),
+                        listTileDrawer(
+                          ontap: () {
+                            return _Share();
+                          },
+                          assetsvg: 'assets/svg/share.svg',
+                          title: 'Share app',
+                        ),
+                        listTileDrawer(
+                          ontap: () {
+                            showDialog(context: context, builder: (context) {
+                              return Theme(
+                                data: ThemeData(
+                                  canvasColor: leadingBtnColor,
                                 ),
-                                actions: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0, right: 8.0, top: 18),
-                                    child: SubmitButtonnoPadding(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      titlee: 'Accept',
-                                      primaryColor: goldenColor,
-                                    ),
+                                child: AlertDialog(
+
+                                  backgroundColor: leadingBtnColor,
+                                  title: normalText(title: 'Preference for ads',
+                                      color: whiteColor,
+                                      textSize: 18.0),
+                                  content: normalText(title:
+                                  'In its free use, this app will display advertising managed by Google and its partners. you can now choose whether or not you want to receive custom ads based on your browsing preferences. you can change your choice at any time in the preferences.',
+                                      color: whiteColor,
+                                      textSize: 12.0
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0,
-                                        right: 8.0,
-                                        bottom: 18,
-                                        top: 10),
-                                    child: InkWell(
-                                      child: normalText(
-                                          title: 'No, I want to see non-personalized ads ',
-                                          color: whiteColor,
-                                          textSize: 8.0),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
+                                  actions: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8.0, top: 18),
+                                      child: SubmitButtonnoPadding(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        titlee: 'Accept',
+                                        primaryColor: goldenColor,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0,
+                                          right: 8.0,
+                                          bottom: 18,
+                                          top: 10),
+                                      child: InkWell(
+                                        child: normalText(
+                                            title: 'No, I want to see non-personalized ads ',
+                                            color: whiteColor,
+                                            textSize: 8.0),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+
                                     ),
 
+                                  ],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6.0),
                                   ),
-
-                                ],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0),
+                                  titlePadding: EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 25),
+                                  actionsPadding: EdgeInsets.only(
+                                      top: 10, left: 10, right: 10),
+                                  actionsAlignment: MainAxisAlignment.center,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
                                 ),
-                                titlePadding: EdgeInsets.symmetric(
-                                    horizontal: 25, vertical: 15),
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 25),
-                                actionsPadding: EdgeInsets.only(
-                                    top: 10, left: 10, right: 10),
-                                actionsAlignment: MainAxisAlignment.center,
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                              ),
-                            );
-                          });
-                        },
-                        assetsvg: 'assets/svg/preferenceforads.svg',
-                        title: 'Preference for ads',
-                      ),
-                      listTileDrawer(
-                        ontap: () async {
-                          const facebookProfileUrl = 'https://www.google.com';
-                          _launchYoutubeVideo(facebookProfileUrl);
-                        },
-                        assetsvg: 'assets/svg/prvacypolicy.svg',
-                        title: 'Privacy Policy',
-                      ),
-                      listTileDrawer(
-                        ontap: () {
-                          showDialog(context: context, builder: (context) {
-                            return Theme(
-                              data: ThemeData(
-                                canvasColor: leadingBtnColor,
-                              ),
-                              child: AlertDialog(
-
-                                backgroundColor: leadingBtnColor,
-                                title: normalText(title: 'About',
-                                    color: whiteColor,
-                                    textSize: 18.0),
-                                content: normalText(title:
-                                'App Version: 5.0.018 (500000018) - 400.0\nYou can contact us at contact@carnatdemusulation.fr for any information, suggestion or problem encountered. The images contained in the application are subject to copyright and a usage license. Any reuse on your part is Strictly prohibited.',
-                                    color: whiteColor,
-                                    textSize: 12.0
+                              );
+                            });
+                          },
+                          assetsvg: 'assets/svg/preferenceforads.svg',
+                          title: 'Preference for ads',
+                        ),
+                        listTileDrawer(
+                          ontap: () async {
+                            const facebookProfileUrl = 'https://www.google.com';
+                            _launchYoutubeVideo(facebookProfileUrl);
+                          },
+                          assetsvg: 'assets/svg/prvacypolicy.svg',
+                          title: 'Privacy Policy',
+                        ),
+                        listTileDrawer(
+                          ontap: () {
+                            showDialog(context: context, builder: (context) {
+                              return Theme(
+                                data: ThemeData(
+                                  canvasColor: leadingBtnColor,
                                 ),
-                                actions: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0,
-                                        right: 8.0,
-                                        bottom: 18,
-                                        top: 10),
-                                    child: SubmitButtonnoPadding(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      titlee: 'Ok',
-                                      primaryColor: goldenColor,
+                                child: AlertDialog(
+
+                                  backgroundColor: leadingBtnColor,
+                                  title: normalText(title: 'About',
+                                      color: whiteColor,
+                                      textSize: 18.0),
+                                  content: normalText(title:
+                                  'App Version: 5.0.018 (500000018) - 400.0\nYou can contact us at contact@carnatdemusulation.fr for any information, suggestion or problem encountered. The images contained in the application are subject to copyright and a usage license. Any reuse on your part is Strictly prohibited.',
+                                      color: whiteColor,
+                                      textSize: 12.0
+                                  ),
+                                  actions: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0,
+                                          right: 8.0,
+                                          bottom: 18,
+                                          top: 10),
+                                      child: SubmitButtonnoPadding(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        titlee: 'Ok',
+                                        primaryColor: goldenColor,
+                                      ),
                                     ),
+                                  ],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6.0),
                                   ),
-                                ],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0),
+                                  titlePadding: EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 15),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 25),
+                                  actionsPadding: EdgeInsets.only(
+                                      top: 10, left: 10, right: 10),
+                                  actionsAlignment: MainAxisAlignment.center,
                                 ),
-                                titlePadding: EdgeInsets.symmetric(
-                                    horizontal: 25, vertical: 15),
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 25),
-                                actionsPadding: EdgeInsets.only(
-                                    top: 10, left: 10, right: 10),
-                                actionsAlignment: MainAxisAlignment.center,
-                              ),
-                            );
-                          });
-                        },
-                        assetsvg: 'assets/svg/aboutus.svg',
-                        title: 'About Us',
-                      ),
-                    ],
+                              );
+                            });
+                          },
+                          assetsvg: 'assets/svg/aboutus.svg',
+                          title: 'About Us',
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         })

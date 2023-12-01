@@ -25,63 +25,70 @@ class HomeScreenProvider extends ChangeNotifier {
     // Load user-added images from Hive and append them to the pictures list
     final box = BoxesClass.getData();
     final pictureListUserImages = box.values.map((value) =>
-        ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
+        ImageItem(value.image.toString(), value.title.toString(), value.description.toString(), isAsset: false)).toList();
     // Load user-added images from Hive and append them to the pictures list
     final demoBox = BoxesClass.getDemoData();
     final demoListUserImages = demoBox.values.map((value) =>
-        ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
+        ImageItem(value.image.toString(), value.title.toString(), value.description.toString(),  isAsset: false)).toList();
     // Load user-added images from Hive and append them to the triceps list
     final tricepsBox = BoxesClass.getTricepsData();
     final tricepsListUserImages = tricepsBox.values.map((value) =>
-        ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
+        ImageItem(value.image.toString(), value.title.toString(), value.description.toString(), isAsset: false)).toList();
     // Load user-added images from Hive and append them to the biceps list
     final bicepsBox = BoxesClass.getBicepsData();
     final bicepsListUserImages = bicepsBox.values.map((value) =>
-        ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
+        ImageItem(value.image.toString(), value.title.toString(), value.description.toString(), isAsset: false)).toList();
     // Load user-added images from Hive and append them to the chest list
     final chestBox = BoxesClass.getChestData();
     final chestListUserImages = chestBox.values.map((value) =>
-        ImageItem(value.image.toString(), value.title.toString(), isAsset: false)).toList();
+        ImageItem(value.image.toString(), value.title.toString(), value.description.toString(), isAsset: false)).toList();
     // Initialize filteredPictures with the combined list of assets and Hive data
     pictures.addAll(pictureListUserImages);
     pictures.addAll([
-      ImageItem('assets/json/crunch.json', 'Goku', isAsset: true),
-      ImageItem('assets/images/demon1.gif', 'Vegeta', isAsset: true),
-      ImageItem('assets/images/demon2.gif', 'Rengoku', isAsset: true),
-      ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
-      ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
+      ImageItem('assets/json/crunch a la poulie pour les obliques.json', 'Pulley Crunch For Obliques', 'The kneeling cable oblique crunch is an effective exercise for working the obliques with constant resistance. It helps develop a toned and strong waist, while improving core stability and posture. The advantage of this exercise is that you can change the weights quickly and therefore do pyramid series by gradually increasing the load.', isAsset: true, ),
+      ImageItem('assets/json/crunch poulie haute exercice musculation.json', 'Crunch High Pulley Exercise Bodybuilding', "While there's nothing inherently wrong with doing a weighted crunch, holding a disc across your chest or behind your head can be uncomfortable and cumbersome. And the more strength you gain, the more difficult it will be to add weight without risking crushing your ribcage or putting strain on your neck.\nHere's why it's time to move on to the cable kneeling crunch. Using a machine equipped with a pulley allows you to add weight using a pin, and the constant tension of the cable means your abdominal muscles have to work hard at every moment during the exercise, making this exercise more effective than the classic crunch.", isAsset: true),
+      ImageItem('assets/json/flexions laterales poulie basse.json', 'lateral Flexions Low Pulley', "Low pulley side bends are simply a variation of the side bend typically performed with dumbbells. This exercise is commonly used to develop the oblique muscles of the abdominal girdle. \nStrengthening the obliques has several benefits, including improved mobility, reduced risk of injury, improved physical performance, improved stability and improved posture. \nNamely, whichever hand you hold the handle with, the opposite side is used. For example, if you hold the handle in your left hand, the right side is worked and vice versa.", isAsset: true),
+      ImageItem('assets/json/rotation buste debout poulie.json', 'Rotation Bust Standing Pulley',"Empty", isAsset: true),
+      ImageItem('assets/json/rotation buste elastique pallof press.json', 'Rotation Elastic Bust Pallof Press', "empty", isAsset: true),
+      ImageItem('assets/json/russian twist poulie.json', 'Russian Twist Pulley', "This variation of Russian twists will be the centerpiece of your training program to strengthen your abs!\nRussian pulley rotations (on a Swiss ball) are a unique exercise that you won't often see practiced in your gym. Maybe you've never even done it yourself. However, it has advantages and is an excellent variation for working the obliques.\nAnd since it is a functional exercise, it will help you perform better overall in any sporting activity.", isAsset: true),
+      // ImageItem('assets/images/', '', isAsset: true),
+
     ]);
     demo.addAll(demoListUserImages);
     demo.addAll([
-      ImageItem('assets/images/demon.gif', 'Goku', isAsset: true),
-      ImageItem('assets/images/demon1.gif', 'Vegeta', isAsset: true),
-      ImageItem('assets/images/demon2.gif', 'Rengoku', isAsset: true),
-      ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
-      ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
+      ImageItem('assets/json/crunch a la poulie pour les obliques.json', 'Pulley Crunch For Obliques', 'The kneeling cable oblique crunch is an effective exercise for working the obliques with constant resistance. It helps develop a toned and strong waist, while improving core stability and posture. The advantage of this exercise is that you can change the weights quickly and therefore do pyramid series by gradually increasing the load.', isAsset: true, ),
+      ImageItem('assets/json/crunch poulie haute exercice musculation.json', 'Crunch High Pulley Exercise Bodybuilding', "While there's nothing inherently wrong with doing a weighted crunch, holding a disc across your chest or behind your head can be uncomfortable and cumbersome. And the more strength you gain, the more difficult it will be to add weight without risking crushing your ribcage or putting strain on your neck.\nHere's why it's time to move on to the cable kneeling crunch. Using a machine equipped with a pulley allows you to add weight using a pin, and the constant tension of the cable means your abdominal muscles have to work hard at every moment during the exercise, making this exercise more effective than the classic crunch.", isAsset: true),
+      ImageItem('assets/json/flexions laterales poulie basse.json', 'lateral Flexions Low Pulley', "Low pulley side bends are simply a variation of the side bend typically performed with dumbbells. This exercise is commonly used to develop the oblique muscles of the abdominal girdle. \nStrengthening the obliques has several benefits, including improved mobility, reduced risk of injury, improved physical performance, improved stability and improved posture. \nNamely, whichever hand you hold the handle with, the opposite side is used. For example, if you hold the handle in your left hand, the right side is worked and vice versa.", isAsset: true),
+      ImageItem('assets/json/rotation buste debout poulie.json', 'Rotation Bust Standing Pulley',"Empty", isAsset: true),
+      ImageItem('assets/json/rotation buste elastique pallof press.json', 'Rotation Elastic Bust Pallof Press', "empty", isAsset: true),
+      ImageItem('assets/json/russian twist poulie.json', 'Russian Twist Pulley', "This variation of Russian twists will be the centerpiece of your training program to strengthen your abs!\nRussian pulley rotations (on a Swiss ball) are a unique exercise that you won't often see practiced in your gym. Maybe you've never even done it yourself. However, it has advantages and is an excellent variation for working the obliques.\nAnd since it is a functional exercise, it will help you perform better overall in any sporting activity.", isAsset: true),
     ]);
     triceps.addAll(tricepsListUserImages);
     triceps.addAll([
-      ImageItem('assets/images/demon.gif', 'Goku', isAsset: true),
-      ImageItem('assets/images/demon1.gif', 'Vegeta', isAsset: true),
-      ImageItem('assets/images/demon2.gif', 'Rengoku', isAsset: true),
-      ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
-      ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
+      ImageItem('assets/json/crunch a la poulie pour les obliques.json', 'Pulley Crunch For Obliques', 'The kneeling cable oblique crunch is an effective exercise for working the obliques with constant resistance. It helps develop a toned and strong waist, while improving core stability and posture. The advantage of this exercise is that you can change the weights quickly and therefore do pyramid series by gradually increasing the load.', isAsset: true, ),
+      ImageItem('assets/json/crunch poulie haute exercice musculation.json', 'Crunch High Pulley Exercise Bodybuilding', "While there's nothing inherently wrong with doing a weighted crunch, holding a disc across your chest or behind your head can be uncomfortable and cumbersome. And the more strength you gain, the more difficult it will be to add weight without risking crushing your ribcage or putting strain on your neck.\nHere's why it's time to move on to the cable kneeling crunch. Using a machine equipped with a pulley allows you to add weight using a pin, and the constant tension of the cable means your abdominal muscles have to work hard at every moment during the exercise, making this exercise more effective than the classic crunch.", isAsset: true),
+      ImageItem('assets/json/flexions laterales poulie basse.json', 'lateral Flexions Low Pulley', "Low pulley side bends are simply a variation of the side bend typically performed with dumbbells. This exercise is commonly used to develop the oblique muscles of the abdominal girdle. \nStrengthening the obliques has several benefits, including improved mobility, reduced risk of injury, improved physical performance, improved stability and improved posture. \nNamely, whichever hand you hold the handle with, the opposite side is used. For example, if you hold the handle in your left hand, the right side is worked and vice versa.", isAsset: true),
+      ImageItem('assets/json/rotation buste debout poulie.json', 'Rotation Bust Standing Pulley',"Empty", isAsset: true),
+      ImageItem('assets/json/rotation buste elastique pallof press.json', 'Rotation Elastic Bust Pallof Press', "empty", isAsset: true),
+      ImageItem('assets/json/russian twist poulie.json', 'Russian Twist Pulley', "This variation of Russian twists will be the centerpiece of your training program to strengthen your abs!\nRussian pulley rotations (on a Swiss ball) are a unique exercise that you won't often see practiced in your gym. Maybe you've never even done it yourself. However, it has advantages and is an excellent variation for working the obliques.\nAnd since it is a functional exercise, it will help you perform better overall in any sporting activity.", isAsset: true),
     ]);
     biceps.addAll(bicepsListUserImages);
     biceps.addAll([
-      ImageItem('assets/images/demon.gif', 'Goku', isAsset: true),
-      ImageItem('assets/images/demon1.gif', 'Vegeta', isAsset: true),
-      ImageItem('assets/images/demon2.gif', 'Rengoku', isAsset: true),
-      ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
-      ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
+      ImageItem('assets/json/crunch a la poulie pour les obliques.json', 'Pulley Crunch For Obliques', 'The kneeling cable oblique crunch is an effective exercise for working the obliques with constant resistance. It helps develop a toned and strong waist, while improving core stability and posture. The advantage of this exercise is that you can change the weights quickly and therefore do pyramid series by gradually increasing the load.', isAsset: true, ),
+      ImageItem('assets/json/crunch poulie haute exercice musculation.json', 'Crunch High Pulley Exercise Bodybuilding', "While there's nothing inherently wrong with doing a weighted crunch, holding a disc across your chest or behind your head can be uncomfortable and cumbersome. And the more strength you gain, the more difficult it will be to add weight without risking crushing your ribcage or putting strain on your neck.\nHere's why it's time to move on to the cable kneeling crunch. Using a machine equipped with a pulley allows you to add weight using a pin, and the constant tension of the cable means your abdominal muscles have to work hard at every moment during the exercise, making this exercise more effective than the classic crunch.", isAsset: true),
+      ImageItem('assets/json/flexions laterales poulie basse.json', 'lateral Flexions Low Pulley', "Low pulley side bends are simply a variation of the side bend typically performed with dumbbells. This exercise is commonly used to develop the oblique muscles of the abdominal girdle. \nStrengthening the obliques has several benefits, including improved mobility, reduced risk of injury, improved physical performance, improved stability and improved posture. \nNamely, whichever hand you hold the handle with, the opposite side is used. For example, if you hold the handle in your left hand, the right side is worked and vice versa.", isAsset: true),
+      ImageItem('assets/json/rotation buste debout poulie.json', 'Rotation Bust Standing Pulley',"Empty", isAsset: true),
+      ImageItem('assets/json/rotation buste elastique pallof press.json', 'Rotation Elastic Bust Pallof Press', "empty", isAsset: true),
+      ImageItem('assets/json/russian twist poulie.json', 'Russian Twist Pulley', "This variation of Russian twists will be the centerpiece of your training program to strengthen your abs!\nRussian pulley rotations (on a Swiss ball) are a unique exercise that you won't often see practiced in your gym. Maybe you've never even done it yourself. However, it has advantages and is an excellent variation for working the obliques.\nAnd since it is a functional exercise, it will help you perform better overall in any sporting activity.", isAsset: true),
     ]);
     chest.addAll(chestListUserImages);
     chest.addAll([
-      ImageItem('assets/images/demon.gif', 'Goku', isAsset: true),
-      ImageItem('assets/images/demon1.gif', 'Vegeta', isAsset: true),
-      ImageItem('assets/images/demon2.gif', 'Rengoku', isAsset: true),
-      ImageItem('assets/images/goku.gif', 'Tangero', isAsset: true),
-      ImageItem('assets/images/vegeta.gif', 'Tomia', isAsset: true),
+      ImageItem('assets/json/crunch a la poulie pour les obliques.json', 'Pulley Crunch For Obliques', 'The kneeling cable oblique crunch is an effective exercise for working the obliques with constant resistance. It helps develop a toned and strong waist, while improving core stability and posture. The advantage of this exercise is that you can change the weights quickly and therefore do pyramid series by gradually increasing the load.', isAsset: true, ),
+      ImageItem('assets/json/crunch poulie haute exercice musculation.json', 'Crunch High Pulley Exercise Bodybuilding', "While there's nothing inherently wrong with doing a weighted crunch, holding a disc across your chest or behind your head can be uncomfortable and cumbersome. And the more strength you gain, the more difficult it will be to add weight without risking crushing your ribcage or putting strain on your neck.\nHere's why it's time to move on to the cable kneeling crunch. Using a machine equipped with a pulley allows you to add weight using a pin, and the constant tension of the cable means your abdominal muscles have to work hard at every moment during the exercise, making this exercise more effective than the classic crunch.", isAsset: true),
+      ImageItem('assets/json/flexions laterales poulie basse.json', 'lateral Flexions Low Pulley', "Low pulley side bends are simply a variation of the side bend typically performed with dumbbells. This exercise is commonly used to develop the oblique muscles of the abdominal girdle. \nStrengthening the obliques has several benefits, including improved mobility, reduced risk of injury, improved physical performance, improved stability and improved posture. \nNamely, whichever hand you hold the handle with, the opposite side is used. For example, if you hold the handle in your left hand, the right side is worked and vice versa.", isAsset: true),
+      ImageItem('assets/json/rotation buste debout poulie.json', 'Rotation Bust Standing Pulley',"Empty", isAsset: true),
+      ImageItem('assets/json/rotation buste elastique pallof press.json', 'Rotation Elastic Bust Pallof Press', "empty", isAsset: true),
+      ImageItem('assets/json/russian twist poulie.json', 'Russian Twist Pulley', "This variation of Russian twists will be the centerpiece of your training program to strengthen your abs!\nRussian pulley rotations (on a Swiss ball) are a unique exercise that you won't often see practiced in your gym. Maybe you've never even done it yourself. However, it has advantages and is an excellent variation for working the obliques.\nAnd since it is a functional exercise, it will help you perform better overall in any sporting activity.", isAsset: true),
     ]);
     // Initialize filteredPictures with the combined list
     filteredPictures = List.from(pictures);
@@ -132,35 +139,6 @@ class HomeScreenProvider extends ChangeNotifier {
     return pickedFile?.path;
   }
 
-  void editPicture(int index, String newTitle, String? newImagePath) {
-    final box = BoxesClass.getData();
-    final pictureToEdit = pictures[index];
-
-    // Check if the picture is from user-added data or asset, and edit accordingly
-    if (pictureToEdit.isAsset) {
-      pictures[index] = ImageItem(
-        pictureToEdit.imagePath,
-        newTitle,
-        isAsset: true,
-      );
-      filteredPictures = List.from(pictures);
-      notifyListeners();
-    } else {
-      final updatedPicture = AddingPictures(
-        image: newImagePath ?? pictureToEdit.imagePath,
-        title: newTitle,
-      );
-      box.put(pictureToEdit.imagePath, updatedPicture);
-      pictures[index] = ImageItem(
-        updatedPicture.image!,
-        updatedPicture.title!,
-        isAsset: false,
-      );
-      filteredPictures = List.from(pictures);
-      notifyListeners();
-    }
-  }
-//
 
   List<ImageItem> pictures = [];
   List<ImageItem> filteredPictures = [];

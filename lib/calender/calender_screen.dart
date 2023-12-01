@@ -65,13 +65,20 @@ class _ShareScreenState extends State<ShareScreen> {
       daysOfWeekVisible: true,
       headerVisible: true,
       headerStyle: HeaderStyle(
+        leftChevronIcon: Icon(Icons.arrow_back_ios,color: whiteColor,size: 15,),
+        rightChevronIcon:Icon(Icons.arrow_forward_ios,color: whiteColor,size: 15,),
+        headerMargin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+            color: listTileLeadingColor),
         titleCentered: true,
         formatButtonDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: goldenColor),
+            borderRadius: BorderRadius.circular(10), color: buttonColors),
         formatButtonShowsNext: true,
         formatButtonVisible: true,
+        formatButtonTextStyle: TextStyle(color: whiteColor),
         titleTextStyle: TextStyle(
-            color: goldenColor, fontSize: 16, fontWeight: FontWeight.bold),
+            color: whiteColor, fontSize: 16, fontWeight: FontWeight.bold),
       ),
       daysOfWeekStyle: const DaysOfWeekStyle(
         weekdayStyle: TextStyle(color: buttonColors),
@@ -139,7 +146,7 @@ class _ShareScreenState extends State<ShareScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
-        normalText(title: exerciseData, textSize: 14.0),
+        smallText(title: exerciseData,weight: FontWeight.bold),
       ],
     );
   }
