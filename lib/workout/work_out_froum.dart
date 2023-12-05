@@ -16,9 +16,8 @@ class AddWorkoutDayForm extends StatefulWidget {
 
 class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
   final TextEditingController _workoutNameController = TextEditingController();
-  final TextEditingController leadingworkoutcontroller =
-      TextEditingController();
-  Color _selectedworkoutColor = whiteColor; //initialize with  a default color
+  final TextEditingController leadingworkoutcontroller = TextEditingController();
+  Color _selectedworkoutColor = greyColor; //initialize with  a default color
   int _selectedColorIndex = 0;
 
   String getHexCodeWorkout(Color color) {
@@ -76,23 +75,12 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
                         );
                       }).toList(),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ourButton(
-                            color: redColor,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            textColor: whiteColor,
-                            title: "Yes"),
-                        ourButton(
-                            color: redColor,
-                            onPressed: () {},
-                            textColor: whiteColor,
-                            title: "No"),
-                      ],
-                    )
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*0.02,
+                    ),
+                    SubmitButtonnoPadding(onTap: (){
+                      Navigator.of(context).pop();
+                    }, primaryColor: goldenColor, titlee: 'Submit',)
                   ],
                 ),
               ),
@@ -113,8 +101,11 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
           titlee: 'Add Workout',
           primaryColor: goldenColor,
           onTap: () {
-            if (_workoutNameController.text.isNotEmpty &&
-                leadingworkoutcontroller.text.isNotEmpty) {
+            if (_workoutNameController.text.isNotEmpty) {
+              if(leadingworkoutcontroller.text.isNotEmpty){
+// Set the first character of _controller to leadingcontroller
+                leadingworkoutcontroller.text = _workoutNameController.text.substring(0, 1);
+              }
               widget.onAdd(
                   _workoutNameController.text,
                   leadingworkoutcontroller.text,
@@ -142,7 +133,11 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
                       width: MediaQuery.of(context).size.width * .2,
                       child: Center(
                           child: Text(
-                        leadingworkoutcontroller.text.toUpperCase(),
+                        leadingworkoutcontroller.text.isNotEmpty
+                          ?leadingworkoutcontroller.text.toUpperCase()
+                              :_workoutNameController.text.isNotEmpty
+                      ?_workoutNameController.text.substring(0, 1).toUpperCase()
+                  : '',
                         style: TextStyle(
                           color: whiteColor,
                           fontWeight: FontWeight.w500,
