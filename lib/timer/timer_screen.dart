@@ -129,13 +129,15 @@ class TimerButton extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: timerModel.selectedBox == index ? goldenColor : Colors.grey,
+          border: Border.all(color:timerModel.selectedBox == index ? iconColor : buttonColors,width:timerModel.selectedBox == index ? 4: 2),
+          borderRadius: BorderRadius.circular(15),
+          color: timerModel.selectedBox == index ? buttonColors : listTileLeadingColor,
         ),
         width: MediaQuery.of(context).size.width * 0.4,
         height: MediaQuery.of(context).size.height * 0.4,
         child: Center(
           child: largeText(
+            textSize:timerModel.selectedBox == index ? 28.0 : 20.0,
             title: '${timerModel.currentValues[index]}s',
           ),
         ),
@@ -159,7 +161,7 @@ class TimerBottomNavigationBar extends StatelessWidget {
     var timerModel = Provider.of<TimerModel>(context);
 
     return SubmitButton(
-      primaryColor: goldenColor,
+      primaryColor: buttonColors,
       onTap: () {
         timerModel.stopTimer(timerModel.selectedBox);
         Navigator.pop(context);

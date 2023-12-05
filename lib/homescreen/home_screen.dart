@@ -132,8 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           print('imageURl : ${imageItem.imagePath}');
                                           print('setName : ${imageItem.title.toString()}');
                                         });
-                                        Navigator.pop(context);
-                                        Navigator.push(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
+                                        Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                       },) : Container(height: 5,width: 5,),
                                       onTap: (){
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
@@ -204,7 +203,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               print('imageURlFile: ${imageItem.imagePath}');
                                             }
                                           });
-                                          Navigator.pop(context);
                                           Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                         },) : Container(height: 5,width: 5,),
                                         onTap: (){
@@ -278,7 +276,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               print('imageURlFile: ${imageItem.imagePath}');
                                             }
                                           });
-                                          Navigator.pop(context);
                                           Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                         },) : Container(height: 5,width: 5,),
                                         onTap: (){
@@ -352,7 +349,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               print('imageURlFile: ${imageItem.imagePath}');
                                             }
                                           });
-                                          Navigator.pop(context);
                                           Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                         },) : Container(height: 5,width: 5,),
                                         onTap: (){
@@ -426,7 +422,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               print('imageURlFile: ${imageItem.imagePath}');
                                             }
                                           });
-                                          Navigator.pop(context);
                                           Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
                                         },) : Container(height: 5,width: 5,),
                                         onTap: (){

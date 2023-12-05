@@ -30,7 +30,7 @@ void main() async  {
   Hive.registerAdapter(TricepsModelAdapter());
   Hive.registerAdapter(BicepsModelAdapter());
   Hive.registerAdapter(ChestModelAdapter());
-  await Hive.openBox<AddingPictures>('Pictures');
+  await Hive.openBox<AddingPictures>('Pictures', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<DemonPictures>('Demo');
   await Hive.openBox<TricepsModel>('triceps');
   await Hive.openBox<BicepsModel>('biceps');
@@ -51,7 +51,6 @@ void main() async  {
         ChangeNotifierProvider(create: (context) => ExercisesScreenProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutDaysScreenProvider()),
         ChangeNotifierProvider(create: (context) => SwitchProvider()),
-
       ],
         child: MyApp(),
       )
@@ -76,7 +75,7 @@ Future<void> initializeDummyData() async {
   await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
   // Dummy Exercises
   final exercisesBox = Hive.box<Exercise>('ExercisesBox');
-  final exercise1 = Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null);
+  final exercise1 = Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null,);
   final exercise2 = Exercise('Squats','assets/json/crunch a la poulie pour les obliques.json',null);
   final exercise3 = Exercise('Pull-ups','assets/json/crunch a la poulie pour les obliques.json',null);
   await exercisesBox.addAll([exercise1, exercise2, exercise3]);

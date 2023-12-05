@@ -66,12 +66,12 @@ class _EditTimerScreenState extends State<EditTimerScreen> {
                   decoration: BoxDecoration(
                     color: leadingBtnColor,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: goldenColor)
+                    border: Border.all(color: buttonColors)
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      normalText(title: 'Timer ${index + 1}: '),
+                      normalText(title: 'Timer ${index + 1}  : '),
                       IconButton(
                         icon: Icon(Icons.remove, color: whiteColor,),
                         onPressed: () {
