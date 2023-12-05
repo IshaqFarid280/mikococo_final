@@ -125,6 +125,11 @@ class _SetsScreenState extends State<SetsScreenContent> {
                     final setIndex = index;
                     final setKey = _setsScreenStateProvider.setKeys[setIndex];
                     final set = box.get(setKey)!;
+                    final String currentFormattedDate = DateFormat('MMMM d, yyyy').format(set.date!);
+                    final int totalReps =
+                        _setsScreenStateProvider.totalDailyRepsMap[currentFormattedDate] ?? 0;
+                    final int totalKg =
+                        _setsScreenStateProvider.totalDailyKgMap[currentFormattedDate] ?? 0;
                     if (setIndex == 0 ||
                         set.date!.day !=
                             box
@@ -181,15 +186,18 @@ class _SetsScreenState extends State<SetsScreenContent> {
                                   mainAxisAlignment: MainAxisAlignment.center,
 
                                   children: [
-                                    normalText(title:'${_setsScreenStateProvider.totalRepsDay}', textSize:12.0,color: skinColor),
+                                    normalText(title: '$totalReps', textSize:12.0,color: skinColor),
+                                   // normalText(title:'${_setsScreenStateProvider.totalDailyReps}', textSize:12.0,color: skinColor),
                                     normalText(title: ' reps ', textSize: 12.0, color: skinColor),
                                   ],
                                 ),
                                 normalText(title: ' X ', textSize: 12.0, color: whiteColor),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [normalText(title: '${_setsScreenStateProvider.totalKgDay}', textSize:12.0,color: skinColor),
-                                    normalText(title: ' reps ', textSize: 12.0, color: skinColor),],
+                                  children: [
+                                    normalText(title: '$totalKg', textSize:12.0,color: skinColor),
+                                  //  normalText(title: '${_setsScreenStateProvider.totalDailyKg}', textSize:12.0,color: skinColor),
+                                    normalText(title: ' kg ', textSize: 12.0, color: skinColor),],
                                 )
 
                               ],

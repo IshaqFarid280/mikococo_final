@@ -14,11 +14,11 @@ class SetsScreenStateProvider extends ChangeNotifier {
   int bestKg = 0;
   double averageKg = 0.0;
   Exercise? exercise;
-  int totalRepsDay = 0 ;
-  int totalKgDay = 0 ;
+  int totalDailyReps = 0 ;
+  int totalDailyKg = 0 ;
   // New properties to track daily totals
-  Map<String, int> dailyRepsMap = {};
-  Map<String, int> dailyKgMap = {};
+  Map<String, int> totalDailyRepsMap = {};
+  Map<String, int> totalDailyKgMap = {};
 
   SetsScreenStateProvider(this.exercise) {
     _initializeSetsBox();
@@ -39,33 +39,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
     return date.isAfter(now.subtract(Duration(days: 30))) && date.isBefore(now);
   }
 
-  void calculateDailyTotals() {
-    dailyRepsMap.clear();
-    dailyKgMap.clear();
 
-    List<Map<String, dynamic>> setData = getSetData();
-
-    for (var data in setData) {
-      final DateTime? date = data['date'] as DateTime?;
-      final int? reps = data['reps'] as int?;
-      final double? kg = data['kg'] as double?;
-
-      if (date != null && reps != null && kg != null) {
-        final String formattedDate = DateFormat('yyyy-MM-dd').format(date);
-
-        dailyRepsMap[formattedDate] ??= 0;
-        dailyKgMap[formattedDate] ??= 0;
-
-        dailyRepsMap[formattedDate] = (dailyRepsMap[formattedDate] ?? 0) + reps;
-        dailyKgMap[formattedDate] = (dailyKgMap[formattedDate] ?? 0) + kg.round();
-      }
-    }
-
-    totalRepsDay = dailyRepsMap.values.fold(0, (sum, reps) => sum + reps);
-    totalKgDay = dailyKgMap.values.fold(0, (sum, kg) => sum + kg);
-
-    notifyListeners();
-  }
 
   List<int> getRepsData() {
     List<int> repsData = [];
@@ -89,6 +63,45 @@ class SetsScreenStateProvider extends ChangeNotifier {
     return kgData;
   }
 
+  void calculateDailyTotals() {
+    totalDailyRepsMap.clear();
+    totalDailyKgMap.clear();
+
+    List<Map<String, dynamic>> setData = getSetData();
+    DateTime now = DateTime.now();
+    final DateFormat displayFormat = DateFormat('MMMM d, yyyy');
+
+    for (var data in setData) {
+      final DateTime? date = data['date'] as DateTime?;
+      final int? reps = data['reps'] as int?;
+      final double? kg = data['kg'] as double?;
+
+      if (date != null && reps != null && kg != null) {
+        final String formattedDate = displayFormat.format(date);
+
+        totalDailyRepsMap[formattedDate] ??= 0;
+        totalDailyKgMap[formattedDate] ??= 0;
+
+        totalDailyRepsMap[formattedDate] = (totalDailyRepsMap[formattedDate] ?? 0) + reps;
+        totalDailyKgMap[formattedDate] = (totalDailyKgMap[formattedDate] ?? 0) + kg.round();
+      }
+    }
+
+    // Add print statements
+    print('calculateDailyTotals - totalDailyRepsMap: $totalDailyRepsMap');
+    print('calculateDailyTotals - totalDailyKgMap: $totalDailyKgMap');
+
+    // Clear overall daily totals
+    totalDailyReps = 0;
+    totalDailyKg = 0;
+
+    // Calculate the overall daily totals for the current date
+    final String currentFormattedDate = displayFormat.format(now);
+    totalDailyReps = totalDailyRepsMap[currentFormattedDate] ?? 0;
+    totalDailyKg = totalDailyKgMap[currentFormattedDate] ?? 0;
+
+    notifyListeners();
+  }
   List<Map<String, dynamic>> getSetData() {
     List<Map<String, dynamic>> setData = [];
     DateTime now = DateTime.now();
@@ -106,8 +119,34 @@ class SetsScreenStateProvider extends ChangeNotifier {
         }
       }
     }
+
+    // Add print statements
+    print('getSetData - setData: $setData');
+
     return setData;
   }
+
+
+
+  // List<Map<String, dynamic>> getSetData() {
+  //   List<Map<String, dynamic>> setData = [];
+  //   DateTime now = DateTime.now();
+  //
+  //   for (int setKey in setKeys) {
+  //     final set = setsBox.get(setKey);
+  //     if (set != null && set.date != null) {
+  //       // Check if the set date is within the last month
+  //       if (isWithinLastMonth(set.date!, now)) {
+  //         setData.add({
+  //           'date': set.date!,
+  //           'reps': set.reps,
+  //           'kg': set.kg,
+  //         });
+  //       }
+  //     }
+  //   }
+  //   return setData;
+  // }
 
   void loadSetKeys() {
     setKeys.clear();
