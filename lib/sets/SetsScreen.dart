@@ -8,6 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mikococo/sets/sets_timer.dart';
+import 'package:mikococo/timer/timer_screen.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:provider/provider.dart';
 import '../charts/charts_screen.dart';
@@ -195,7 +196,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    normalText(title: '$totalKg', textSize:12.0,color: skinColor),
+                                    normalText(title: '${totalKg} ', textSize:12.0,color: skinColor),
                                   //  normalText(title: '${_setsScreenStateProvider.totalDailyKg}', textSize:12.0,color: skinColor),
                                     normalText(title: ' kg ', textSize: 12.0, color: skinColor),],
                                 )
@@ -447,13 +448,18 @@ class _SetsScreenState extends State<SetsScreenContent> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    normalText(
-                        title: timerModel.selectedBox != -1
-                            ? '00: ${timerModel.currentValues[timerModel.selectedBox]}s'
-                            : '00: ${timerModel.dummyTimerValue}',
-                        color: timerModel.isTimerRunning
-                            ? buttonColors
-                            : whiteColor),
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(context, CupertinoPageRoute(builder: (context)=> TimerScreen()));
+                      },
+                      child: normalText(
+                          title: timerModel.selectedBox != -1
+                              ? '00: ${timerModel.currentValues[timerModel.selectedBox]}s'
+                              : '00: ${timerModel.dummyTimerValue}',
+                          color: timerModel.isTimerRunning
+                              ? buttonColors
+                              : whiteColor),
+                    ),
                     IconButton(
                         onPressed: timerModel.isTimerRunning
                             ? () {

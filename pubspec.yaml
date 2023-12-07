@@ -53,6 +53,7 @@ dependencies:
   motion_toast:
   lottie: ^2.7.0
   responsive_framework: ^0.1.7
+  in_app_purchase: ^3.1.11
 #  audioplayers:
 
 
