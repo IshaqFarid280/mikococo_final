@@ -20,6 +20,26 @@ class Routine extends HiveObject {
   List<int> workoutDays;
 
   Routine(this.name,  this.description, this.leadingword, this.avatarColor, this.workoutDays);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'description': description,
+      'leadingword': leadingword,
+      'avatarColor': avatarColor,
+      'workoutDays': workoutDays,
+    };
+  }
+
+  factory Routine.fromJson(Map<String, dynamic> json) {
+    return Routine(
+      json['name'],
+      json['description'],
+      json['leadingword'],
+      json['avatarColor'],
+      List<int>.from(json['workoutDays']),
+    );
+  }
 }
 
 
@@ -38,6 +58,24 @@ class WorkoutDay extends HiveObject {
   List<int> exercises;
 
   WorkoutDay(this.name, this.leadingword, this.avatarColors,  this.exercises);
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'leadingword': leadingword,
+      'avatarColors': avatarColors,
+      'exercises': exercises,
+    };
+  }
+
+  factory WorkoutDay.fromJson(Map<String, dynamic> json) {
+    return WorkoutDay(
+      json['name'],
+      json['leadingword'],
+      json['avatarColors'],
+      List<int>.from(json['exercises']),
+    );
+  }
+
 }
 
 
@@ -54,6 +92,23 @@ class Exercise extends HiveObject {
   List<int> ? sets;
 
   Exercise(this.name,this.image,this.sets);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'image': image,
+      'sets': sets,
+    };
+  }
+
+  factory Exercise.fromJson(Map<String, dynamic> json) {
+    return Exercise(
+      json['name'],
+      json['image'],
+      List<int>.from(json['sets']),
+    );
+  }
+
 }
 
 
@@ -105,6 +160,24 @@ class SetsScreenData extends HiveObject {
   int exerciseKey;
 
   SetsScreenData(this.reps, this.kg, this.date, this.exerciseKey);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'reps': reps,
+      'kg': kg,
+      'date': date?.toIso8601String(),
+      'exerciseKey': exerciseKey,
+    };
+  }
+
+  factory SetsScreenData.fromJson(Map<String, dynamic> json) {
+    return SetsScreenData(
+      json['reps'],
+      json['kg'],
+      json['date'] != null ? DateTime.parse(json['date']) : null,
+      json['exerciseKey'],
+    );
+  }
 }
 
 

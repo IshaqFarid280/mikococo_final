@@ -32,8 +32,7 @@ class SetsScreen extends StatelessWidget {
       create: (_) => SetsScreenStateProvider(exercise),
       child: Consumer<SetsScreenStateProvider>(
         builder: (context, setsProvider, _) {
-          setsProvider
-              .setExercise(exercise); // Set the exercise when it's available
+         setsProvider.setExercise(exercise); // Set the exercise when it's available
           return SetsScreenContent();
         },
       ),
@@ -49,10 +48,137 @@ class SetsScreenContent extends StatefulWidget {
 class _SetsScreenState extends State<SetsScreenContent> {
   late SetsScreenStateProvider _setsScreenStateProvider;
 
+
+
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _setsScreenStateProvider = SetsScreenStateProvider.of(context);
+  }
+  void _showAddSetDialog(DateTime selectedDate) async {
+
+    int? selectedReps;
+    int? selectedKg;
+
+    await showModalBottomSheet<void>(
+      elevation: 10,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(22),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: listTileColor,
+          height: MediaQuery.of(context).size.height *
+              0.35, // Adjust the height as needed
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: CupertinoPicker(
+                      magnification: 1,
+                      useMagnifier: true,
+                      itemExtent: 70.0,
+                      onSelectedItemChanged: (int index) {
+                        print("Selected Reps: ${index + 1}");
+                        selectedReps = index + 1;
+                      },
+                      children: List.generate(50, (index) {
+                        return Center(
+                            child: normalText(
+                                title: ('${index + 1}  reps').toString(),
+                                textSize: 20.0));
+                      }),
+                    ),
+                  ),
+                  Expanded(
+                    child: CupertinoPicker(
+                      useMagnifier: true,
+                      itemExtent: 70.0,
+                      onSelectedItemChanged: (int index) {
+                        print("Selected Kg: ${index + 1}");
+                        selectedKg = index + 1;
+                      },
+                      children: List.generate(50, (index) {
+                        return Center(
+                            child: normalText(
+                                title: ('${index + 1}  kg').toString(),
+                                textSize: 20.0));
+                      }),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.02,
+              ),
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width * 0.8,
+                child: SubmitButton(
+                  onTap: () {
+                    print("Add Set Pressed");
+                    if (selectedReps != null && selectedKg != null) {
+                      _addSetsForDate(selectedDate,selectedReps!.toInt(),selectedKg!.toDouble());
+                    }
+                    Navigator.of(context).pop();
+                  },
+                  titlee: 'Validate the Set',
+                  primaryColor: goldenColor,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    // showDialog(
+    //   context: context,
+    //   builder: (context) {
+    //     return AlertDialog(
+    //       title: Text('Add Sets for ${DateFormat('MMM d, yyyy').format(selectedDate)}'),
+    //       content: Column(
+    //         children: [
+    //           // Text fields for reps and kg
+    //           TextField(
+    //             controller: repsController,
+    //             keyboardType: TextInputType.number,
+    //             decoration: InputDecoration(labelText: 'Reps'),
+    //           ),
+    //           TextField(
+    //             controller: kgController,
+    //             keyboardType: TextInputType.number,
+    //             decoration: InputDecoration(labelText: 'Kg'),
+    //           ),
+    //         ],
+    //       ),
+    //       actions: [
+    //         TextButton(
+    //           onPressed: () {
+    //             Navigator.pop(context);
+    //           },
+    //           child: Text('Cancel'),
+    //         ),
+    //         TextButton(
+    //           onPressed: () {
+    //             _addSetsForDate(selectedDate);
+    //             Navigator.pop(context);
+    //           },
+    //           child: Text('Add Sets'),
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
+  }
+
+  void _addSetsForDate(DateTime selectedDate, int reps,double kg) {
+    // final int reps = int.tryParse(repsController.text) ?? 0;
+    // final double kg = double.tryParse(kgController.text) ?? 0.0;
+    _setsScreenStateProvider.addSetForDate(selectedDate, reps, kg);
   }
 
   String  ? exerciseName ;
@@ -121,74 +247,59 @@ class _SetsScreenState extends State<SetsScreenContent> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _setsScreenStateProvider.setKeys.length,
+                  itemCount: _setsScreenStateProvider.setsByDate.length,
                   itemBuilder: (context, index) {
-                    final setIndex = index;
-                    final setKey = _setsScreenStateProvider.setKeys[setIndex];
-                    final set = box.get(setKey)!;
-                    final String currentFormattedDate = DateFormat('MMMM d, yyyy').format(set.date!);
-                    final int totalReps =
-                        _setsScreenStateProvider.totalDailyRepsMap[currentFormattedDate] ?? 0;
-                    final int totalKg =
-                        _setsScreenStateProvider.totalDailyKgMap[currentFormattedDate] ?? 0;
-                    if (setIndex == 0 ||
-                        set.date!.day !=
-                            box
-                                .get(_setsScreenStateProvider
-                                    .setKeys[setIndex - 1])!
-                                .date!
-                                .day) {
-                      // Display date ListTile
-                      final formattedDate =
-                          DateFormat('MMMM d, yyyy').format(set.date!);
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).height * 0.02,
-                          ),
-                          Container(
+                    String formattedDate = _setsScreenStateProvider.setsByDate.keys.toList()[index];
+                    List<SetsScreenData> setsForDate = _setsScreenStateProvider.setsByDate[formattedDate]!;
+                    int totalReps = _setsScreenStateProvider.totalDailyRepsMap[formattedDate] ?? 0;
+                    int totalKg = _setsScreenStateProvider.totalDailyKgMap[formattedDate] ?? 0;
+
+                    return Column(
+                      children: [
+                        // Display date ListTile
+                        InkWell(
+                          onTap: (){
+                            _showAddSetDialog(setsForDate.first.date!);
+                          },
+                          child: Container(
                             alignment: Alignment.center,
-                            height: MediaQuery.of(context).size.height*0.07,
-                            width: MediaQuery.sizeOf(context).width * 0.85,
+                            height: MediaQuery.of(context).size.height * 0.07,
+                            width: MediaQuery.of(context).size.width * 0.85,
                             decoration: BoxDecoration(
                               color: buttonColors,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-
                                     children: [
                                       Center(
-                                          child: listTileText(
-                                              title: DateFormat('MMM d').format(set.date!),
-                                            textSize: 14.0,
-
-                                      )),
-                                      // Vertical space between the two Text widgets
+                                        child: listTileText(
+                                          title: DateFormat('MMM d').format(setsForDate.first.date!),
+                                          textSize: 14.0,
+                                        ),
+                                      ),
                                       SizedBox(height: 1),
-
-                                      // Text for Year
                                       listTileText(
-                                        title: DateFormat('yyyy').format(set.date!),
+                                        title: DateFormat('yyyy').format(setsForDate.first.date!),
                                         textSize: 14.0,
                                       ),
-                                       ],
+                                    ],
                                   ),
                                 ),
-                                SizedBox(width: MediaQuery.of(context).size.width*0.081,),
-                                normalText(title: ' Total ', textSize: 16.0, color: whiteColor),
+                                normalText(
+                                  title: ' Total ',
+                                  textSize: 16.0,
+                                  color: whiteColor,
+                                ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-
                                   children: [
-                                    normalText(title: '$totalReps', textSize:12.0,color: skinColor),
-                                   // normalText(title:'${_setsScreenStateProvider.totalDailyReps}', textSize:12.0,color: skinColor),
+                                    normalText(title: '$totalReps', textSize: 12.0, color: skinColor),
                                     normalText(title: ' reps ', textSize: 12.0, color: skinColor),
                                   ],
                                 ),
@@ -196,85 +307,89 @@ class _SetsScreenState extends State<SetsScreenContent> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    normalText(title: '${totalKg} ', textSize:12.0,color: skinColor),
-                                  //  normalText(title: '${_setsScreenStateProvider.totalDailyKg}', textSize:12.0,color: skinColor),
-                                    normalText(title: ' kg ', textSize: 12.0, color: skinColor),],
-                                )
-
+                                    normalText(title: '$totalKg ', textSize: 12.0, color: skinColor),
+                                    normalText(title: ' kg ', textSize: 12.0, color: skinColor),
+                                  ],
+                                ),
+                                SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,)
                               ],
                             ),
                           ),
-                          // Display set ListTile
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                        ),
+
+                        // Display sets for the current date
+                        for (var set in setsForDate)
                           Padding(
                             padding: const EdgeInsets.all(5),
                             child: Container(
                               child: Slidable(
-                              endActionPane:ActionPane(
-                                motion: const StretchMotion(),
-                                children: [
-                                  SlidableAction(onPressed: (index) async {
-                                 await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
-                               },
-                                    backgroundColor: greyColor,
-                                    icon: Icons.brush_outlined,),
-                                  SlidableAction(onPressed: (index) async {
-                                    _setsScreenStateProvider.deleteSet(setKey);
-                                  },
-                                    borderRadius:const BorderRadius.only(
-                                      topRight: Radius.circular(15),
-                                      bottomRight: Radius.circular(15),
+                                endActionPane: ActionPane(
+                                  motion: const StretchMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (index) async {
+                                        await _showEditSetBottomSheet(context, set.key, set.reps, set.kg.round());
+                                      },
+                                      backgroundColor: greyColor,
+                                      icon: Icons.brush_outlined,
                                     ),
-                                    backgroundColor: deleteColor,
-                                    icon: Icons.delete,),
-                                ],
-                              ),
+                                    SlidableAction(
+                                      onPressed: (index) async {
+                                        _setsScreenStateProvider.deleteSet(set.key);
+                                      },
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                      ),
+                                      backgroundColor: deleteColor,
+                                      icon: Icons.delete,
+                                    ),
+                                  ],
+                                ),
                                 child: ListTile(
                                   leading: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       smallText(
-                                          title: 'Set ${setIndex + 1}',
-                                          textSize: 14.0,
-                                          color: iconColor),
+                                        title: 'Set ${setsForDate.indexOf(set) + 1}',
+                                        textSize: 14.0,
+                                        color: iconColor,
+                                      ),
                                       SizedBox(
-                                        width: MediaQuery.sizeOf(context).width *
-                                            0.15,
+                                        width: MediaQuery.of(context).size.width * 0.15,
                                       ),
                                       normalText(
-                                          title: set.reps.toString(),
-                                          color: buttonColors,
-                                          textSize: 20.0),
+                                        title: set.reps.toString(),
+                                        color: buttonColors,
+                                        textSize: 20.0,
+                                      ),
                                       SizedBox(
-                                        width: MediaQuery.sizeOf(context).width *
-                                            0.02,
+                                        width: MediaQuery.of(context).size.width * 0.02,
                                       ),
                                       smallText(title: 'reps'),
                                       SizedBox(
-                                        width: MediaQuery.sizeOf(context).width *
-                                            0.05,
+                                        width: MediaQuery.of(context).size.width * 0.05,
                                       ),
                                       smallText(
-                                          title: 'x',
-                                          color: iconColor,
-                                          textSize: 14.0),
+                                        title: 'x',
+                                        color: iconColor,
+                                        textSize: 14.0,
+                                      ),
                                       SizedBox(
-                                        width: MediaQuery.sizeOf(context).width *
-                                            0.05,
+                                        width: MediaQuery.of(context).size.width * 0.05,
                                       ),
                                       normalText(
-                                          title: set.kg.toString(),
-                                          color: buttonColors,
-                                          textSize: 20.0),
+                                        title: set.kg.toString(),
+                                        color: buttonColors,
+                                        textSize: 20.0,
+                                      ),
                                       SizedBox(
-                                        width: MediaQuery.sizeOf(context).width *
-                                            0.02,
+                                        width: MediaQuery.of(context).size.width * 0.02,
                                       ),
                                       smallText(title: 'kg'),
                                     ],
                                   ),
-                                  contentPadding: EdgeInsets.only(
-                                      left: 15, top: 5, bottom: 5),
+                                  contentPadding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -283,87 +398,8 @@ class _SetsScreenState extends State<SetsScreenContent> {
                               ),
                             ),
                           ),
-                        ],
-                      );
-                    } else {
-                      // Display set ListTile without the date
-                      return Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Container(
-                          child: Slidable(
-                            endActionPane:ActionPane(
-                              motion: const StretchMotion(),
-                              children: [
-                                SlidableAction(onPressed: (index) async {
-                                  await _showEditSetBottomSheet(context, setKey, set.reps, set.kg.round());
-                                },backgroundColor: greyColor,
-                                  icon: Icons.brush_outlined,),
-                                SlidableAction(onPressed: (index) async {
-                                  _setsScreenStateProvider.deleteSet(setKey);
-                                },
-                                  borderRadius:const BorderRadius.only(
-                                    topRight: Radius.circular(15),
-                                    bottomRight: Radius.circular(15),
-                                  ),
-                                  backgroundColor: deleteColor,
-                                  icon: Icons.delete,),
-                              ],
-                            ),
-                            child: ListTile(
-                              contentPadding:
-                                  EdgeInsets.only(left: 15, top: 5, bottom: 5),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              tileColor: listTileColor,
-                              leading: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  smallText(
-                                      title: 'Set ${setIndex + 1}',
-                                      textSize: 14.0,
-                                      color: iconColor),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.15,
-                                  ),
-                                  normalText(
-                                      title: set.reps.toString(),
-                                      color: buttonColors,
-                                      textSize: 20.0),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.02,
-                                  ),
-                                  smallText(title: 'reps'),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.05,
-                                  ),
-                                  smallText(
-                                      title: 'x',
-                                      color: iconColor,
-                                      textSize: 14.0),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.05,
-                                  ),
-                                  normalText(
-                                      title: set.kg.toString(),
-                                      color: buttonColors,
-                                      textSize: 20.0),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.02,
-                                  ),
-                                  smallText(title: 'kg'),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
+                      ],
+                    );
                   },
                 ),
               ],
@@ -376,8 +412,7 @@ class _SetsScreenState extends State<SetsScreenContent> {
           await _showAddSetBottomSheet(context);
         },
       ),
-      bottomNavigationBar:
-      Consumer<TimerModel>(builder: (context, timerModel, _) {
+      bottomNavigationBar: Consumer<TimerModel>(builder: (context, timerModel, _) {
         return Container(
           height: MediaQuery.sizeOf(context).height * 0.065,
           decoration:const  BoxDecoration(

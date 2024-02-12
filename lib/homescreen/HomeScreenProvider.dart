@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mikococo/module/models.dart';
 import 'package:mikococo/services/Boxes.dart';
+import 'package:flutter_gen/gen_l10n/mikococo_final.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
   TextEditingController titleController = TextEditingController();

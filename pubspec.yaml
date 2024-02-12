@@ -39,7 +39,7 @@ dependencies:
   path_provider:
   hive_flutter: ^1.1.0
   image_picker:
-  intl: ^0.17.0
+  intl:
   provider:
   flutter_slidable:
   fl_chart: ^0.40.0
@@ -54,6 +54,9 @@ dependencies:
   lottie: ^2.7.0
   responsive_framework: ^0.1.7
   in_app_purchase: ^3.1.11
+  csv: ^5.1.1
+  file_picker:
+  flutter_localization: ^0.1.13
 #  audioplayers:
 
 
@@ -75,7 +78,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -87,6 +90,7 @@ flutter:
     - assets/sound/
     - assets/svg/
     - assets/json/
+    - lib/l10n/
 
 
   fonts:

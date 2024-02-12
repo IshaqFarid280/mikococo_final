@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mikococo/consts/strnigs.dart';
 import 'package:mikococo/exercide/exercise_screen.dart';
@@ -17,6 +16,7 @@ import '../module/models.dart';
 import '../services/Boxes.dart';
 import '../widgets_common/our_button.dart';
 import 'add_info_screen.dart';
+import 'package:mikococo/AppLocalizations.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -108,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               final imageItem = homeScreenProvider.pictures[index]; // Use pictures to get the items
                               // Apply filtering here
                               if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
+                                print('${AppLocalizations.of(context)!.translate('exercise${index + 1}')}');
                                 return Container(
                                   margin: const EdgeInsets.only(top: 5),
                                   child: CustomSlider(
@@ -137,10 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       onTap: (){
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                       },
-                                      title: listTileText(title:imageItem.title.toString(), textSize: 14.0),
+                                      title: listTileText(title:AppLocalizations.of(context)!.translate == '' ? imageItem.title : AppLocalizations.of(context)!.translate('exercise${index + 1}'), textSize: 14.0),
                                       leading: imageItem.isAsset ? ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
-
                                           child: Container(
                                             width: MediaQuery.of(context).size.width*0.15,
                                               height: MediaQuery.of(context).size.height*0.15,
@@ -151,7 +151,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                           fit: BoxFit.cover,
                                           width: MediaQuery.of(context).size.width*0.15,
                                           height: MediaQuery.of(context).size.height*0.15,
-
                                           image: FileImage(File(imageItem.imagePath ?? '')),
                                         )
                                       )
@@ -215,7 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                           leading: imageItem.isAsset ? ClipRRect(
                                               borderRadius: BorderRadius.circular(12),
-
                                               child: Container(
                                                   width: MediaQuery.of(context).size.width*0.15,
                                                   height: MediaQuery.of(context).size.height*0.15,

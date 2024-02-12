@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import '../module/models.dart';
+
+
 
 class SetsScreenStateProvider extends ChangeNotifier {
   late Box<SetsScreenData> setsBox;
@@ -19,6 +20,8 @@ class SetsScreenStateProvider extends ChangeNotifier {
   // New properties to track daily totals
   Map<String, int> totalDailyRepsMap = {};
   Map<String, int> totalDailyKgMap = {};
+  // Map to store sets for each date
+  Map<String, List<SetsScreenData>> setsByDate = {};
 
   SetsScreenStateProvider(this.exercise) {
     _initializeSetsBox();
@@ -31,6 +34,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
     if (exercise != null) {
       loadSetKeys();
       calculateStats();
+      groupSetsByDate();
     }
   }
 
@@ -39,7 +43,30 @@ class SetsScreenStateProvider extends ChangeNotifier {
     return date.isAfter(now.subtract(Duration(days: 30))) && date.isBefore(now);
   }
 
+  void groupSetsByDate() {
+    setsByDate.clear();
 
+    List<int> sortedKeys = [...setKeys];
+    sortedKeys.sort((a, b) {
+      final dateA = setsBox.get(a)?.date;
+      final dateB = setsBox.get(b)?.date;
+      return dateA?.compareTo(dateB ?? DateTime.now()) ?? 0;
+    });
+
+    for (int setKey in sortedKeys) {
+      final set = setsBox.get(setKey);
+      if (set != null && set.date != null) {
+        final String formattedDate = DateFormat('MMMM d, yyyy').format(set.date!);
+        setsByDate[formattedDate] ??= [];
+        setsByDate[formattedDate]!.add(set);
+      }
+    }
+
+    // Add print statement
+    print('groupSetsByDate - setsByDate: $setsByDate');
+
+    notifyListeners();
+  }
 
   List<int> getRepsData() {
     List<int> repsData = [];
@@ -102,6 +129,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
   List<Map<String, dynamic>> getSetData() {
     List<Map<String, dynamic>> setData = [];
     DateTime now = DateTime.now();
@@ -125,28 +153,6 @@ class SetsScreenStateProvider extends ChangeNotifier {
 
     return setData;
   }
-
-
-
-  // List<Map<String, dynamic>> getSetData() {
-  //   List<Map<String, dynamic>> setData = [];
-  //   DateTime now = DateTime.now();
-  //
-  //   for (int setKey in setKeys) {
-  //     final set = setsBox.get(setKey);
-  //     if (set != null && set.date != null) {
-  //       // Check if the set date is within the last month
-  //       if (isWithinLastMonth(set.date!, now)) {
-  //         setData.add({
-  //           'date': set.date!,
-  //           'reps': set.reps,
-  //           'kg': set.kg,
-  //         });
-  //       }
-  //     }
-  //   }
-  //   return setData;
-  // }
 
   void loadSetKeys() {
     setKeys.clear();
@@ -196,15 +202,20 @@ class SetsScreenStateProvider extends ChangeNotifier {
 
     print("Set added successfully. Exercise sets: ${exercise!.sets}");
 
+    // Refresh the set keys
     loadSetKeys();
     calculateStats();
     calculateDailyTotals();
+    // Group sets by date
+    groupSetsByDate();
   }
 
   void editSet(int setKey, SetsScreenData editedSet) {
     setsBox.put(setKey, editedSet);
     loadSetKeys();
     calculateStats();
+    // Group sets by date
+    groupSetsByDate();
   }
 
   void deleteSet(int setKey) {
@@ -212,6 +223,8 @@ class SetsScreenStateProvider extends ChangeNotifier {
     exercise?.sets?.remove(setKey);
     exercise?.save();
     loadSetKeys();
+    // Group sets by date
+    groupSetsByDate();
     Future.delayed(Duration.zero,(){
       calculateStats();
     });
@@ -221,12 +234,45 @@ class SetsScreenStateProvider extends ChangeNotifier {
     exercise = newExercise;
     // Ensure sets is not null
     exercise?.sets ??= [];
+    //  Refresh the set keys
+    loadSetKeys();
+    // Notify listeners
       Future.delayed(Duration.zero,(){
         notifyListeners();
       });
   }
 
+  // Function to add sets for a specific date
+  Future<void> addSetForDate(DateTime date, int reps, double kg) async {
+    SetsScreenData newSet = SetsScreenData(reps, kg, date, exercise!.key);
+    await addSet(newSet); // Assuming you already have an addSet method in your provider class
+    calculateStats(); // Refresh UI after adding the set
+  }
+
   static SetsScreenStateProvider of(BuildContext context) {
     return Provider.of<SetsScreenStateProvider>(context, listen: false);
   }
+
 }
+
+
+
+// List<Map<String, dynamic>> getSetData() {
+//   List<Map<String, dynamic>> setData = [];
+//   DateTime now = DateTime.now();
+//
+//   for (int setKey in setKeys) {
+//     final set = setsBox.get(setKey);
+//     if (set != null && set.date != null) {
+//       // Check if the set date is within the last month
+//       if (isWithinLastMonth(set.date!, now)) {
+//         setData.add({
+//           'date': set.date!,
+//           'reps': set.reps,
+//           'kg': set.kg,
+//         });
+//       }
+//     }
+//   }
+//   return setData;
+// }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mikococo/AppLocalizations.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/homescreen/HomeScreenProvider.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
-import 'package:mikococo/sets/SetsProvider.dart';
 import 'package:mikococo/setting/SettingProvider.dart';
 import 'package:mikococo/timer/timer.model.dart';
 import 'package:mikococo/workout/WorkoutScreenProvider.dart';
@@ -15,8 +15,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'Gate_way_screen/buttom_navigation_screens.dart';
 import 'module/models.dart';
+import 'setting/export_provider.dart';
+import 'setting/hive_import_export.dart';
 
 void main() async  {
+  await Hive.initFlutter();
   WidgetsFlutterBinding.ensureInitialized();
   var directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
@@ -51,6 +54,8 @@ void main() async  {
         ChangeNotifierProvider(create: (context) => ExercisesScreenProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutDaysScreenProvider()),
         ChangeNotifierProvider(create: (context) => SwitchProvider()),
+        ChangeNotifierProvider(create: (context) => ExportProvider()),
+        ChangeNotifierProvider(create: (context) => HiveProvider()),
       ],
         child: MyApp(),
       )
@@ -104,26 +109,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // builder: (context, widget) => ResponsiveWrapper.builder(
-      //     BouncingScrollWrapper.builder(context, widget!),
-      //     maxWidth: 1200,
-      //     minWidth: 450,
-      //     defaultScale: true,
-      //     breakpoints: [
-      //       const ResponsiveBreakpoint.resize(550, name: MOBILE),
-      //       const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-      //       const ResponsiveBreakpoint.autoScale(1000, name: TABLET),
-      //       const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-      //       const ResponsiveBreakpoint.autoScale(2460, name: "4K"),
-      //     ],
-      // ),
+      // The initial locale
+      locale: Locale('es', 'ES'), // English
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en', 'US'), // English
+        Locale('es', 'ES'), // Spanish
+      ],
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: ' ',
         appBarTheme:const  AppBarTheme(
-
-
           color:blackColor,
           elevation: 0,
         ),

@@ -1,9 +1,11 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/setting/SettingProvider.dart';
 import 'package:mikococo/setting/SoundModel.dart';
+import 'package:mikococo/setting/export_screen.dart';
 import 'package:mikococo/setting/motionToastConstructor.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
@@ -13,6 +15,8 @@ import 'package:motion_toast/resources/arrays.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'importing _exporting.dart';
 
 
 class SettingScreen extends StatelessWidget {
@@ -328,23 +332,22 @@ class SettingScreen extends StatelessWidget {
                       children: [
                         listTileDrawer(
                           ontap: () {
-                            CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
-
+                            Navigator.push(context, CupertinoPageRoute(builder: (context)=>  DataImport()));
                           },
                           assetsvg: 'assets/svg/importDB.svg',
                           title: 'Import Database',
                         ),
                         listTileDrawer(
                           ontap: () {
-                            CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
-
+                            Navigator.push(context, CupertinoPageRoute(builder: (context)=>  DataExport()));
                           },
                           assetsvg: 'assets/svg/exportDB.svg',
                           title: 'Export Database',
                         ),
                         listTileDrawer(
                           ontap: () {
-                            CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
+                            Navigator.push(context, CupertinoPageRoute(builder: (context)=> const ExportScreen()));
+                            // CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
 
                           },
                           assetsvg: 'assets/svg/exportcsv.svg',
