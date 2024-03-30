@@ -29,103 +29,124 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String selectedCategory = 'AddingPictures'; // Default category
 
-
-
-
+  final List<String> exerciseCategories = ['AddingPictures', 'DemonPictures', 'TricepsModel', 'BicepsModel', 'ChestModel'];
 
   @override
   Widget build(BuildContext context) {
     var homeScreenProvider = Provider.of<HomeScreenProvider>(context);
-
-
     return Scaffold(
-      floatingActionButton: floatingActionButton(onTap: (){
-        Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddPictureScreen(
-          pictures: homeScreenProvider.pictures,
-          filteredPictures: homeScreenProvider.filteredPictures,
-          demo: homeScreenProvider.demo,
-          filteredDemo: homeScreenProvider.filteredDemo,
-          triceps: homeScreenProvider.triceps,
-          filteredTriceps: homeScreenProvider.filteredTriceps,
-          biceps: homeScreenProvider.biceps,
-          filteredBiceps:homeScreenProvider.filteredBiceps,
-          chest: homeScreenProvider.chest,
-          filteredChest: homeScreenProvider.chest,
-        )));
-      },
-        colors: iconColor,
-      ),
-
-
       appBar: AppBar(
         centerTitle: true,
         leading: LeadingIcon(),
         title: normalText(title: appName),
       ),
       body: Consumer<HomeScreenProvider>(
-        builder: (ctx, homeScreenProvider, _){
+        builder: (ctx, homeScreenProvider, _) {
           return SingleChildScrollView(
-            physics:const  BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      normalText(title: 'Exercises',textSize:22.0),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      TextFormField(
-                        enabled: true,
-                        controller: homeScreenProvider.searchController,
-                        onChanged: (text) {
-                          homeScreenProvider.filterLists(homeScreenProvider.searchController.text.toString());
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'search',
-                          hintStyle:const TextStyle(color: iconColor),
-                          label: Icon(Icons.search,color: iconColor,size:30,),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:const BorderSide(color: iconColor),
-                            borderRadius: BorderRadius.circular(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                  normalText(title: 'Exercises',textSize:22.0),
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: exerciseCategories.map((category) {
+                        return Container(
+                          margin:const  EdgeInsets.all(5),
+                          child: ourButton(
+                            onPressed: () {
+                              setState(() {
+                                selectedCategory = category;
+                              });
+                            },
+                            title: category,
+                            color: selectedCategory == category ? buttonColors :listTileEditColor,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:const  BorderSide(color: iconColor,width: 3),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                  TextFormField(
+                    enabled: true,
+                    controller: homeScreenProvider.searchController,
+                    onChanged: (text) {
+                      homeScreenProvider.filterLists(homeScreenProvider.searchController.text.toString());
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'search',
+                      hintStyle:const TextStyle(color: iconColor),
+                      label: Icon(Icons.search,color: iconColor,size:30,),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:const BorderSide(color: iconColor),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.04,),
-                      ExercisesNameListTile(exercisesCategoryName:'Abs',),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ValueListenableBuilder<Box<AddingPictures>>(
-                        valueListenable: BoxesClass.getData().listenable(),
-                        builder: (context, box, _) {
-                          return Column(
-                            children:List.generate(
-                              homeScreenProvider.pictures.length, (index){
-                              final imageItem = homeScreenProvider.pictures[index]; // Use pictures to get the items
-                              // Apply filtering here
-                              if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
-                                print('${AppLocalizations.of(context)!.translate('exercise${index + 1}')}');
-                                return Container(
-                                  margin: const EdgeInsets.only(top: 5),
-                                  child: CustomSlider(
-                                    deleteOnPressed: (context){
-                                      homeScreenProvider.deleteImageItem(imageItem);
-                                    },
-                                    editOnPressed: (BuildContext ) {
-                                      // showEditDialog(context,index);
-                                      CustomMotionToast.showSuccessToast(context, 'This field will be implemented', ' in Next Milstone');
-                                    },
-                                    child: ListTile(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:const  BorderSide(color: iconColor,width: 3),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.04,),
+                  ExercisesNameListTile(exercisesCategoryName: selectedCategory),
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                  ValueListenableBuilder<Box>(
+                    valueListenable: selectedCategory == 'AddingPictures' ? BoxesClass.getData().listenable() :
+                    selectedCategory == 'DemonPictures' ? BoxesClass.getDemoData().listenable() :
+                    selectedCategory == 'TricepsModel' ? BoxesClass.getTricepsData().listenable() :
+                    selectedCategory == 'BicepsModel' ? BoxesClass.getBicepsData().listenable() :
+                    BoxesClass.getChestData().listenable(),
+                    builder: (context, box, _) {
+                      return Column(
+                        children: List.generate(
+                          selectedCategory == 'AddingPictures' ? homeScreenProvider.pictures.length :
+                          selectedCategory == 'DemonPictures' ? homeScreenProvider.demo.length :
+                          selectedCategory == 'TricepsModel' ? homeScreenProvider.triceps.length :
+                          selectedCategory == 'BicepsModel' ? homeScreenProvider.biceps.length :
+                          homeScreenProvider.chest.length,
+                              (index) {
+                            final imageItem = selectedCategory == 'AddingPictures' ? homeScreenProvider.pictures[index] :
+                            selectedCategory == 'DemonPictures' ? homeScreenProvider.demo[index] :
+                            selectedCategory == 'TricepsModel' ? homeScreenProvider.triceps[index] :
+                            selectedCategory == 'BicepsModel' ? homeScreenProvider.biceps[index] :
+                            homeScreenProvider.chest[index];
+                            // Apply filtering here
+                            if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
+                              String translatedTitle;
+                              if (index < 6) {
+                                translatedTitle = AppLocalizations.of(context)?.translate('exercise${index + 1}') ?? '';
+                                print('Index: $index');
+                                print('Translated Title: $translatedTitle');
+                              } else {
+                                translatedTitle = ''; // Set translated title to empty for index >= 6
+                              }
+                              print('${AppLocalizations.of(context)!.translate('exercise${index + 1}')}');
+                              return Container(
+                                margin: const EdgeInsets.only(top: 5),
+                                child: CustomSlider(
+                                  deleteOnPressed: (context){
+                                    homeScreenProvider.deleteImageItem(imageItem);
+                                  },
+                                  editOnPressed: (BuildContext ) {
+                                    // showEditDialog(context,index);
+                                    CustomMotionToast.showSuccessToast(context, 'This field will be implemented', ' in Next Milstone');
+                                  },
+                                  child: ListTile(
                                       contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       tileColor: listTileColor,
-                                      trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
+                                      trailing: widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
                                         // add data into exercise list
                                         imageItem.isAsset ? imageItem.imagePath :imageItem.imagePath;
                                         homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
@@ -138,329 +159,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                       onTap: (){
                                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
                                       },
-                                      title: listTileText(title:AppLocalizations.of(context)!.translate == '' ? imageItem.title : AppLocalizations.of(context)!.translate('exercise${index + 1}'), textSize: 14.0),
+                                      title:  listTileText(
+                                        title: translatedTitle.isNotEmpty ? translatedTitle : imageItem.title,
+                                        textSize: 14.0,
+                                      ),
                                       leading: imageItem.isAsset ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                           child: Container(
-                                            width: MediaQuery.of(context).size.width*0.15,
+                                              width: MediaQuery.of(context).size.width*0.15,
                                               height: MediaQuery.of(context).size.height*0.15,
                                               child: Lottie.asset(imageItem.imagePath, repeat: false,  )))
                                           : ClipRRect(
                                           borderRadius: BorderRadius.circular(8),
-                                        child: Image(
-                                          fit: BoxFit.cover,
-                                          width: MediaQuery.of(context).size.width*0.15,
-                                          height: MediaQuery.of(context).size.height*0.15,
-                                          image: FileImage(File(imageItem.imagePath ?? '')),
-                                        )
+                                          child: Image(
+                                            fit: BoxFit.cover,
+                                            width: MediaQuery.of(context).size.width*0.15,
+                                            height: MediaQuery.of(context).size.height*0.15,
+                                            image: FileImage(File(imageItem.imagePath ?? '')),
+                                          )
                                       )
 
-                                    ),
                                   ),
-                                );
-                              } else {
-                                return const SizedBox();
-                              }
-                            },),
-                          );
-                        },
-                      ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ExercisesNameListTile(exercisesCategoryName:'Legs',),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ValueListenableBuilder<Box<DemonPictures>>(
-                          valueListenable: BoxesClass.getDemoData().listenable(),
-                          builder: (context,box,_) {
-                            return Column(
-                              children: List.generate(
-                                homeScreenProvider.demo.length, (index) {
-                                final imageItem = homeScreenProvider.demo[index];
-                                if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
-                                  // var data = box.values.toList().cast<AddingPictures>();
-                                  return Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: CustomSlider(
-                                      deleteOnPressed: (context){
-                                        homeScreenProvider.deleteImageItem(imageItem);
-                                      },
-                                      editOnPressed: (BuildContext ) {
-                                        // showEditDialog(context,index);
-                                        CustomMotionToast.showSuccessToast(context, 'This field will be implemented', ' in Next Milstone');
-                                      },
-
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-                                        trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
-                                          // add data into exercise list
-                                          imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
-                                          homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
-                                          setState(() {
-                                            if(imageItem.imagePath.contains('assets/images')){
-                                              print('imageURlAssets: ${imageItem.imagePath}');
-                                              print('imageURlAssets: ${imageItem.title}');
-                                            }else{
-                                              print('imageURlFile: ${imageItem.imagePath}');
-                                            }
-                                          });
-                                          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
-                                        },) : Container(height: 5,width: 5,),
-                                        onTap: (){
-                                          Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
-                                        },
-                                        title: listTileText(textSize: 14.0,title :imageItem.title.toString().toUpperCase()),
-                                        tileColor: listTileColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                          leading: imageItem.isAsset ? ClipRRect(
-                                              borderRadius: BorderRadius.circular(12),
-                                              child: Container(
-                                                  width: MediaQuery.of(context).size.width*0.15,
-                                                  height: MediaQuery.of(context).size.height*0.15,
-                                                  child: Lottie.asset(imageItem.imagePath, repeat: false,  )))
-                                              : ClipRRect(
-                                              borderRadius: BorderRadius.circular(8),
-                                              child: Image(
-                                                fit: BoxFit.cover,
-                                                width: MediaQuery.of(context).size.width*0.15,
-                                                height: MediaQuery.of(context).size.height*0.15,
-
-                                                image: FileImage(File(imageItem.imagePath ?? '')),
-                                              )
-                                          )
-                                      ),
-                                    ),
-                                  );
-                                }
-                                return const SizedBox();
-                              },
-                              ),
-                            );
-                          }
-                      ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ExercisesNameListTile(exercisesCategoryName:'Triceps',),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ValueListenableBuilder<Box<TricepsModel>>(
-                          valueListenable: BoxesClass.getTricepsData().listenable(),
-                          builder: (context,box,_) {
-                            return Column(
-                              children: List.generate(
-                                homeScreenProvider.triceps.length, (index) {
-                                final imageItem = homeScreenProvider.triceps[index];
-                                if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
-                                  // var data = box.values.toList().cast<AddingPictures>();
-                                  return Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: CustomSlider(
-                                      deleteOnPressed: (context){
-                                        homeScreenProvider.deleteImageItem(imageItem);
-                                      },
-                                      editOnPressed: (BuildContext ) {
-                                        // showEditDialog(context,index);
-                                        CustomMotionToast.showSuccessToast(context, 'This field will be implemented', ' in Next Milstone');
-                                      },
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-                                        trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
-                                          // add data into exercise list
-                                          imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
-                                          homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
-                                          setState(() {
-                                            if(imageItem.imagePath.contains('assets/images')){
-                                              print('imageURlAssets: ${imageItem.imagePath}');
-                                              print('imageURlAssets: ${imageItem.title}');
-                                            }else{
-                                              print('imageURlFile: ${imageItem.imagePath}');
-                                            }
-                                          });
-                                          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
-                                        },) : Container(height: 5,width: 5,),
-                                        onTap: (){
-                                          Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
-                                        },
-                                        title: listTileText(textSize: 14.0,title :imageItem.title.toString().toUpperCase()),
-                                        tileColor: listTileColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                          leading: imageItem.isAsset ? ClipRRect(
-                                              borderRadius: BorderRadius.circular(12),
-
-                                              child: Container(
-                                                  width: MediaQuery.of(context).size.width*0.15,
-                                                  height: MediaQuery.of(context).size.height*0.15,
-                                                  child: Lottie.asset(imageItem.imagePath, repeat: false,  )))
-                                              : ClipRRect(
-                                              borderRadius: BorderRadius.circular(8),
-                                              child: Image(
-                                                fit: BoxFit.cover,
-                                                width: MediaQuery.of(context).size.width*0.15,
-                                                height: MediaQuery.of(context).size.height*0.15,
-
-                                                image: FileImage(File(imageItem.imagePath ?? '')),
-                                              )
-                                          )
-                                      ),
-                                    ),
-                                  );
-                                }
-                                return const SizedBox();
-                              },
-                              ),
-                            );
-                          }
-                      ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ExercisesNameListTile(exercisesCategoryName:'Biceps',),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ValueListenableBuilder<Box<BicepsModel>>(
-                          valueListenable: BoxesClass.getBicepsData().listenable(),
-                          builder: (context,box,_) {
-                            return Column(
-                              children: List.generate(
-                                homeScreenProvider.biceps.length, (index) {
-                                final imageItem = homeScreenProvider.biceps[index];
-                                if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
-                                  // var data = box.values.toList().cast<AddingPictures>();
-                                  return Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: CustomSlider(
-                                      deleteOnPressed: (context){
-                                        homeScreenProvider.deleteImageItem(imageItem);
-                                      },
-                                      editOnPressed: (BuildContext ) {
-                                        // showEditDialog(context,index);
-                                        CustomMotionToast.showSuccessToast(context, 'This field will be implemented', ' in Next Milstone');
-                                      },
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-                                        trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
-                                          // add data into exercise list
-                                          imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
-                                          homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
-                                          setState(() {
-                                            if(imageItem.imagePath.contains('assets/images')){
-                                              print('imageURlAssets: ${imageItem.imagePath}');
-                                              print('imageURlAssets: ${imageItem.title}');
-                                            }else{
-                                              print('imageURlFile: ${imageItem.imagePath}');
-                                            }
-                                          });
-                                          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
-                                        },) : Container(height: 5,width: 5,),
-                                        onTap: (){
-                                          Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
-                                        },
-                                        title: listTileText(textSize: 14.0,title :imageItem.title.toString().toUpperCase()),
-                                        tileColor: listTileColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                          leading: imageItem.isAsset ? ClipRRect(
-                                              borderRadius: BorderRadius.circular(12),
-
-                                              child: Container(
-                                                  width: MediaQuery.of(context).size.width*0.15,
-                                                  height: MediaQuery.of(context).size.height*0.15,
-                                                  child: Lottie.asset(imageItem.imagePath, repeat: false,  )))
-                                              : ClipRRect(
-                                              borderRadius: BorderRadius.circular(8),
-                                              child: Image(
-                                                fit: BoxFit.cover,
-                                                width: MediaQuery.of(context).size.width*0.15,
-                                                height: MediaQuery.of(context).size.height*0.15,
-
-                                                image: FileImage(File(imageItem.imagePath ?? '')),
-                                              )
-                                          )
-                                      ),
-                                    ),
-                                  );
-                                }
-                                return const SizedBox();
-                              },
-                              ),
-                            );
-                          }
-                      ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ExercisesNameListTile(exercisesCategoryName:'Chest',),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                      ValueListenableBuilder<Box<ChestModel>>(
-                          valueListenable: BoxesClass.getChestData().listenable(),
-                          builder: (context,box,_) {
-                            return Column(
-                              children: List.generate(
-                                homeScreenProvider.chest.length, (index) {
-                                final imageItem = homeScreenProvider.chest[index];
-                                if (imageItem.title.toString().toLowerCase().contains(homeScreenProvider.searchController.text.toLowerCase())) {
-                                  // var data = box.values.toList().cast<AddingPictures>();
-                                  return Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: CustomSlider(
-                                      deleteOnPressed: (context){
-                                        homeScreenProvider.deleteImageItem(imageItem);
-                                      },
-                                      editOnPressed: (BuildContext ) {
-                                        // showEditDialog(context,index);
-                                        CustomMotionToast.showSuccessToast(context, 'This field will be implemented', ' in Next Milstone');
-                                      },
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.only(left: 15,top: 5,bottom: 5),
-                                        trailing:widget.isExerciseScreen ? HomeScreenAddExerciseButton(onTap: (){
-                                          // add data into exercise list
-                                          imageItem.isAsset  ?  imageItem.imagePath :imageItem.imagePath;
-                                          homeScreenProvider.addExercise(imageItem.title.toString(),imageItem.imagePath,widget.workoutDay!);
-                                          setState(() {
-                                            if(imageItem.imagePath.contains('assets/images')){
-                                              print('imageURlAssets: ${imageItem.imagePath}');
-                                              print('imageURlAssets: ${imageItem.title}');
-                                            }else{
-                                              print('imageURlFile: ${imageItem.imagePath}');
-                                            }
-                                          });
-                                          Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=> ExercisesScreen(widget.workoutDay!)));
-                                        },) : Container(height: 5,width: 5,),
-                                        onTap: (){
-                                          Navigator.push(context, CupertinoPageRoute(builder: (context)=> ViewPictureScreen(imageItem:imageItem)));
-                                        },
-                                        title: listTileText(textSize: 14.0,title :imageItem.title.toString().toUpperCase()),
-                                        tileColor: listTileColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                          leading: imageItem.isAsset ? ClipRRect(
-                                              borderRadius: BorderRadius.circular(12),
-
-                                              child: Container(
-                                                  width: MediaQuery.of(context).size.width*0.15,
-                                                  height: MediaQuery.of(context).size.height*0.15,
-                                                  child: Lottie.asset(imageItem.imagePath, repeat: false,  )))
-                                              : ClipRRect(
-                                              borderRadius: BorderRadius.circular(8),
-                                              child: Image(
-                                                fit: BoxFit.cover,
-                                                width: MediaQuery.of(context).size.width*0.15,
-                                                height: MediaQuery.of(context).size.height*0.15,
-
-                                                image: FileImage(File(imageItem.imagePath ?? '')),
-                                              )
-                                          )
-                                      ),
-                                    ),
-                                  );
-                                }
-                                return const SizedBox();
-                              },
-                              ),
-                            );
-                          }
-                      ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                    ],
+                                ),
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          },
+                        ),
+                      );
+                    },
                   ),
-
+                ],
+              ),
             ),
           );
         },
@@ -468,3 +199,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+

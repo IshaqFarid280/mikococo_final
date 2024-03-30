@@ -117,7 +117,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [
+      supportedLocales:  [
         Locale('en', 'US'), // English
         Locale('es', 'ES'), // Spanish
       ],
