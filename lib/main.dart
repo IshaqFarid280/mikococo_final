@@ -29,19 +29,22 @@ void main() async  {
   Hive.registerAdapter(RoutineAdapter());
   Hive.registerAdapter(WorkoutDayAdapter());
   Hive.registerAdapter(ExerciseAdapter());
-  Hive.registerAdapter(AddingPicturesAdapter());
-  Hive.registerAdapter(DemonPicturesAdapter());
+  Hive.registerAdapter(ShoulderModelAdapter());
+  Hive.registerAdapter(AbsModelAdapter());
   Hive.registerAdapter(SetsScreenDataAdapter());
   Hive.registerAdapter(TimerValuesAdapter());
   Hive.registerAdapter(TricepsModelAdapter());
   Hive.registerAdapter(BicepsModelAdapter());
   Hive.registerAdapter(ChestModelAdapter());
-  Hive.registerAdapter(SetsScreenDataAdapter());
-  await Hive.openBox<AddingPictures>('Pictures', compactionStrategy: (int total, int deleted) => deleted > 20);
-  await Hive.openBox<DemonPictures>('Demo');
+  Hive.registerAdapter(GlutealModelAdapter());
+  // Hive.registerAdapter(SetsScreenDataAdapter());
+  await Hive.openBox<ShoulderModel>('shoulder', compactionStrategy: (int total, int deleted) => deleted > 20);
+  await Hive.openBox<AbsModel>('abs');
   await Hive.openBox<TricepsModel>('triceps');
   await Hive.openBox<BicepsModel>('biceps');
   await Hive.openBox<ChestModel>('chest');
+  await Hive.openBox<GlutealModel>('gluteal');
+
   await Hive.openBox<Routine>('RoutineBox', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<WorkoutDay>('WorkoutDaysBox', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<Exercise>('ExercisesBox', compactionStrategy: (int total, int deleted) => deleted > 20);

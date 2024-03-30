@@ -113,7 +113,7 @@ class Exercise extends HiveObject {
 
 
 @HiveType(typeId: 3)
-class AddingPictures extends HiveObject {
+class ShoulderModel extends HiveObject {
 
   @HiveField(0)
   String ? image ;
@@ -124,12 +124,12 @@ class AddingPictures extends HiveObject {
   @HiveField(2)
   String ? description;
 
-  AddingPictures({this.image,this.title, this.description});
+  ShoulderModel({this.image,this.title, this.description});
 }
 
 
 @HiveType(typeId: 4)
-class DemonPictures extends HiveObject {
+class AbsModel extends HiveObject {
 
   @HiveField(0)
   String ? image ;
@@ -141,7 +141,7 @@ class DemonPictures extends HiveObject {
   @HiveField(2)
   String ? description;
 
-  DemonPictures({this.image,this.title, this.description});
+  AbsModel({this.image,this.title, this.description});
 }
 
 
@@ -237,6 +237,22 @@ class ChestModel extends HiveObject {
 
   ChestModel({this.image,this.title, this.description});
 }
+
+@HiveType(typeId: 10)
+class GlutealModel extends HiveObject {
+
+  @HiveField(0)
+  String ? image ;
+
+  @HiveField(1)
+  String ? title;
+
+  @HiveField(2)
+  String ? description;
+
+  GlutealModel({this.image,this.title, this.description});
+}
+
 
 
 

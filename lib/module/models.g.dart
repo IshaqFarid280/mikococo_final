@@ -135,17 +135,17 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
           typeId == other.typeId;
 }
 
-class AddingPicturesAdapter extends TypeAdapter<AddingPictures> {
+class ShoulderModelAdapter extends TypeAdapter<ShoulderModel> {
   @override
   final int typeId = 3;
 
   @override
-  AddingPictures read(BinaryReader reader) {
+  ShoulderModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AddingPictures(
+    return ShoulderModel(
       image: fields[0] as String?,
       title: fields[1] as String?,
       description: fields[2] as String?,
@@ -153,7 +153,7 @@ class AddingPicturesAdapter extends TypeAdapter<AddingPictures> {
   }
 
   @override
-  void write(BinaryWriter writer, AddingPictures obj) {
+  void write(BinaryWriter writer, ShoulderModel obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -170,22 +170,22 @@ class AddingPicturesAdapter extends TypeAdapter<AddingPictures> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AddingPicturesAdapter &&
+      other is ShoulderModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
 
-class DemonPicturesAdapter extends TypeAdapter<DemonPictures> {
+class AbsModelAdapter extends TypeAdapter<AbsModel> {
   @override
   final int typeId = 4;
 
   @override
-  DemonPictures read(BinaryReader reader) {
+  AbsModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return DemonPictures(
+    return AbsModel(
       image: fields[0] as String?,
       title: fields[1] as String?,
       description: fields[2] as String?,
@@ -193,7 +193,7 @@ class DemonPicturesAdapter extends TypeAdapter<DemonPictures> {
   }
 
   @override
-  void write(BinaryWriter writer, DemonPictures obj) {
+  void write(BinaryWriter writer, AbsModel obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -210,7 +210,7 @@ class DemonPicturesAdapter extends TypeAdapter<DemonPictures> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DemonPicturesAdapter &&
+      other is AbsModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -408,6 +408,46 @@ class ChestModelAdapter extends TypeAdapter<ChestModel> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ChestModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class GlutealModelAdapter extends TypeAdapter<GlutealModel> {
+  @override
+  final int typeId = 10;
+
+  @override
+  GlutealModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return GlutealModel(
+      image: fields[0] as String?,
+      title: fields[1] as String?,
+      description: fields[2] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, GlutealModel obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.image)
+      ..writeByte(1)
+      ..write(obj.title)
+      ..writeByte(2)
+      ..write(obj.description);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GlutealModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

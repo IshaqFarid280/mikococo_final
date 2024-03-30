@@ -14,25 +14,29 @@ import '../widgets_common/our_button.dart';
 import 'home_screen.dart';
 
 class AddPictureScreen extends StatefulWidget {
-  final List<ImageItem> pictures;
-  final List<ImageItem> filteredPictures;
-  final List<ImageItem> demo;
-  final List<ImageItem> filteredDemo;
+  final List<ImageItem> shoulder;
+  final List<ImageItem> filteredshoulder;
+  final List<ImageItem> abs;
+  final List<ImageItem> filteredabs;
   final List<ImageItem> triceps;
   final List<ImageItem> filteredTriceps;
   final List<ImageItem> biceps;
   final List<ImageItem> filteredBiceps;
+  final List<ImageItem> gluteal;
+  final List<ImageItem> filteredgluteal;
   final List<ImageItem> chest;
   final List<ImageItem> filteredChest;
   AddPictureScreen(
-      {required this.pictures,
-      required this.demo,
-      required this.filteredPictures,
-      required this.filteredDemo,
+      {required this.shoulder,
+      required this.abs,
+      required this.filteredshoulder,
+      required this.filteredabs,
       required this.triceps,
       required this.biceps,
       required this.chest,
       required this.filteredChest,
+      required this.gluteal,
+      required this.filteredgluteal,
       required this.filteredBiceps,
       required this.filteredTriceps});
   @override
@@ -58,45 +62,45 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
 
   _addPicture() {
     if (pickedImagePath != null) {
-      if (selectedList == 'pictures') {
-        var data = AddingPictures(
+      if (selectedList == 'Shoulder') {
+        var data = ShoulderModel(
           image: pickedImagePath!,
           title: titleController.text.toString(),
         );
-        final box = BoxesClass.getData();
+        final box = BoxesClass.getshoulder();
         box.add(data);
         data.save();
         setState(() {
-          widget.pictures.add(ImageItem(
+          widget.shoulder.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
             descriptionController.text.toString(),
 
             isAsset: false,
           ));
-          widget.filteredPictures.add(ImageItem(
+          widget.filteredshoulder.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
             descriptionController.text.toString(),
             isAsset: false,
           ));
         });
-      } else if (selectedList == 'demo') {
-        var data = DemonPictures(
+      } else if (selectedList == 'Abs') {
+        var data = AbsModel(
           image: pickedImagePath!,
           title: titleController.text.toString(),
         );
-        final box = BoxesClass.getDemoData();
+        final box = BoxesClass.getabs();
         box.add(data);
         data.save();
         setState(() {
-          widget.demo.add(ImageItem(
+          widget.abs.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
             descriptionController.text.toString(),
             isAsset: false,
           ));
-          widget.filteredDemo.add(ImageItem(
+          widget.filteredabs.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
             descriptionController.text.toString(),
@@ -141,6 +145,29 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
             isAsset: false,
           ));
           widget.filteredBiceps.add(ImageItem(
+            pickedImagePath!,
+            titleController.text.toString(),
+            descriptionController.text.toString(),
+            isAsset: false,
+          ));
+        });
+      }
+      else if  (selectedList == 'Gluteal') {
+        var data = GlutealModel(
+          image: pickedImagePath!,
+          title: titleController.text.toString(),
+        );
+        final box = BoxesClass.getglutealData();
+        box.add(data);
+        data.save();
+        setState(() {
+          widget.gluteal.add(ImageItem(
+            pickedImagePath!,
+            titleController.text.toString(),
+            descriptionController.text.toString(),
+            isAsset: false,
+          ));
+          widget.filteredgluteal.add(ImageItem(
             pickedImagePath!,
             titleController.text.toString(),
             descriptionController.text.toString(),
@@ -282,7 +309,8 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                         style: TextStyle(color: whiteColor),
                         items: [
                           //null, //represents the initial state
-                          'pictures','demo','Triceps','Biceps','Chest',
+                          'Chest','Biceps','Triceps','Abs','Shoulder', 'Gluteal',
+                          //'Shoulder','Abs','Triceps','Biceps','Chest', 'Gluteal',
                         ]
                             .map((list) {
                               return DropdownMenuItem<String>(
@@ -298,6 +326,7 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                             .toList(),
                         onChanged: (value) {
                           setState(() {
+                            selectedList = value!;
                             selectedList = value!;
                           });
                         },
