@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/consts/list.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
+import 'package:provider/provider.dart';
 
 class AddWorkoutDayForm extends StatefulWidget {
   final Function(String, String, String) onAdd;
@@ -91,14 +93,17 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
 
   @override
   Widget build(BuildContext context) {
+
+    final languageProvider =
+    Provider.of<LanguageProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         leading: LeadingIcon(),
-        title: largeText(title: 'Add New Workout'),
+        title: largeText(title: languageProvider.translate('add_new_workout')),
       ),
       bottomNavigationBar: SubmitButton(
-          titlee: 'Add Workout',
+          titlee: languageProvider.translate('add_workout_button'),
           primaryColor: goldenColor,
           onTap: () {
             if (_workoutNameController.text.isNotEmpty) {
@@ -172,9 +177,9 @@ class _AddWorkoutDayFormState extends State<AddWorkoutDayForm> {
             ),
             textFormField(
               context: context,
-              text: 'Workout Name',
+              text: languageProvider.translate('workout_name_text'),
               controller: _workoutNameController,
-              hint: 'example - day 1',
+              hint: languageProvider.translate('workout_name_textformfield'),
               // labelText: 'Example - Mass Gain Program'
             ),
           ],

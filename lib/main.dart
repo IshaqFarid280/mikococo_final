@@ -3,10 +3,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:mikococo/AppLocalizations.dart';
+import 'package:mikococo/l10n/AppLocalizations.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/exercide/ExerciseScreenProvider.dart';
 import 'package:mikococo/homescreen/HomeScreenProvider.dart';
+import 'package:mikococo/l10n/app_localization.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
+import 'package:mikococo/l10n/localConstants.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
 import 'package:mikococo/setting/SettingProvider.dart';
 import 'package:mikococo/timer/timer.model.dart';
@@ -33,6 +36,7 @@ void main() async  {
   Hive.registerAdapter(TricepsModelAdapter());
   Hive.registerAdapter(BicepsModelAdapter());
   Hive.registerAdapter(ChestModelAdapter());
+  Hive.registerAdapter(SetsScreenDataAdapter());
   await Hive.openBox<AddingPictures>('Pictures', compactionStrategy: (int total, int deleted) => deleted > 20);
   await Hive.openBox<DemonPictures>('Demo');
   await Hive.openBox<TricepsModel>('triceps');
@@ -47,23 +51,31 @@ void main() async  {
     await initializeDummyData();
   }
   runApp(
-      MultiProvider(providers: [
-        ChangeNotifierProvider(create: (context) => RoutineProvider()),
-        ChangeNotifierProvider(create: (context) => HomeScreenProvider()),
-        ChangeNotifierProvider(create: (context) => TimerModel()),
-        ChangeNotifierProvider(create: (context) => ExercisesScreenProvider()),
-        ChangeNotifierProvider(create: (context) => WorkoutDaysScreenProvider()),
-        ChangeNotifierProvider(create: (context) => SwitchProvider()),
-        ChangeNotifierProvider(create: (context) => ExportProvider()),
-        ChangeNotifierProvider(create: (context) => HiveProvider()),
-      ],
-        child: MyApp(),
-      )
-  );
+      Builder(
+        builder: (context){
+          return MultiProvider(providers: [
+              ChangeNotifierProvider(create: (context) => RoutineProvider()),
+          ChangeNotifierProvider(create: (context) => HomeScreenProvider()),
+          ChangeNotifierProvider(create: (context) => TimerModel()),
+          ChangeNotifierProvider(create: (context) => ExercisesScreenProvider()),
+          ChangeNotifierProvider(create: (context) => WorkoutDaysScreenProvider()),
+          ChangeNotifierProvider(create: (context) => SwitchProvider()),
+          ChangeNotifierProvider(create: (context) => ExportProvider()),
+          ChangeNotifierProvider(create: (context) => HiveProvider()),
+          ChangeNotifierProvider(create: (context) => LanguageProvider()),
+          ],
+            child: MyApp(),
+          );
+        },
+
+        ),
+      );
+
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
+
 
 Future<void> initializeDummyData() async {
   // Dummy Routines
@@ -104,34 +116,84 @@ Future<void> initializeDummyData() async {
 }
 
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeLocale();
+  }
+
+  void _initializeLocale() async {
+    Locale locale = await LocaleConstants.getLocale();
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // The initial locale
-      locale: Locale('es', 'ES'), // English
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en', 'US'), // English
-        Locale('es', 'ES'), // Spanish
-      ],
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: ' ',
-        appBarTheme:const  AppBarTheme(
-          color:blackColor,
-          elevation: 0,
-        ),
-        scaffoldBackgroundColor: backGroundColor,
-      ),
-      home:const BottomNavigationScreen(),
+    return Consumer<LanguageProvider>(
+      builder: ( context, languageProvider, child) {
+        return MaterialApp(
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale?.languageCode == locale?.languageCode &&
+                  supportedLocale?.countryCode == locale?.countryCode) {
+                return supportedLocale;
+              }
+            }
+            return supportedLocales?.first;
+          },
+          locale: _locale,
+          supportedLocales: const [
+            // Locale('ar', ''),
+            Locale('en', ''),
+            Locale('es', ''),
+            // Locale('ru', ''),
+          ],
+          // locale: Locale('en'), // Set the default locale
+          builder: (context, child) {
+            return Directionality(
+              textDirection: languageProvider.locale.languageCode == 'ar'
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
+              child: child!,
+            );
+          },
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            fontFamily: ' ',
+            appBarTheme: const AppBarTheme(
+              color: blackColor,
+              elevation: 0,
+            ),
+            scaffoldBackgroundColor: backGroundColor,
+          ),
+          home: const BottomNavigationScreen(),
+        );
+      }
     );
   }
 }

@@ -1,0 +1,34 @@
+
+{
+  "app_title": "GlobalFit Coach",
+  "add_todo": "Add Todo",
+  "title": "Title",
+  "description": "Description",
+  "cancel": "Cancel",
+  "add": "Add",
+  "add_new_routine": "Add New Routine",
+  "routine_name_text": "Routine Name",
+  "routine_name_textformfield": "example - mass gain programs",
+  "routine_description_text": "Routine Description",
+  "routine_description_textformfield": "example - description",
+  "add_routine_button": "Add Routine",
+
+  "workout_days": "Workout Days",
+  "add_new_workout": "Add New Workout",
+  "workout_name_text": "Workout Name",
+  "workout_name_textformfield": "example - day 1",
+  "add_workout_button": "Add Workout",
+
+  "day_exercise": "Exercise",
+  "category_exercise": "Exercises",
+  "search": "Search",
+
+  "add_new_day_exercises": "Add New Exercises",
+  "exercise_name_text": "Exercise Name",
+  "exercise_name_textformfield": "example - Curl Bar",
+  "exercise_description_text": "Exercise Description",
+  "exercise_description_textformfield": "description",
+  "add_exercise_button": "Add Exercise",
+  "add_select_round_button": "--Select--",
+  "pictures": "pictures"
+}

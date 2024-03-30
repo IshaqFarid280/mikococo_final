@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mikococo/calender/calender_screen.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/routine/RoutineProvider.dart';
 import 'package:mikococo/routine/edit_routine.dart';
 import 'package:mikococo/setting/motionToastConstructor.dart';
@@ -14,21 +15,251 @@ import 'package:mikococo/widgets_common/emptybox.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:mikococo/workout/workoutScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../consts/colors.dart';
 import '../module/models.dart';
 import '../widgets_common/our_button.dart';
 import 'add_routine.dart';
 
-class MyRoutinesScreen extends StatelessWidget {
+class MyRoutinesScreen extends StatefulWidget {
+  @override
+  State<MyRoutinesScreen> createState() => _MyRoutinesScreenState();
+}
+
+class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
+
+  final _routineBox = Hive.box<Routine>('RoutineBox');
+  final _dayBox = Hive.box<WorkoutDay>('WorkoutDaysBox');
+  final _dayexerciseBox = Hive.box<Exercise>('ExercisesBox');
+  String _currentLanguage = 'en';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    final prefs = await SharedPreferences.getInstance();
+    _currentLanguage = prefs.getString('language_code') ?? 'en';
+
+    // await _loadDemoData();
+    // await _updateDemoData();
+  }
+
+  // if (Hive.box<Routine>('RoutineBox').isEmpty || Hive.box<WorkoutDay>('WorkoutDaysBox').isEmpty || Hive.box<Exercise>('ExercisesBox').isEmpty) {
+  // await initializeDummyData();
+  // }
+
+  // Future<void> _loadDemoData() async {
+  //   // Dummy Routines
+  //   if (_routineBox.isEmpty ||  _dayBox.isEmpty || _dayexerciseBox.isEmpty) {
+  //     // _routineBox.add(Routine('Body weight', '3 Monhs me Mass Gain Karna 😮', 'e', redColor.value.toRadixString(16), []));
+  //     // _routineBox.add(Routine('Full body','3 Monhs me Mass Gain Karna 😮', 'g', blackColor.value.toRadixString(16), []));
+  //     // _routineBox.add(Routine('Mass gain','3 Monhs me Mass Gain Karna 😮', 'a', greyColor.value.toRadixString(16), []));
+  //     //
+  //     // _dayBox.add(WorkoutDay('Day 1', 's', redColor.value.toRadixString(16), []));
+  //     // _dayBox.add(WorkoutDay('Day 2', 'q', greenColor.value.toRadixString(16), []));
+  //     // _dayBox.add(WorkoutDay('Day 3', 'p',greyColor.value.toRadixString(16),[]));
+  //     //
+  //     // _dayexerciseBox.add(Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null,));
+  //     // _dayexerciseBox.add(Exercise('Squats','assets/json/crunch a la poulie pour les obliques.json',null));
+  //     // _dayexerciseBox.add(Exercise('Pull-ups','assets/json/crunch a la poulie pour les obliques.json',null));
+  //     // // await exercisesBox.addAll([exercise1, exercise2, exercise3]);
+  //     //
+  //     // routine1.workoutDays.add(workoutDay1.key);
+  //     // routine2.workoutDays.add(workoutDay2.key);
+  //     // routine3.workoutDays.add(workoutDay3.key);
+  //
+  //     final routineBox = Hive.box<Routine>('RoutineBox');
+  //     final routine1 = Routine('Body weight', '3 Monhs me Mass Gain Karna 😮', 'e', redColor.value.toRadixString(16), []);
+  //     final routine2 = Routine('Full body','3 Monhs me Mass Gain Karna 😮', 'g', blackColor.value.toRadixString(16), []);
+  //     final routine3 = Routine('Mass gain','3 Monhs me Mass Gain Karna 😮', 'a', greyColor.value.toRadixString(16), []);
+  //     await routineBox.addAll([routine1, routine2, routine3]);
+  //     // Dummy Workout Days
+  //     final workoutDaysBox = Hive.box<WorkoutDay>('WorkoutDaysBox');
+  //     final workoutDay1 = WorkoutDay('Day 1', 's', redColor.value.toRadixString(16), []);
+  //     final workoutDay2 = WorkoutDay('Day 2', 'q', greenColor.value.toRadixString(16), []);
+  //     final workoutDay3 = WorkoutDay('Day 3', 'p',greyColor.value.toRadixString(16),[]);
+  //     await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
+  //     // Dummy Exercises
+  //     final exercisesBox = Hive.box<Exercise>('ExercisesBox');
+  //     final exercise1 = Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null,);
+  //     final exercise2 = Exercise('Squats','assets/json/crunch a la poulie pour les obliques.json',null);
+  //     final exercise3 = Exercise('Pull-ups','assets/json/crunch a la poulie pour les obliques.json',null);
+  //     await exercisesBox.addAll([exercise1, exercise2, exercise3]);
+  //     // Link routines with workout days
+  //     routine1.workoutDays.add(workoutDay1.key);
+  //     routine2.workoutDays.add(workoutDay2.key);
+  //     routine3.workoutDays.add(workoutDay3.key);
+  //     // Link workout days with exercises
+  //     workoutDay1.exercises.add(exercise1.key);
+  //     workoutDay2.exercises.add(exercise2.key);
+  //     workoutDay3.exercises.add(exercise3.key);
+  //     // Save changes
+  //     await Future.wait([
+  //       routine1.save(),
+  //       routine2.save(),
+  //       routine3.save(),
+  //       workoutDay1.save(),
+  //       workoutDay2.save(),
+  //       workoutDay3.save(),
+  //     ]);
+  //   }
+  //   // else{
+  //   //   await _updateDemoData();
+  //   // }
+  //
+  // }
+
+
+  // Future<void> _updateDemoData() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('language_code', _currentLanguage);
+  //
+  //     switch (_currentLanguage) {
+  //       case 'es':
+  //       // Update data for Spanish
+  //         final routineBox = Hive.box<Routine>('RoutineBox');
+  //         final routine1 = Routine('Body weightes', '3 Monhs for spanish 😮', 'e', redColor.value.toRadixString(16), []);
+  //         final routine2 = Routine('Full body','3 Monhs me Mass Gain Karna 😮', 'g', blackColor.value.toRadixString(16), []);
+  //         final routine3 = Routine('Mass gain','3 Monhs me Mass Gain Karna 😮', 'a', greyColor.value.toRadixString(16), []);
+  //         // await routineBox.addAll([routine1, routine2, routine3]);
+  //         routineBox.putAt(0, routine1);
+  //         routineBox.putAt(1, routine2);
+  //         routineBox.putAt(2, routine3);
+  //         // Dummy Workout Days
+  //         final workoutDaysBox = Hive.box<WorkoutDay>('WorkoutDaysBox');
+  //         final workoutDay1 = WorkoutDay('Day 1', 's', redColor.value.toRadixString(16), []);
+  //         final workoutDay2 = WorkoutDay('Day 2', 'q', greenColor.value.toRadixString(16), []);
+  //         final workoutDay3 = WorkoutDay('Day 3', 'p',greyColor.value.toRadixString(16),[]);
+  //         // await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
+  //         workoutDaysBox.putAt(0, workoutDay1);
+  //         workoutDaysBox.putAt(1, workoutDay2);
+  //         workoutDaysBox.putAt(2, workoutDay3);
+  //         // Dummy Exercises
+  //         final exercisesBox = Hive.box<Exercise>('ExercisesBox');
+  //         final exercise1 = Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null,);
+  //         final exercise2 = Exercise('Squats','assets/json/crunch a la poulie pour les obliques.json',null);
+  //         final exercise3 = Exercise('Pull-ups','assets/json/crunch a la poulie pour les obliques.json',null);
+  //         // await exercisesBox.addAll([exercise1, exercise2, exercise3]);
+  //         exercisesBox.putAt(0, exercise1);
+  //         exercisesBox.putAt(1, exercise2);
+  //         exercisesBox.putAt(2, exercise3);
+  //
+  //         // Link routines with workout days
+  //
+  //         routine1.workoutDays.add(workoutDay1.key);
+  //         routine2.workoutDays.add(workoutDay2.key);
+  //         routine3.workoutDays.add(workoutDay3.key);
+  //         // Link workout days with exercises
+  //         workoutDay1.exercises.add(exercise1.key);
+  //         workoutDay2.exercises.add(exercise2.key);
+  //         workoutDay3.exercises.add(exercise3.key);
+  //         // Save changes
+  //         await Future.wait([
+  //           routine1.save(),
+  //           routine2.save(),
+  //           routine3.save(),
+  //           workoutDay1.save(),
+  //           workoutDay2.save(),
+  //           workoutDay3.save(),
+  //         ]);
+  //
+  //     //   _routineBox.putAt(0, Routine('Body weight for Spanish', '3 Monhs me Mass Gain Karna 😮', 'e', redColor.value.toRadixString(16), []));
+  //       //   _routineBox.putAt(1, Routine('Full body', '3 Monhs me Mass Gain Karna 😮', 'g', blackColor.value.toRadixString(16), []));
+  //       //   _routineBox.putAt(2, Routine('Mass gain', '3 Monhs me Mass Gain Karna 😮', 'a', greyColor.value.toRadixString(16), []));
+  //       //
+  //       //   _dayBox.putAt(0, WorkoutDay('Day 1', 's', redColor.value.toRadixString(16), []));
+  //       //   _dayBox.putAt(1, WorkoutDay('Day 2', 'q', redColor.value.toRadixString(16), []));
+  //       //   _dayBox.putAt(2, WorkoutDay('Day 3', 'z', redColor.value.toRadixString(16), []));
+  //       //
+  //       //   _dayexerciseBox.putAt(0, Exercise('Push-ups_es', 'assets/json/crunch a la poulie pour les obliques.json', null,));
+  //       //   _dayexerciseBox.putAt(1, Exercise('Squats_es', 'assets/json/crunch a la poulie pour les obliques.json', null));
+  //       //   _dayexerciseBox.putAt(2, Exercise('Pull-ups_es', 'assets/json/crunch a la poulie pour les obliques.json', null));
+  //         break;
+  //       default:
+  //       // Update data for other languages or default
+  //       // Update data for Spanish
+  //         final routineBox = Hive.box<Routine>('RoutineBox');
+  //         final routine1 = Routine('Body weightes', '3 Monhs me Mass Gain Karna 😮', 'e', redColor.value.toRadixString(16), []);
+  //         final routine2 = Routine('Full body','3 Monhs me Mass Gain Karna 😮', 'g', blackColor.value.toRadixString(16), []);
+  //         final routine3 = Routine('Mass gain','3 Monhs me Mass Gain Karna 😮', 'a', greyColor.value.toRadixString(16), []);
+  //         // await routineBox.addAll([routine1, routine2, routine3]);
+  //         routineBox.putAt(0, routine1);
+  //         routineBox.putAt(1, routine2);
+  //         routineBox.putAt(2, routine3);
+  //         // Dummy Workout Days
+  //         final workoutDaysBox = Hive.box<WorkoutDay>('WorkoutDaysBox');
+  //         final workoutDay1 = WorkoutDay('Day 1', 's', redColor.value.toRadixString(16), []);
+  //         final workoutDay2 = WorkoutDay('Day 2', 'q', greenColor.value.toRadixString(16), []);
+  //         final workoutDay3 = WorkoutDay('Day 3', 'p',greyColor.value.toRadixString(16),[]);
+  //         // await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
+  //         workoutDaysBox.putAt(0, workoutDay1);
+  //         workoutDaysBox.putAt(1, workoutDay2);
+  //         workoutDaysBox.putAt(2, workoutDay3);
+  //         // Dummy Exercises
+  //         final exercisesBox = Hive.box<Exercise>('ExercisesBox');
+  //         final exercise1 = Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null,);
+  //         final exercise2 = Exercise('Squats','assets/json/crunch a la poulie pour les obliques.json',null);
+  //         final exercise3 = Exercise('Pull-ups','assets/json/crunch a la poulie pour les obliques.json',null);
+  //         // await exercisesBox.addAll([exercise1, exercise2, exercise3]);
+  //         exercisesBox.putAt(0, exercise1);
+  //         exercisesBox.putAt(1, exercise2);
+  //         exercisesBox.putAt(2, exercise3);
+  //
+  //         // Link routines with workout days
+  //
+  //         routine1.workoutDays.add(workoutDay1.key);
+  //         routine2.workoutDays.add(workoutDay2.key);
+  //         routine3.workoutDays.add(workoutDay3.key);
+  //         // Link workout days with exercises
+  //         workoutDay1.exercises.add(exercise1.key);
+  //         workoutDay2.exercises.add(exercise2.key);
+  //         workoutDay3.exercises.add(exercise3.key);
+  //         // Save changes
+  //         await Future.wait([
+  //           routine1.save(),
+  //           routine2.save(),
+  //           routine3.save(),
+  //           workoutDay1.save(),
+  //           workoutDay2.save(),
+  //           workoutDay3.save(),
+  //         ]);
+  //         break;
+  //     }
+  //
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Language changed to $_currentLanguage'),
+  //         duration: Duration(seconds: 2),
+  //       ),
+  //     );
+  //
+  //     setState(() {}); // Manually trigger a rebuild when language changes
+  //
+  // }
+
+
   Future<void> _launchYoutubeVideo(String url) async {
     await launch(url);
   }
+
+  // Future<void> _onRefresh() async {
+  //   // await _loadDemoData();
+  //   print('rebuild in refresh');
+  //   // await _updateDemoData();
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
     var routineProvider = Provider.of<RoutineProvider>(context, listen: false);
     routineProvider.loadRoutines();
+
+    final languageProvider =
+    Provider.of<LanguageProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -50,15 +281,36 @@ class MyRoutinesScreen extends StatelessWidget {
           },
         ),
         centerTitle: true,
-        title: normalText(title: 'My Routines'),
+        // title: normalText(title:'Workout Days ${routine.name}'),
+        title: normalText(title: languageProvider.translate('app_title'),),
         actions: [
-          trailingbutton(
-            onTap: () {
-              CustomMotionToast.showSuccessToast(context, 'This Option will implemented', 'in next Milestone');
-            },
-            svgAsset: 'assets/svg/language.svg',
-            svgColor: leadingBtnColor,
+
+        DropdownButton<String>(
+          style: TextStyle(
+            color: whiteColor,
           ),
+          dropdownColor: Colors.grey,
+
+        value: _currentLanguage,
+        items: const [
+          DropdownMenuItem(
+            value: 'en',
+            child: Text('English'),
+          ),
+          DropdownMenuItem(
+            value: 'es',
+            child: Text('Spanish'),
+          ),
+        ],
+        onChanged: (value) async {
+          languageProvider.changeLanguage(value!);
+          setState(() {
+            _currentLanguage = value!;
+          });
+          // await _onRefresh();
+        },
+      ),
+
         ],
       ),
       drawer: Drawer(
@@ -208,7 +460,8 @@ class MyRoutinesScreen extends StatelessWidget {
                             tileColor: listTileColor,
                             leading: Container(
                               decoration: BoxDecoration(
-                                  color: Color(int.parse(
+                                  color: Color(
+                                      int.parse(
                                           currentroutine.avatarColor
                                               .replaceFirst('#', ''),
                                           radix: 16) |

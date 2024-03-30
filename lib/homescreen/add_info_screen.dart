@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../module/models.dart';
 import '../services/Boxes.dart';
@@ -180,10 +182,14 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final languageProvider =
+    Provider.of<LanguageProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: LeadingIcon(),
-        title: normalText(title: 'Globalfit'),
+        centerTitle: true,
+        title: normalText(title: languageProvider.translate('add_new_day_exercises')),
         actions: [],
       ),
       body: Padding(
@@ -270,7 +276,7 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                         iconEnabledColor: whiteColor,
                         underline: Container(), // or underline: SizedBox(),
                         hint: Text(
-                          '--Select--',
+    languageProvider.translate('add_select_round_button'),
                           style: TextStyle(color: whiteColor),
                         ),
                         style: TextStyle(color: whiteColor),
@@ -321,7 +327,8 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                         iconEnabledColor: whiteColor,
                         underline: Container(), // or underline: SizedBox(),
                         hint: Text(
-                          '--Select--',
+
+                          languageProvider.translate('add_select_round_button'),
                           style: TextStyle(color: whiteColor),
                         ),
                         isExpanded: true,
@@ -358,9 +365,9 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
             ),
             textFormField(
               context: context,
-              text: 'Exercise Name',
+              text: languageProvider.translate('exercise_name_text'),
               controller: titleController,
-              hint: 'exercise name',
+              hint: languageProvider.translate('exercise_name_textformfield'),
               // labelText: 'Example - Mass Gain Program'
             ),
             SizedBox(
@@ -368,9 +375,9 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
             ),
             textFormField(
               context: context,
-              text: 'Description',
+              text: languageProvider.translate('exercise_description_text'),
               controller: descriptionController,
-              hint: 'description',
+              hint: languageProvider.translate('exercise_description_textformfield'),
               // labelText: 'Example - Mass Gain Program'
             ),
             SizedBox(
@@ -386,7 +393,7 @@ class _AddPictureScreenState extends State<AddPictureScreen> {
                     onTap: () {
                       _addPicture();
                     },
-                    titlee: 'Add',
+                    titlee: languageProvider.translate('add_exercise_button'),
                     primaryColor: goldenColor,
                   ),
                 ),

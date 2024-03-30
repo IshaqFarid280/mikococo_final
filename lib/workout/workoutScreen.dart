@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/exercide/exercise_screen.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/widgets_common/emptybox.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
@@ -25,12 +26,14 @@ class WorkoutDaysScreen extends StatelessWidget {
         Provider.of<WorkoutDaysScreenProvider>(context);
     workoutDaysScreenProvider.loadWorkoutDays(routine);
 
+    final languageProvider =
+    Provider.of<LanguageProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: LeadingIcon(),
         centerTitle: true,
         // title: normalText(title:'Workout Days ${routine.name}'),
-        title: normalText(title: 'Workout Days'),
+        title: normalText(title: languageProvider.translate('app_title'),),
       ),
       body: Consumer<WorkoutDaysScreenProvider>(
         builder: (context, workoutDaysScreenProvider, _) {

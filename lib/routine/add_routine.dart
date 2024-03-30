@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/consts/list.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
+import 'package:provider/provider.dart';
 
 class AddRoutineForm extends StatefulWidget {
   final Function(String, String, String, String) onAdd;
@@ -78,9 +80,13 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
 
   @override
   Widget build(BuildContext context) {
+
+    final languageProvider =
+    Provider.of<LanguageProvider>(context, listen: false);
+
     return Scaffold(
       bottomNavigationBar: SubmitButton(
-          titlee: 'Add Routine',
+          titlee: languageProvider.translate('add_routine_button'),
           primaryColor: goldenColor,
           onTap: () {
             if (_controller.text.isNotEmpty &&
@@ -100,7 +106,7 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
           }),
       appBar: AppBar(
         leading: LeadingIcon(),
-        title: largeText(title: 'Add New Routine'),
+        title: largeText(title: languageProvider.translate('add_new_routine')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -160,16 +166,16 @@ class _AddRoutineFormState extends State<AddRoutineForm> {
           ),
           textFormField(
             context: context,
-            text: 'Routine Name',
+            text: languageProvider.translate('routine_name_text'),
             controller: _controller,
-            hint: 'example - mass gain program',
+            hint: languageProvider.translate('routine_name_textformfield'),
             // labelText: 'Example - Mass Gain Program'
           ),
           textFormField(
             context: context,
-            text: 'Routine Description',
+            text: languageProvider.translate('routine_description_text'),
             controller: _desccontroller,
-            hint: 'example - december',
+            hint: languageProvider.translate('routine_description_textformfield'),
             // labelText: 'Example - Mass Gain Program'
           ),
         ]),

@@ -39,7 +39,12 @@ dependencies:
   path_provider:
   hive_flutter: ^1.1.0
   image_picker:
-  intl:
+#  intl:
+
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.1
+
   provider:
   flutter_slidable:
   fl_chart: ^0.40.0
@@ -56,9 +61,10 @@ dependencies:
   in_app_purchase: ^3.1.11
   csv: ^5.1.1
   file_picker:
-  flutter_localization: ^0.1.13
+#  flutter_localization: ^0.1.13
 #  audioplayers:
 
+  shared_preferences: ^2.0.12
 
 dev_dependencies:
   hive_generator: ^2.0.1
@@ -91,6 +97,10 @@ flutter:
     - assets/svg/
     - assets/json/
     - lib/l10n/
+    - assets/i18n/ar.json
+    - assets/i18n/en.json
+    - assets/i18n/es.json
+    - assets/i18n/ru.json
 
 
   fonts:

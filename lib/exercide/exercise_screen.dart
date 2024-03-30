@@ -12,6 +12,7 @@ import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:provider/provider.dart';
 import '../consts/colors.dart';
 import '../consts/strnigs.dart';
+import '../l10n/languageProvider.dart';
 import '../module/models.dart';
 import '../widgets_common/text_widgets.dart';
 
@@ -23,11 +24,15 @@ class ExercisesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var exercisesScreenProvider = Provider.of<ExercisesScreenProvider>(context);
     exercisesScreenProvider.setWorkoutDay(workoutDay);
+
+    final languageProvider =
+    Provider.of<LanguageProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         leading: LeadingIcon(),
         centerTitle: true,
-        title: normalText(title: appName),
+        title: normalText(title: languageProvider.translate('app_title')),
       ),
       body: Consumer<ExercisesScreenProvider>(
         builder: (context, exercisesScreenProvider, _) {
@@ -48,7 +53,7 @@ class ExercisesScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, top: 8),
                   child: normalText(
-                      title: 'Exercise ( ${workoutDay.name} )',
+                      title: '${languageProvider.translate('day_exercise')} ( ${workoutDay.name} )',
                       textSize: 20.0,
                       weight: FontWeight.w400),
                 ),
