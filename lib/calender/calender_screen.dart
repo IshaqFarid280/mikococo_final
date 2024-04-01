@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -31,22 +33,32 @@ class _ShareScreenState extends State<ShareScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: LeadingIcon(),
-        title: normalText(title: 'Share Exercise'),
+        title: normalText(title: languageProvider.translate('app_title'),),
+        centerTitle: true,
       ),
       bottomNavigationBar: SubmitButton(
           onTap: () {
             _shareExerciseData(_formatExerciseData());
+            setState(() {
+
+            });
           },
-          titlee: 'Share Exercises', primaryColor: buttonColors),
+          titlee: languageProvider.translate('share_exercise'),
+          primaryColor: buttonColors),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              normalText(title: languageProvider.translate('calender'),),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+
               _buildCalendar(),
               SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
               _buildExerciseData(),
@@ -60,7 +72,11 @@ class _ShareScreenState extends State<ShareScreen> {
   }
 
   Widget _buildCalendar() {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+
     return TableCalendar(
+
+      locale: languageProvider.currentLocale.toString(),
       weekNumbersVisible: false,
       daysOfWeekVisible: true,
       headerVisible: true,
@@ -152,8 +168,9 @@ class _ShareScreenState extends State<ShareScreen> {
   }
 
   String _formatExerciseData() {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     String formattedDate = DateFormat('dd / MM / yyyy').format(_selectedDate);
-    String exerciseText = 'Workout : $formattedDate\n';
+    String exerciseText = '${languageProvider.translate('workout')} : $formattedDate\n';
     List<SetsScreenData> selectedDateSets = getSelectedDateSets(_selectedDate);
 
     for (SetsScreenData set in selectedDateSets) {

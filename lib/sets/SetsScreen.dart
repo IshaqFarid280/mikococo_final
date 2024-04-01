@@ -32,7 +32,7 @@ class SetsScreen extends StatelessWidget {
       create: (_) => SetsScreenStateProvider(exercise),
       child: Consumer<SetsScreenStateProvider>(
         builder: (context, setsProvider, _) {
-         setsProvider.setExercise(exercise); // Set the exercise when it's available
+          setsProvider.setExercise(exercise); // Set the exercise when it's available
           return SetsScreenContent();
         },
       ),
@@ -201,45 +201,45 @@ class _SetsScreenState extends State<SetsScreenContent> {
             scrollDirection: Axis.vertical,
             child: Column(
               children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: ListTile(
-                  contentPadding:
-                  const EdgeInsets.only(left: 15, top: 5, bottom: 5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  title: normalText(
-                      title: _setsScreenStateProvider.exercise?.name,
-                      textSize: 18.0),
-                  tileColor: listTileLeadingColor,
-                  onTap: (){
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) => DummyTimerScreen(exerciseName: exerciseName.toString(),exercisePath: exercisePath.toString(),)));
-                  },
-                  leading: _setsScreenStateProvider.exercise!.image.toString().toString().contains('assets/json')
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: ListTile(
+                    contentPadding:
+                    const EdgeInsets.only(left: 15, top: 5, bottom: 5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    title: normalText(
+                        title: _setsScreenStateProvider.exercise?.name,
+                        textSize: 18.0),
+                    tileColor: listTileLeadingColor,
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => DummyTimerScreen(exerciseName: exerciseName.toString(),exercisePath: exercisePath.toString(),)));
+                    },
+                    leading: _setsScreenStateProvider.exercise!.image.toString().toString().contains('assets/json')
 
-                    ? ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.15,
-                        child: Lottie.asset(
-                          _setsScreenStateProvider.exercise!.image.toString(),
-                          repeat: false,
-                        )))
-                    : ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image(
-                      fit: BoxFit.cover,
-                      width: MediaQuery.of(context).size.width * 0.15,
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      image: FileImage(File(_setsScreenStateProvider.exercise!.image.toString())) as ImageProvider,
-                    )),
+                        ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.15,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            child: Lottie.asset(
+                              _setsScreenStateProvider.exercise!.image.toString(),
+                              repeat: false,
+                            )))
+                        : ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image(
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          image: FileImage(File(_setsScreenStateProvider.exercise!.image.toString())) as ImageProvider,
+                        )),
+                  ),
                 ),
-              ),
 
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,

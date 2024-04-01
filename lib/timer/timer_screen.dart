@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/homescreen/add_info_screen.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class TimerScreen extends StatefulWidget {
 class _TimerScreenState extends State<TimerScreen> {
   late Future<void> _loadTimerValues;
 
-  @override
+   @override
   void initState() {
     super.initState();
     _loadTimerValues = _loadValues();
@@ -28,11 +29,15 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         leading: LeadingIcon(),
-        title: normalText(title: 'Globalfit'),
+        title: normalText(title: languageProvider.translate('app_title'),
+        ),
+
         // title: Text('Timer Screen'),
         actions: [
           AddThingsIcon(
@@ -49,7 +54,7 @@ class _TimerScreenState extends State<TimerScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 16),
-            child: largeText(title: 'Timer Screen', weight: FontWeight.bold),
+            child: largeText(title: '${languageProvider.translate('timer')}', weight: FontWeight.bold),
           ),
           Expanded(
             child: FutureBuilder(
@@ -156,8 +161,12 @@ class TimerButton extends StatelessWidget {
 }
 
 class TimerBottomNavigationBar extends StatelessWidget {
+  // final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+  //
+  // TimerBottomNavigationBar({required this.languageProvider});
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     var timerModel = Provider.of<TimerModel>(context);
 
     return SubmitButton(
@@ -166,7 +175,7 @@ class TimerBottomNavigationBar extends StatelessWidget {
         timerModel.stopTimer(timerModel.selectedBox);
         Navigator.pop(context);
       },
-      titlee: 'STOP',
+      titlee: '${languageProvider.translate('stop_timer')}',
     );
 
   }

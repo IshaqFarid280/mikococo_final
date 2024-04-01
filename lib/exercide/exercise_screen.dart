@@ -23,6 +23,7 @@ class ExercisesScreen extends StatelessWidget {
 
   Widget build(BuildContext context) {
     var exercisesScreenProvider = Provider.of<ExercisesScreenProvider>(context);
+
     exercisesScreenProvider.setWorkoutDay(workoutDay);
 
     final languageProvider =
@@ -134,9 +135,9 @@ class ExercisesScreen extends StatelessWidget {
                                 content: EditExerciseForm(
                                   initialName: exercisesScreenProvider
                                       .exercises[index].name,
-                                  onEdit: (String newName) {
+                                  onEdit: (String newName, String newdescription) {
                                     exercisesScreenProvider.updateExercise(
-                                        index, newName);
+                                        index, newName, newdescription);
                                     Navigator.of(context).pop();
                                   },
                                 ),

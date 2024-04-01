@@ -95,9 +95,9 @@ Future<void> initializeDummyData() async {
   await workoutDaysBox.addAll([workoutDay1, workoutDay2, workoutDay3]);
   // Dummy Exercises
   final exercisesBox = Hive.box<Exercise>('ExercisesBox');
-  final exercise1 = Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null,);
-  final exercise2 = Exercise('Squats','assets/json/crunch a la poulie pour les obliques.json',null);
-  final exercise3 = Exercise('Pull-ups','assets/json/crunch a la poulie pour les obliques.json',null);
+  final exercise1 = Exercise('Push-upps','assets/json/crunch a la poulie pour les obliques.json',null, null);
+  final exercise2 = Exercise('Squats','assets/json/crunch a la poulie pour les obliques.json',null, null);
+  final exercise3 = Exercise('Pull-ups','assets/json/crunch a la poulie pour les obliques.json',null, null);
   await exercisesBox.addAll([exercise1, exercise2, exercise3]);
   // Link routines with workout days
   routine1.workoutDays.add(workoutDay1.key);

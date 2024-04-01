@@ -85,17 +85,21 @@ class Exercise extends HiveObject {
   String name ;
 
   @HiveField(1)
+  String description ;
+
+  @HiveField(2)
   String ? image ;
 
 
-  @HiveField(2)
+  @HiveField(3)
   List<int> ? sets;
 
-  Exercise(this.name,this.image,this.sets);
+  Exercise(this.name, this.description, this.image,this.sets);
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'description': description,
       'image': image,
       'sets': sets,
     };
@@ -104,6 +108,7 @@ class Exercise extends HiveObject {
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
       json['name'],
+      json['description'],
       json['image'],
       List<int>.from(json['sets']),
     );

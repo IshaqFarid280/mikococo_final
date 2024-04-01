@@ -27,6 +27,8 @@ class LanguageProvider extends ChangeNotifier {
     }
   }
 
+  Locale get currentLocale => _locale; // New getter to return the current locale
+
   Future<void> _initPreferences() async {
     _preferences = await SharedPreferences.getInstance();
     String? savedLocale = _preferences.getString('language_code');

@@ -1,5 +1,5 @@
 {
-  "app_title": "Entrenador GlobalFit",
+  "app_title": "GlobalFit",
   "add_todo": "Agregar Tarea",
   "title": "Título",
   "description": "Descripción",
@@ -29,5 +29,41 @@
   "exercise_description_textformfield": "descripción",
   "add_exercise_button": "Agregar Ejercicio",
   "add_select_round_button": "--Seleccionar--",
-  "pictures": "imágenes"
+  "pictures": "imágenes",
+
+  "my_exercise_drawable": "Mis Ejercicios",
+  "diary_drawable": "Diario",
+  "timer_drawable": "Temporizador",
+  "setting_drawable": "Configuración",
+  "facebook_draweable": "Facebook",
+  "sync_drawable": "Sincronizar",
+  "get_premium_drawable": "Obtener Premium",
+
+  "timer": "Temporizador",
+  "stop_timer": "Detener",
+  "edit_timer": "Editar Temporizador",
+  "calender": "Calendario de Entrenamiento",
+
+  "share_exercise": "Compartir Ejercicio",
+  "workout": "Entrenamiento",
+
+  "setting": "Configuración",
+  "data": "datos",
+  "import_database": "Importar base de datos",
+  "export_database": "Exportar base de datos",
+  "export_csv": "Exportar CSV",
+  "about": "Acerca de",
+  "rate_this_app": "Calificar esta aplicación",
+  "share_app": "Compartir aplicación",
+  "preference_for_ads": "Preferencia para anuncios",
+  "preference_dialog_description": "En su uso gratuito, esta aplicación mostrará publicidad gestionada por Google y sus socios. Ahora puede elegir si desea o no recibir anuncios personalizados basados en sus preferencias de navegación. Puede cambiar su elección en cualquier momento en las preferencias.",
+  "preference_dialog_description_accept": "Aceptar",
+  "preference_dialog_description_cannel": "No, quiero ver anuncios no personalizados",
+  "privacy_policy": "Política de privacidad",
+  "about_us": "Sobre nosotros",
+  "about_us_dialog_description": "Versión de la aplicación: 5.0.018 (500000018) - 400.0\\nPuedes contactarnos en contact@carnatdemusulation.fr para cualquier información, sugerencia o problema encontrado. Las imágenes contenidas en la aplicación están sujetas a derechos de autor y a una licencia de uso. Cualquier reutilización por tu parte está estrictamente prohibida.",
+  "ok": "Ok",
+
+  "exercise_categories": ["Pecho", "Bíceps", "Tríceps", "Abdominales", "Glúteos", "Hombros"]
+
 }

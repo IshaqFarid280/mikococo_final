@@ -256,6 +256,7 @@ class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
   @override
   Widget build(BuildContext context) {
     var routineProvider = Provider.of<RoutineProvider>(context, listen: false);
+
     routineProvider.loadRoutines();
 
     final languageProvider =
@@ -323,7 +324,7 @@ class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/dumbel.svg',
-                title: 'My Exercises',
+                title: languageProvider.translate('my_exercise_drawable'),
                 ontap: () {
                   Navigator.push(context,
                       CupertinoPageRoute(builder: (ctx) => HomeScreen(null)));
@@ -331,7 +332,7 @@ class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/calnder.svg',
-                title: 'Diary',
+                title: languageProvider.translate('diary_drawable'),
                 ontap: () {
                   Navigator.push(context,
                       CupertinoPageRoute(builder: (ctx) => ShareScreen()));
@@ -340,7 +341,7 @@ class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
 
               listTileDrawer(
                 assetsvg: 'assets/svg/clock.svg',
-                title: 'Timer',
+                title: languageProvider.translate('timer_drawable'),
                 ontap: () {
                   Navigator.push(context,
                       CupertinoPageRoute(builder: (ctx) => TimerScreen()));
@@ -355,7 +356,7 @@ class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
               // ),
               listTileDrawer(
                 assetsvg: 'assets/svg/setting.svg',
-                title: 'Setting',
+                title: languageProvider.translate('setting_drawable'),
                 ontap: () {
                   Navigator.push(context,
                       CupertinoPageRoute(builder: (ctx) => SettingScreen()));
@@ -363,7 +364,7 @@ class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/facebooklogo.svg',
-                title: 'Facebook',
+                title: languageProvider.translate('facebook_draweable'),
                 ontap: () async {
                   const facebookProfileUrl = 'https://www.google.com';
                   _launchYoutubeVideo(facebookProfileUrl);
@@ -371,7 +372,7 @@ class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
               ),
               listTileDrawer(
                 assetsvg: 'assets/svg/sync.svg',
-                title: 'Sync',
+                title: languageProvider.translate('sync_drawable'),
                 ontap: () {
                   CustomMotionToast.showSuccessToast(context, "This option will be implemented", "Next Milestone");
 
@@ -407,7 +408,7 @@ class _MyRoutinesScreenState extends State<MyRoutinesScreen> {
                               width: 10,
                             ),
                             Text(
-                              'Get Premium',
+                              languageProvider.translate('get_premium_drawable'),
                               style: TextStyle(
                                 fontFamily: "Poppins",
                                 color: whiteColor,

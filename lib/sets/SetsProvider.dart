@@ -4,8 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../module/models.dart';
 
-
-
 class SetsScreenStateProvider extends ChangeNotifier {
   late Box<SetsScreenData> setsBox;
   List<int> setKeys = [];
@@ -183,7 +181,7 @@ class SetsScreenStateProvider extends ChangeNotifier {
     if (setKeys.isNotEmpty) {
       averageKg = totalKg / setKeys.length;
     }
-   calculateDailyTotals();
+    calculateDailyTotals();
     notifyListeners();
   }
 
@@ -237,9 +235,9 @@ class SetsScreenStateProvider extends ChangeNotifier {
     //  Refresh the set keys
     loadSetKeys();
     // Notify listeners
-      Future.delayed(Duration.zero,(){
-        notifyListeners();
-      });
+    Future.delayed(Duration.zero,(){
+      notifyListeners();
+    });
   }
 
   // Function to add sets for a specific date

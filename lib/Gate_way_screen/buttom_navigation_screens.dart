@@ -6,7 +6,7 @@ import 'package:mikococo/calender/calender_screen.dart';
 import 'package:mikococo/consts/colors.dart';
 import 'package:mikococo/homescreen/home_screen.dart';
 import 'package:mikococo/module/models.dart';
-import 'package:mikococo/routine/MyRoutineClass.dart';
+import 'package:mikococo/routine/routine_screen.dart';
 import 'package:mikococo/timer/timer_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

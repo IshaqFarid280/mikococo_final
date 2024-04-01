@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/setting/SettingProvider.dart';
 import 'package:mikococo/setting/SoundModel.dart';
 import 'package:mikococo/setting/export_screen.dart';
@@ -229,11 +230,12 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
         leading: LeadingIcon(),
-        title: normalText(title: 'Globalfit'),
+        title: normalText(title: languageProvider.translate('app_title')),
         centerTitle: true,
       ),
       body: Consumer<SwitchProvider>(
@@ -244,84 +246,83 @@ class SettingScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0, right: 8, top: 12, bottom: 4),
-                    child: normalText(title: 'Setting', textSize: 14.0),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.0),
-                      color: listTileColor,
-                    ),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          onTap: () {},
-                          leading: SvgPicture.asset(
-                            'assets/svg/keyboard.svg',
-                            width: 15,
-                            height: 18,
-                            color: whiteColor,
-                          ),
-
-                          trailing: Container(
-                            width: 80,
-                            child: FlutterSwitch(
-                              width: 65.0,
-                              height: 30.0,
-                              valueFontSize: 12.0,
-                              toggleSize: 20.0,
-                              value: switchProvider.status,
-                              borderRadius: 20.0,
-                              padding: 6.0,
-                              showOnOff: true,
-                              onToggle: (val) {
-                                switchProvider.toggleSwitch(context, val);
-                              },
-                            ),
-                          ),
-                          title: Padding(
-                            padding: const EdgeInsets.only(left: 2.0, right: 2),
-                            child: Text(
-                              'Use the Roller Mode',
-                              style: TextStyle(
-                                color: whiteColor,
-                                fontSize: 14,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        settingListDrawer(
-                          ontap: () {
-                            _showUnitSelectionDialog(context);
-                          },
-                          assetsvg: 'assets/svg/weight.svg',
-                          title: 'Weight',
-                          subtitle: switchProvider.selectedUnit,
-                        ),
-                        settingListDrawer(
-                          ontap: () {
-                            _showSoundSelectionDialog(context);
-                          },
-                          assetsvg: 'assets/svg/notification.svg',
-                          title: 'Notification Sound',
-                          // subtitle: switchProvider.selectedSound?.name ??
-                          //     'Select a Sound',
-                          subtitle: 'Beep 1',
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 4.0, right: 8, top: 12, bottom: 4),
+                  //   child: normalText(title: 'Setting', textSize: 14.0),
+                  // ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(6.0),
+                  //     color: listTileColor,
+                  //   ),
+                  //   child: Column(
+                  //     children: [
+                  //       ListTile(
+                  //         onTap: () {},
+                  //         leading: SvgPicture.asset(
+                  //           'assets/svg/keyboard.svg',
+                  //           width: 15,
+                  //           height: 18,
+                  //           color: whiteColor,
+                  //         ),
+                  //
+                  //         trailing: Container(
+                  //           width: 80,
+                  //           child: FlutterSwitch(
+                  //             width: 65.0,
+                  //             height: 30.0,
+                  //             valueFontSize: 12.0,
+                  //             toggleSize: 20.0,
+                  //             value: switchProvider.status,
+                  //             borderRadius: 20.0,
+                  //             padding: 6.0,
+                  //             showOnOff: true,
+                  //             onToggle: (val) {
+                  //               switchProvider.toggleSwitch(context, val);
+                  //             },
+                  //           ),
+                  //         ),
+                  //         title: Padding(
+                  //           padding: const EdgeInsets.only(left: 2.0, right: 2),
+                  //           child: Text(
+                  //             'Use the Roller Mode',
+                  //             style: TextStyle(
+                  //               color: whiteColor,
+                  //               fontSize: 14,
+                  //               fontFamily: "Poppins",
+                  //               fontWeight: FontWeight.bold,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       settingListDrawer(
+                  //         ontap: () {
+                  //           _showUnitSelectionDialog(context);
+                  //         },
+                  //         assetsvg: 'assets/svg/weight.svg',
+                  //         title: 'Weight',
+                  //         subtitle: switchProvider.selectedUnit,
+                  //       ),
+                  //       settingListDrawer(
+                  //         ontap: () {
+                  //           _showSoundSelectionDialog(context);
+                  //         },
+                  //         assetsvg: 'assets/svg/notification.svg',
+                  //         title: 'Notification Sound',
+                  //         // subtitle: switchProvider.selectedSound?.name ??
+                  //         //     'Select a Sound',
+                  //         subtitle: 'Beep 1',
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(
                       left: 4.0,
                       right: 8,
-                      top: 12,
                       bottom: 4
                     ),
-                    child: normalText(title: 'Data', textSize: 14.0),
+                    child: normalText(title: languageProvider.translate('data'), textSize: 14.0),
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -335,14 +336,14 @@ class SettingScreen extends StatelessWidget {
                             Navigator.push(context, CupertinoPageRoute(builder: (context)=>  DataImport()));
                           },
                           assetsvg: 'assets/svg/importDB.svg',
-                          title: 'Import Database',
+                          title: languageProvider.translate('import_database'),
                         ),
                         listTileDrawer(
                           ontap: () {
                             Navigator.push(context, CupertinoPageRoute(builder: (context)=>  DataExport()));
                           },
                           assetsvg: 'assets/svg/exportDB.svg',
-                          title: 'Export Database',
+                          title: languageProvider.translate('export_database'),
                         ),
                         listTileDrawer(
                           ontap: () {
@@ -351,14 +352,14 @@ class SettingScreen extends StatelessWidget {
 
                           },
                           assetsvg: 'assets/svg/exportcsv.svg',
-                          title: 'Export CSV',
+                          title: languageProvider.translate('export_csv'),
                         ),
                       ],
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 4.0, right: 8, top: 12, bottom: 4),
-                    child: normalText(title: 'About', textSize: 14.0),
+                    child: normalText(title: languageProvider.translate('about'), textSize: 14.0),
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -372,14 +373,14 @@ class SettingScreen extends StatelessWidget {
                             return _openMap();
                           },
                           assetsvg: 'assets/svg/star.svg',
-                          title: 'Rate this app',
+                          title: languageProvider.translate('rate_this_app'),
                         ),
                         listTileDrawer(
                           ontap: () {
                             return _Share();
                           },
                           assetsvg: 'assets/svg/share.svg',
-                          title: 'Share app',
+                          title: languageProvider.translate('share_app'),
                         ),
                         listTileDrawer(
                           ontap: () {
@@ -391,11 +392,13 @@ class SettingScreen extends StatelessWidget {
                                 child: AlertDialog(
 
                                   backgroundColor: leadingBtnColor,
-                                  title: normalText(title: 'Preference for ads',
+                                  title: normalText(
+
+                                      title: languageProvider.translate('preference_for_ads'),
                                       color: whiteColor,
                                       textSize: 18.0),
                                   content: normalText(title:
-                                  'In its free use, this app will display advertising managed by Google and its partners. you can now choose whether or not you want to receive custom ads based on your browsing preferences. you can change your choice at any time in the preferences.',
+                                  languageProvider.translate('preference_dialog_description'),
                                       color: whiteColor,
                                       textSize: 12.0
                                   ),
@@ -407,7 +410,7 @@ class SettingScreen extends StatelessWidget {
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
-                                        titlee: 'Accept',
+                                        titlee:   languageProvider.translate('preference_dialog_description_accept'),
                                         primaryColor: goldenColor,
                                       ),
                                     ),
@@ -418,7 +421,7 @@ class SettingScreen extends StatelessWidget {
                                           top: 10),
                                       child: InkWell(
                                         child: normalText(
-                                            title: 'No, I want to see non-personalized ads ',
+                                            title: languageProvider.translate('preference_dialog_description_cannel'),
                                             color: whiteColor,
                                             textSize: 8.0),
                                         onTap: () {
@@ -445,7 +448,7 @@ class SettingScreen extends StatelessWidget {
                             });
                           },
                           assetsvg: 'assets/svg/preferenceforads.svg',
-                          title: 'Preference for ads',
+                          title: languageProvider.translate('preference_for_ads'),
                         ),
                         listTileDrawer(
                           ontap: () async {
@@ -453,7 +456,7 @@ class SettingScreen extends StatelessWidget {
                             _launchYoutubeVideo(facebookProfileUrl);
                           },
                           assetsvg: 'assets/svg/prvacypolicy.svg',
-                          title: 'Privacy Policy',
+                          title:  languageProvider.translate('privacy_policy'),
                         ),
                         listTileDrawer(
                           ontap: () {
@@ -465,11 +468,12 @@ class SettingScreen extends StatelessWidget {
                                 child: AlertDialog(
 
                                   backgroundColor: leadingBtnColor,
-                                  title: normalText(title: 'About',
+                                  title: normalText(title:
+                                  languageProvider.translate('about'),
                                       color: whiteColor,
                                       textSize: 18.0),
                                   content: normalText(title:
-                                  'App Version: 5.0.018 (500000018) - 400.0\nYou can contact us at contact@carnatdemusulation.fr for any information, suggestion or problem encountered. The images contained in the application are subject to copyright and a usage license. Any reuse on your part is Strictly prohibited.',
+                                  languageProvider.translate('about_us_dialog_description'),
                                       color: whiteColor,
                                       textSize: 12.0
                                   ),
@@ -483,7 +487,8 @@ class SettingScreen extends StatelessWidget {
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
-                                        titlee: 'Ok',
+                                        titlee:
+                                        languageProvider.translate('ok'),
                                         primaryColor: goldenColor,
                                       ),
                                     ),
@@ -503,7 +508,8 @@ class SettingScreen extends StatelessWidget {
                             });
                           },
                           assetsvg: 'assets/svg/aboutus.svg',
-                          title: 'About Us',
+                          title:
+                          languageProvider.translate('about_us'),
                         ),
                       ],
                     ),

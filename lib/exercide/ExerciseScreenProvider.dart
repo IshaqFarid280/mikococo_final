@@ -55,13 +55,14 @@ class ExercisesScreenProvider extends ChangeNotifier {
     loadExercises();
   }
 
-  void updateExercise(int index, String newName) {
+  void updateExercise(int index, String newName, newDescription) {
     if (_workoutDay == null) return;
 
     final exerciseKey = _workoutDay!.exercises[index];
     final exercise = Hive.box<Exercise>('ExercisesBox').get(exerciseKey);
     if (exercise != null) {
       exercise.name = newName;
+      exercise.description = newDescription;
       exercise.save();
       loadExercises();
     }

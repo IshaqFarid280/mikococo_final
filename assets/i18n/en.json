@@ -1,6 +1,6 @@
 
 {
-  "app_title": "GlobalFit Coach",
+  "app_title": "GlobalFit",
   "add_todo": "Add Todo",
   "title": "Title",
   "description": "Description",
@@ -30,5 +30,49 @@
   "exercise_description_textformfield": "description",
   "add_exercise_button": "Add Exercise",
   "add_select_round_button": "--Select--",
-  "pictures": "pictures"
+  "pictures": "pictures",
+
+
+  "my_exercise_drawable": "My Exercise",
+  "diary_drawable": "Diary",
+  "timer_drawable": "Timer",
+  "setting_drawable": "Setting",
+  "facebook_draweable": "Facebook",
+  "sync_drawable": "Sync",
+  "get_premium_drawable": "Get Premium",
+
+  "timer": "Timer",
+  "stop_timer": "Stop",
+  "edit_timer": "Edit Timer",
+  "calender": "Calendario de Entrenamiento",
+
+  "calender": "Workout Calender",
+  "share_exercise": "Share Exercise",
+
+  "setting": "Setting",
+  "data": "data",
+  "import_database": "Import Database",
+  "export_database": "Export Database",
+  "export_csv": "Export CSV",
+  "about": "About",
+  "rate_this_app": "Rate this App",
+  "share_app": "Share App",
+  "preference_for_ads": "Preference for Ads",
+  "preference_dialog_description": "In its free use, this app will display advertising managed by Google and its partners. you can now choose whether or not you want to receive custom ads based on your browsing preferences. you can change your choice at any time in the preferences.",
+  "preference_dialog_description_accept": "Accept",
+  "preference_dialog_description_cannel": "No, I want to see non-personalized ads ",
+  "privacy_policy": "Privacy Policy",
+  "about_us": "About Us",
+  "about_us_dialog_description": "App Version: 5.0.018 (500000018) - 400.0\\nYou can contact us at contact@carnatdemusulation.fr for any information, suggestion or problem encountered. The images contained in the application are subject to copyright and a usage license. Any reuse on your part is Strictly prohibited.",
+  "ok": "Ok",
+
+
+
+
+
+
+
+
+  "exercise_categories": ["Chest", "Biceps", "Triceps", "Abs", "Gluteal", "Shoulder"]
+
 }

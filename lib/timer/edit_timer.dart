@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:mikococo/consts/colors.dart';
+import 'package:mikococo/l10n/languageProvider.dart';
 import 'package:mikococo/widgets_common/our_button.dart';
 import 'package:mikococo/widgets_common/text_widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../module/models.dart';
 
@@ -27,11 +29,13 @@ class _EditTimerScreenState extends State<EditTimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         leading: LeadingIcon(),
-        title: normalText(title: 'Globalfit'),
+        title: normalText(title: languageProvider.translate('app_title')),
         actions: [
           AddThingsIcon(
             svgAsset: 'assets/svg/saveicon.svg',
@@ -53,7 +57,7 @@ class _EditTimerScreenState extends State<EditTimerScreen> {
           SizedBox(height: MediaQuery.of(context).size.height*0.04,),
           Padding(
             padding: const EdgeInsets.only(left: 12.0, right: 8),
-            child: largeText(title: 'Edit Timer'),
+            child: largeText(title: languageProvider.translate('edit_timer'),),
           ),
           SizedBox(height: MediaQuery.of(context).size.height*0.01,),
           Column(
@@ -71,7 +75,7 @@ class _EditTimerScreenState extends State<EditTimerScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      normalText(title: 'Timer ${index + 1}  : '),
+                      normalText(title: '${languageProvider.translate('timer')} ${index + 1}  : '),
                       IconButton(
                         icon: Icon(Icons.remove, color: whiteColor,),
                         onPressed: () {
